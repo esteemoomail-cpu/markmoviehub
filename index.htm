@@ -568,6 +568,7 @@ function hideNavCloseBtn(){
 /* ===== END ===== */
 
 async function goHome(){
+  closeDetail(); // Close any open detail overlay
   setActiveNav('home');
   const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader"><div class="spinner"></div></div>';
@@ -618,6 +619,7 @@ function buildRow(title,items,icon,isTrending=false,forceType=''){
 }
 
 async function showPage(type,page=1){
+  closeDetail(); // Close any open detail overlay
   setActiveNav(type==='movie'?'movies':'tv');
   const m=document.getElementById('mainContent'),l=type==='movie'?'Movies':'TV Shows';
   if(page===1)m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
@@ -633,6 +635,7 @@ async function showPage(type,page=1){
 }
 
 async function showGenreResults(gid,type,gname){
+  closeDetail(); // Close any open detail overlay
   const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const d=await api(`/discover/${type}`,{with_genres:gid,sort_by:'popularity.desc'});
@@ -643,6 +646,7 @@ async function showGenreResults(gid,type,gname){
 }
 
 async function showGenrePage(){
+  closeDetail(); // Close any open detail overlay
   setActiveNav('genres');const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const[mg,tg]=await Promise.all([api('/genre/movie/list'),api('/genre/tv/list')]);
