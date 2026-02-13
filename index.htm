@@ -397,7 +397,10 @@ function exitFullscreen(){
 function toggleFullscreen(){
   const wrapper=document.getElementById('playerFrameWrapper');
   if(!wrapper)return;
-  if(getFullscreenElement()){exitFullscreen();return}
+  if(getFullscreenElement()){
+    exitFullscreen();
+    return;
+  }
   const iframe=wrapper.querySelector('iframe');
   const tryFs=enterFullscreen(wrapper);
   if(tryFs&&typeof tryFs.catch==='function'){
@@ -466,6 +469,19 @@ function startWatching(){
   loadPlayer();
   const ps=document.getElementById('playerSection');
   if(ps)ps.scrollIntoView({behavior:'smooth'});
+  // Auto-enter fullscreen after a short delay to ensure iframe is loaded
+  setTimeout(()=>{
+    const wrapper=document.getElementById('playerFrameWrapper');
+    if(wrapper){
+      const tryFs=enterFullscreen(wrapper);
+      if(tryFs&&typeof tryFs.catch==='function'){
+        tryFs.catch(()=>{
+          const iframe=wrapper.querySelector('iframe');
+          if(iframe)enterFullscreen(iframe);
+        });
+      }
+    }
+  },800);
 }
 
 function buildPlayerSection(detail,type){
@@ -715,6 +731,10 @@ function closeDetail(){
   document.getElementById('detailOverlay').classList.remove('active');
   document.body.style.overflow='';
   playerState.isPlaying=false;
+  // Exit fullscreen if active when closing detail
+  if(getFullscreenElement()){
+    exitFullscreen();
+  }
   hideNavCloseBtn();  // ← hide ✕ + restore navbar style
 }
 
