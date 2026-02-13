@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark's Movie Hub 🎬</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Loader -->
+    <div id="loader" class="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p>Loading Movies...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-film"></i>
+                <span>Mark's Movie Hub</span>
+            </a>
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search movies, TV shows, people..."
+                        autocomplete="off"
+                    >
+                    <button id="clearSearch" class="clear-btn hidden">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="searchSuggestions" class="search-suggestions hidden"></div>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-category="trending">
+                    <i class="fas fa-fire"></i> Trending
+                </button>
+                <button class="nav-btn" data-category="now_playing">
+                    <i class="fas fa-play-circle"></i> Now Playing
+                </button>
+                <button class="nav-btn" data-category="top_rated">
+                    <i class="fas fa-star"></i> Top Rated
+                </button>
+                <button class="nav-btn" data-category="upcoming">
+                    <i class="fas fa-calendar"></i> Upcoming
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden" id="mobileMenu">
+            <button class="nav-btn active" data-category="trending">
+                <i class="fas fa-fire"></i> Trending
+            </button>
+            <button class="nav-btn" data-category="now_playing">
+                <i class="fas fa-play-circle"></i> Now Playing
+            </button>
+            <button class="nav-btn" data-category="top_rated">
+                <i class="fas fa-star"></i> Top Rated
+            </button>
+            <button class="nav-btn" data-category="upcoming">
+                <i class="fas fa-calendar"></i> Upcoming
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-backdrop" id="heroBackdrop"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content" id="heroContent">
+            <!-- Populated by JS -->
+        </div>
+        <div class="hero-indicators" id="heroIndicators"></div>
+    </section>
+
+    <!-- Genre Filter -->
+    <section class="genre-section">
+        <div class="container">
+            <div class="genre-scroll" id="genreFilter">
+                <button class="genre-chip active" data-genre="all">All</button>
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header">
+                <h2 id="sectionTitle">
+                    <i class="fas fa-fire"></i> Trending Movies
+                </h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid" title="Grid view">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list" title="List view">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="moviesGrid" class="movies-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <div id="noResults" class="no-results hidden">
+                <i class="fas fa-search"></i>
+                <h3>No movies found</h3>
+                <p>Try adjusting your search or filters</p>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more-container" id="loadMoreContainer">
+                <button id="loadMoreBtn" class="load-more-btn">
+                    <i class="fas fa-plus"></i> Load More Movies
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="back-to-top hidden" title="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Movie Modal -->
+    <div id="movieModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" id="modalContent">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3><i class="fas fa-film"></i> Mark's Movie Hub</h3>
+                    <p>Your ultimate destination for discovering movies.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <a href="#" data-category="trending">Trending</a>
+                    <a href="#" data-category="now_playing">Now Playing</a>
+                    <a href="#" data-category="top_rated">Top Rated</a>
+                    <a href="#" data-category="upcoming">Upcoming</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Connect</h4>
+                    <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Mark's Movie Hub. Powered by TMDb API.</p>
+                <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDb" class="tmdb-logo">
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
