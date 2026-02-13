@@ -1,112 +1,697 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark Movie Hub - Movies & TV Shows</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark Movie Hub - Movies & TV Shows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--surface:#13131a;--surface2:#1a1a24;
+  --card:#16161e;--border:#2a2a3a;--text:#e4e4e7;
+  --text-muted:#8888a0;--accent:#7c3aed;--accent2:#a855f7;
+  --red:#ef4444;--green:#22c55e;--yellow:#eab308;
+  --gradient:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;background:var(--bg);
+  color:var(--text);overflow-x:hidden;min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{height:6px;width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+
+/* ===== NAVBAR ===== */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0 40px;height:64px;display:flex;align-items:center;
+  justify-content:space-between;transition:background .3s;
+}
+.navbar.scrolled{background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:1.6rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:.9rem;font-weight:500;color:var(--text-muted);transition:color .2s;position:relative}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--gradient);border-radius:1px}
+.nav-right{display:flex;align-items:center;gap:16px}
+.search-btn{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;background:var(--surface2);font-size:1rem;
+  transition:background .2s;
+}
+.search-btn:hover{background:var(--accent)}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;height:85vh;min-height:500px;display:flex;
+  align-items:end;padding:0 40px 60px;
+}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,var(--bg) 0%,transparent 50%),
+             linear-gradient(to right,rgba(10,10,15,.9) 0%,transparent 60%);
+}
+.hero-content{position:relative;z-index:1;max-width:600px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 12px;
+  border-radius:4px;background:var(--accent);font-size:.75rem;
+  font-weight:600;text-transform:uppercase;margin-bottom:16px;
+}
+.hero-title{font-size:3.2rem;font-weight:800;line-height:1.1;margin-bottom:16px}
+.hero-meta{display:flex;align-items:center;gap:16px;margin-bottom:16px;font-size:.9rem;color:var(--text-muted)}
+.hero-meta .rating{color:var(--yellow);font-weight:600}
+.hero-overview{font-size:.95rem;color:var(--text-muted);line-height:1.6;margin-bottom:24px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:12px 28px;
+  border-radius:8px;font-size:.9rem;font-weight:600;transition:all .2s;
+}
+.btn-primary{background:var(--gradient);color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,.4)}
+.btn-secondary{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);color:#fff;border:1px solid rgba(255,255,255,.15)}
+.btn-secondary:hover{background:rgba(255,255,255,.2)}
+
+/* ===== SECTION / ROW ===== */
+.section{padding:40px 40px 0}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.section-title{font-size:1.4rem;font-weight:700}
+.section-title i{margin-right:8px;color:var(--accent)}
+.see-all{font-size:.85rem;color:var(--accent);font-weight:500;transition:color .2s}
+.see-all:hover{color:var(--accent2)}
+.row{display:flex;gap:16px;overflow-x:auto;padding-bottom:16px;scroll-snap-type:x mandatory}
+.row::-webkit-scrollbar{display:none}
+
+/* ===== CARD ===== */
+.card{
+  flex:0 0 180px;scroll-snap-align:start;cursor:pointer;
+  border-radius:12px;overflow:hidden;position:relative;
+  background:var(--card);transition:transform .3s,box-shadow .3s;
+}
+.card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.card-img{width:100%;aspect-ratio:2/3;object-fit:cover;transition:opacity .3s}
+.card:hover .card-img{opacity:.7}
+.card-overlay{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:end;padding:12px;opacity:0;transition:opacity .3s;
+  background:linear-gradient(to top,rgba(0,0,0,.9) 0%,transparent 60%);
+}
+.card:hover .card-overlay{opacity:1}
+.card-title{font-size:.8rem;font-weight:600;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-info{font-size:.7rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.card-rating{color:var(--yellow)}
+.card-badge{
+  position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:4px;
+  font-size:.65rem;font-weight:700;background:var(--accent);z-index:2;
+}
+
+/* ===== WIDE CARD ===== */
+.wide-row .card{flex:0 0 300px;border-radius:12px}
+.wide-row .card-img{aspect-ratio:16/9}
+
+/* ===== SEARCH MODAL ===== */
+.search-overlay{
+  position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);
+  backdrop-filter:blur(20px);display:none;flex-direction:column;
+  align-items:center;padding:80px 20px 20px;overflow-y:auto;
+}
+.search-overlay.active{display:flex}
+.search-close{position:absolute;top:20px;right:30px;font-size:1.5rem;color:var(--text-muted)}
+.search-bar{
+  width:100%;max-width:600px;position:relative;margin-bottom:40px;
+}
+.search-bar input{
+  width:100%;padding:16px 20px 16px 50px;border-radius:12px;
+  border:2px solid var(--border);background:var(--surface);
+  color:var(--text);font-size:1.1rem;outline:none;transition:border-color .2s;
+}
+.search-bar input:focus{border-color:var(--accent)}
+.search-bar i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
+.search-results{
+  width:100%;max-width:900px;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;
+}
+
+/* ===== DETAIL MODAL ===== */
+.detail-overlay{
+  position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.9);
+  backdrop-filter:blur(10px);display:none;overflow-y:auto;
+}
+.detail-overlay.active{display:block}
+.detail-close{
+  position:fixed;top:20px;right:30px;z-index:3001;font-size:1.5rem;
+  color:#fff;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+}
+.detail-backdrop{width:100%;height:55vh;position:relative}
+.detail-backdrop img{width:100%;height:100%;object-fit:cover}
+.detail-backdrop::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,var(--bg),transparent 50%);
+}
+.detail-body{max-width:900px;margin:-100px auto 0;position:relative;z-index:1;padding:0 20px 60px}
+.detail-poster-row{display:flex;gap:30px;margin-bottom:24px}
+.detail-poster{width:200px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.detail-poster img{width:100%;aspect-ratio:2/3;object-fit:cover}
+.detail-main{flex:1}
+.detail-title{font-size:2rem;font-weight:800;margin-bottom:8px}
+.detail-tagline{font-size:.9rem;color:var(--text-muted);font-style:italic;margin-bottom:12px}
+.detail-meta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;font-size:.85rem;color:var(--text-muted)}
+.detail-meta span{display:flex;align-items:center;gap:4px}
+.detail-genres{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.genre-tag{padding:4px 14px;border-radius:20px;background:var(--surface2);font-size:.8rem;border:1px solid var(--border)}
+.detail-overview{font-size:.95rem;line-height:1.7;color:var(--text-muted);margin-bottom:24px}
+.detail-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.detail-section-title{font-size:1.1rem;font-weight:700;margin-bottom:16px}
+.cast-row{display:flex;gap:16px;overflow-x:auto;padding-bottom:10px}
+.cast-card{flex:0 0 110px;text-align:center}
+.cast-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 8px;border:2px solid var(--border)}
+.cast-name{font-size:.75rem;font-weight:600}
+.cast-char{font-size:.7rem;color:var(--text-muted)}
+.video-container{margin-top:20px}
+.video-container iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:12px}
+
+/* ===== GENRE PAGE ===== */
+.page-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:16px;padding:20px 40px 40px;
+}
+.page-title-bar{padding:100px 40px 20px;font-size:1.8rem;font-weight:800}
+
+/* ===== FOOTER ===== */
+.footer{
+  text-align:center;padding:60px 20px 30px;color:var(--text-muted);
+  font-size:.8rem;border-top:1px solid var(--border);margin-top:60px;
+}
+.footer-logo{font-size:1.4rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+
+/* ===== LOADER ===== */
+.loader{display:flex;justify-content:center;padding:40px}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .navbar{padding:0 16px}
+  .nav-links{display:none}
+  .hero{height:70vh;padding:0 16px 40px}
+  .hero-title{font-size:2rem}
+  .section{padding:30px 16px 0}
+  .card{flex:0 0 140px}
+  .wide-row .card{flex:0 0 250px}
+  .detail-poster-row{flex-direction:column;align-items:center}
+  .detail-poster{width:150px}
+  .detail-body{padding:0 16px 40px}
+  .page-grid{padding:20px 16px 40px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .page-title-bar{padding:80px 16px 16px}
+}
+
+/* ===== MOBILE NAV ===== */
+.mobile-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:rgba(13,13,20,.95);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);padding:8px 0;
+}
+@media(max-width:768px){.mobile-nav{display:flex;justify-content:space-around}}
+.mobile-nav a{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-size:.65rem;color:var(--text-muted);padding:6px 12px;
+  transition:color .2s;
+}
+.mobile-nav a.active,.mobile-nav a:hover{color:var(--accent)}
+.mobile-nav a i{font-size:1.2rem}
+</style>
 </head>
 <body>
-    <!-- Header / Navbar -->
-    <header class="header">
-        <div class="header-inner">
-            <a href="#" class="logo" id="logo">
-                <i class="fas fa-play-circle"></i> VVid
-            </a>
-            <nav class="nav">
-                <a href="#" class="nav-link active" data-page="home">Home</a>
-                <a href="#" class="nav-link" data-page="movies">Movies</a>
-                <a href="#" class="nav-link" data-page="tv">TV Shows</a>
-            </nav>
-            <div class="search-container">
-                <form id="search-form">
-                    <input type="text" id="search-input" placeholder="Search movies & TV shows..." autocomplete="off">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </form>
-            </div>
-        </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-backdrop" id="hero-backdrop"></div>
-        <div class="hero-content" id="hero-content">
-            <h1 id="hero-title"></h1>
-            <p id="hero-overview"></p>
-            <div class="hero-meta" id="hero-meta"></div>
-            <div class="hero-buttons">
-                <button class="btn btn-primary" id="hero-watch-btn">
-                    <i class="fas fa-play"></i> Watch Now
-                </button>
-                <button class="btn btn-secondary" id="hero-info-btn">
-                    <i class="fas fa-info-circle"></i> More Info
-                </button>
-            </div>
-        </div>
-        <div class="hero-nav">
-            <button id="hero-prev"><i class="fas fa-chevron-left"></i></button>
-            <div class="hero-dots" id="hero-dots"></div>
-            <button id="hero-next"><i class="fas fa-chevron-right"></i></button>
-        </div>
-    </section>
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-logo" onclick="goHome()">VVID</a>
+  <div class="nav-links">
+    <a href="#" class="active" onclick="goHome()" id="nav-home">Home</a>
+    <a href="#" onclick="showPage('movie')" id="nav-movies">Movies</a>
+    <a href="#" onclick="showPage('tv')" id="nav-tv">TV Shows</a>
+    <a href="#" onclick="showGenrePage()" id="nav-genres">Genres</a>
+  </div>
+  <div class="nav-right">
+    <button class="search-btn" onclick="openSearch()"><i class="fas fa-search"></i></button>
+  </div>
+</nav>
 
-    <!-- Main Content -->
-    <main class="main-content" id="main-content">
-        <!-- Sections will be dynamically generated -->
-    </main>
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <a href="#" class="active" onclick="goHome()" id="mnav-home"><i class="fas fa-home"></i>Home</a>
+  <a href="#" onclick="showPage('movie')" id="mnav-movies"><i class="fas fa-film"></i>Movies</a>
+  <a href="#" onclick="showPage('tv')" id="mnav-tv"><i class="fas fa-tv"></i>TV</a>
+  <a href="#" onclick="openSearch()" id="mnav-search"><i class="fas fa-search"></i>Search</a>
+</div>
 
-    <!-- Detail Modal -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal" id="detail-modal">
-            <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
-            <div class="modal-backdrop-container">
-                <img id="modal-backdrop" src="" alt="">
-                <div class="modal-backdrop-gradient"></div>
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" onclick="closeSearch()"><i class="fas fa-times"></i></button>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search movies & TV shows..." autocomplete="off">
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay">
+  <button class="detail-close" onclick="closeDetail()"><i class="fas fa-times"></i></button>
+  <div id="detailContent"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="mainContent"></main>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">VVID</div>
+  <p>Powered by TMDB API &bull; Built with ❤️</p>
+</div>
+
+<script>
+// ===== CONFIG =====
+const API_KEY = 'fa44f459ed63551cc23e7bf3f97438b9';
+const BASE = 'https://api.themoviedb.org/3';
+const IMG = 'https://image.tmdb.org/t/p/';
+
+// ===== API HELPER =====
+async function api(endpoint, params = {}) {
+  const url = new URL(`${BASE}${endpoint}`);
+  url.searchParams.set('api_key', API_KEY);
+  url.searchParams.set('language', 'en-US');
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url);
+  return res.json();
+}
+
+// ===== NAVBAR SCROLL =====
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ===== HOME PAGE =====
+async function goHome() {
+  setActiveNav('home');
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+
+  try {
+    const [trending, popular, topRated, upcoming, airingTV, popularTV, topTV] = await Promise.all([
+      api('/trending/all/week'),
+      api('/movie/popular'),
+      api('/movie/top_rated'),
+      api('/movie/upcoming'),
+      api('/tv/airing_today'),
+      api('/tv/popular'),
+      api('/tv/top_rated'),
+    ]);
+
+    const hero = trending.results[0];
+    const heroType = hero.media_type || 'movie';
+    const heroTitle = hero.title || hero.name;
+    const heroYear = (hero.release_date || hero.first_air_date || '').slice(0, 4);
+
+    main.innerHTML = `
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-bg">
+          <img src="${IMG}original${hero.backdrop_path}" alt="${heroTitle}" onerror="this.src='https://via.placeholder.com/1920x1080/1a1a24/333?text=VVID'">
+        </div>
+        <div class="hero-content">
+          <div class="hero-badge"><i class="fas fa-fire"></i> Trending</div>
+          <h1 class="hero-title">${heroTitle}</h1>
+          <div class="hero-meta">
+            <span class="rating"><i class="fas fa-star"></i> ${hero.vote_average?.toFixed(1)}</span>
+            <span>${heroYear}</span>
+            <span>${heroType === 'tv' ? 'TV Show' : 'Movie'}</span>
+          </div>
+          <p class="hero-overview">${hero.overview}</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="openDetail(${hero.id},'${heroType}')">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+            <button class="btn btn-secondary" onclick="openDetail(${hero.id},'${heroType}')">
+              <i class="fas fa-info-circle"></i> More Info
+            </button>
+          </div>
+        </div>
+      </section>
+
+      ${buildRow('Trending This Week', trending.results, 'fa-fire', true)}
+      ${buildRow('Popular Movies', popular.results, 'fa-star', false, 'movie')}
+      ${buildRow('Top Rated Movies', topRated.results, 'fa-trophy', false, 'movie')}
+      ${buildRow('Upcoming Movies', upcoming.results, 'fa-calendar', false, 'movie')}
+      ${buildRow('Airing Today', airingTV.results, 'fa-broadcast-tower', false, 'tv')}
+      ${buildRow('Popular TV Shows', popularTV.results, 'fa-tv', false, 'tv')}
+      ${buildRow('Top Rated TV Shows', topTV.results, 'fa-award', false, 'tv')}
+    `;
+  } catch (e) {
+    main.innerHTML = `<div style="text-align:center;padding:200px 20px"><h2>Error loading content</h2><p style="color:var(--text-muted)">${e.message}</p></div>`;
+  }
+}
+
+// ===== BUILD ROW =====
+function buildRow(title, items, icon, isTrending = false, forceType = '') {
+  if (!items || !items.length) return '';
+  const cards = items.filter(i => i.poster_path).slice(0, 20).map((item, idx) => {
+    const type = forceType || item.media_type || 'movie';
+    const name = item.title || item.name;
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    const badge = isTrending ? `<div class="card-badge">#${idx + 1}</div>` : '';
+    return `
+      <div class="card" onclick="openDetail(${item.id},'${type}')">
+        ${badge}
+        <img class="card-img" src="${IMG}w342${item.poster_path}" alt="${name}" loading="lazy"
+          onerror="this.src='https://via.placeholder.com/342x513/1a1a24/333?text=No+Image'">
+        <div class="card-overlay">
+          <div class="card-title">${name}</div>
+          <div class="card-info">
+            <span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span>
+            <span>${year}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas ${icon}"></i> ${title}</h2>
+      </div>
+      <div class="row">${cards}</div>
+    </section>`;
+}
+
+// ===== BROWSE PAGE (Movies / TV) =====
+async function showPage(type, page = 1) {
+  setActiveNav(type === 'movie' ? 'movies' : 'tv');
+  const main = document.getElementById('mainContent');
+  if (page === 1) main.innerHTML = '<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
+
+  const label = type === 'movie' ? 'Movies' : 'TV Shows';
+  const [popular, topRated, genres] = await Promise.all([
+    api(`/${type}/popular`, { page }),
+    api(`/${type}/top_rated`, { page }),
+    api(`/genre/${type}/list`),
+  ]);
+
+  let html = `<div class="page-title-bar">🎬 Browse ${label}</div>`;
+
+  // Genre chips
+  if (genres.genres) {
+    html += `<div style="padding:0 40px 20px;display:flex;flex-wrap:wrap;gap:8px">`;
+    genres.genres.forEach(g => {
+      html += `<button class="genre-tag" onclick="showGenreResults(${g.id},'${type}','${g.name}')" style="cursor:pointer">${g.name}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  html += buildRow(`Popular ${label}`, popular.results, 'fa-fire', false, type);
+  html += buildRow(`Top Rated ${label}`, topRated.results, 'fa-trophy', false, type);
+
+  // Grid of popular
+  html += `<section class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-th"></i> All Popular ${label}</h2></div></section>`;
+  html += `<div class="page-grid">`;
+  popular.results.filter(i => i.poster_path).forEach(item => {
+    const name = item.title || item.name;
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    html += `
+      <div class="card" onclick="openDetail(${item.id},'${type}')">
+        <img class="card-img" src="${IMG}w342${item.poster_path}" alt="${name}" loading="lazy">
+        <div class="card-overlay">
+          <div class="card-title">${name}</div>
+          <div class="card-info">
+            <span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span>
+            <span>${year}</span>
+          </div>
+        </div>
+      </div>`;
+  });
+  html += `</div>`;
+
+  main.innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+// ===== GENRE RESULTS =====
+async function showGenreResults(genreId, type, genreName) {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
+
+  const data = await api(`/discover/${type}`, { with_genres: genreId, sort_by: 'popularity.desc' });
+  let html = `<div class="page-title-bar">${genreName}</div><div class="page-grid">`;
+  data.results.filter(i => i.poster_path).forEach(item => {
+    const name = item.title || item.name;
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    html += `
+      <div class="card" onclick="openDetail(${item.id},'${type}')">
+        <img class="card-img" src="${IMG}w342${item.poster_path}" alt="${name}" loading="lazy">
+        <div class="card-overlay">
+          <div class="card-title">${name}</div>
+          <div class="card-info">
+            <span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span>
+            <span>${year}</span>
+          </div>
+        </div>
+      </div>`;
+  });
+  html += `</div>`;
+  main.innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+// ===== GENRE PAGE =====
+async function showGenrePage() {
+  setActiveNav('genres');
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
+
+  const [movieGenres, tvGenres] = await Promise.all([
+    api('/genre/movie/list'),
+    api('/genre/tv/list'),
+  ]);
+
+  const colors = ['#7c3aed','#ef4444','#22c55e','#eab308','#3b82f6','#ec4899','#f97316','#06b6d4','#8b5cf6','#10b981'];
+  let html = `<div class="page-title-bar">🎭 Genres</div>`;
+
+  html += `<section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-film"></i> Movie Genres</h2></section>`;
+  html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;
+  movieGenres.genres.forEach((g, i) => {
+    html += `<button onclick="showGenreResults(${g.id},'movie','${g.name}')"
+      style="padding:24px 16px;border-radius:12px;background:${colors[i % colors.length]}22;border:1px solid ${colors[i % colors.length]}44;
+      color:${colors[i % colors.length]};font-weight:600;font-size:.9rem;cursor:pointer;transition:transform .2s"
+      onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">${g.name}</button>`;
+  });
+  html += `</div>`;
+
+  html += `<section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-tv"></i> TV Genres</h2></section>`;
+  html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;
+  tvGenres.genres.forEach((g, i) => {
+    html += `<button onclick="showGenreResults(${g.id},'tv','${g.name}')"
+      style="padding:24px 16px;border-radius:12px;background:${colors[(i + 3) % colors.length]}22;border:1px solid ${colors[(i + 3) % colors.length]}44;
+      color:${colors[(i + 3) % colors.length]};font-weight:600;font-size:.9rem;cursor:pointer;transition:transform .2s"
+      onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">${g.name}</button>`;
+  });
+  html += `</div>`;
+
+  main.innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+// ===== SEARCH =====
+let searchTimeout;
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('active');
+  document.getElementById('searchInput').focus();
+  document.body.style.overflow = 'hidden';
+}
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  const q = e.target.value.trim();
+  if (!q) { document.getElementById('searchResults').innerHTML = ''; return; }
+  searchTimeout = setTimeout(async () => {
+    const data = await api('/search/multi', { query: q });
+    const container = document.getElementById('searchResults');
+    container.innerHTML = data.results
+      .filter(i => i.poster_path && (i.media_type === 'movie' || i.media_type === 'tv'))
+      .map(item => {
+        const name = item.title || item.name;
+        const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+        return `
+          <div class="card" onclick="closeSearch();openDetail(${item.id},'${item.media_type}')">
+            <img class="card-img" src="${IMG}w342${item.poster_path}" alt="${name}" loading="lazy">
+            <div class="card-overlay" style="opacity:1">
+              <div class="card-title">${name}</div>
+              <div class="card-info">
+                <span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span>
+                <span>${year}</span>
+                <span>${item.media_type.toUpperCase()}</span>
+              </div>
             </div>
-            <div class="modal-body">
-                <div class="modal-header-info">
-                    <h1 id="modal-title"></h1>
-                    <div class="modal-meta" id="modal-meta"></div>
+          </div>`;
+      }).join('');
+    if (!container.innerHTML) container.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:40px">No results found</p>';
+  }, 400);
+});
+
+// Close search on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeSearch(); closeDetail(); }
+});
+
+// ===== DETAIL =====
+async function openDetail(id, type) {
+  const overlay = document.getElementById('detailOverlay');
+  const content = document.getElementById('detailContent');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  content.innerHTML = '<div class="loader" style="padding-top:40vh"><div class="spinner"></div></div>';
+
+  try {
+    const [detail, credits, videos, similar] = await Promise.all([
+      api(`/${type}/${id}`),
+      api(`/${type}/${id}/credits`),
+      api(`/${type}/${id}/videos`),
+      api(`/${type}/${id}/similar`),
+    ]);
+
+    const title = detail.title || detail.name;
+    const year = (detail.release_date || detail.first_air_date || '').slice(0, 4);
+    const runtime = detail.runtime ? `${Math.floor(detail.runtime / 60)}h ${detail.runtime % 60}m` : (detail.number_of_seasons ? `${detail.number_of_seasons} Season${detail.number_of_seasons > 1 ? 's' : ''}` : '');
+    const trailer = videos.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube') || videos.results?.[0];
+    const cast = credits.cast?.slice(0, 12) || [];
+
+    let seasonsHTML = '';
+    if (type === 'tv' && detail.seasons) {
+      seasonsHTML = `
+        <div style="margin-top:30px">
+          <h3 class="detail-section-title"><i class="fas fa-list" style="color:var(--accent);margin-right:8px"></i>Seasons</h3>
+          <div class="row">
+            ${detail.seasons.filter(s => s.poster_path).map(s => `
+              <div class="card" style="flex:0 0 140px">
+                <img class="card-img" src="${IMG}w342${s.poster_path}" alt="${s.name}" loading="lazy">
+                <div class="card-overlay" style="opacity:1">
+                  <div class="card-title">${s.name}</div>
+                  <div class="card-info">${s.episode_count} Episodes</div>
                 </div>
-                <p id="modal-overview" class="modal-overview"></p>
-                <div class="modal-details" id="modal-details"></div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+    }
 
-                <!-- Player Section -->
-                <div class="player-section" id="player-section" style="display:none;">
-                    <h3>Watch</h3>
-                    <div class="server-tabs" id="server-tabs"></div>
-                    <div class="season-episode-selector" id="season-episode-selector" style="display:none;">
-                        <select id="season-select"></select>
-                        <select id="episode-select"></select>
+    content.innerHTML = `
+      <div class="detail-backdrop">
+        <img src="${detail.backdrop_path ? IMG + 'original' + detail.backdrop_path : 'https://via.placeholder.com/1920x1080/1a1a24/333?text=VVID'}" alt="${title}">
+      </div>
+      <div class="detail-body">
+        <div class="detail-poster-row">
+          <div class="detail-poster">
+            <img src="${detail.poster_path ? IMG + 'w500' + detail.poster_path : 'https://via.placeholder.com/500x750/1a1a24/333?text=No+Image'}" alt="${title}">
+          </div>
+          <div class="detail-main">
+            <h1 class="detail-title">${title}</h1>
+            ${detail.tagline ? `<p class="detail-tagline">"${detail.tagline}"</p>` : ''}
+            <div class="detail-meta">
+              <span><i class="fas fa-star" style="color:var(--yellow)"></i> ${detail.vote_average?.toFixed(1)}</span>
+              <span><i class="fas fa-calendar"></i> ${year}</span>
+              <span><i class="fas fa-clock"></i> ${runtime}</span>
+              <span><i class="fas fa-globe"></i> ${detail.original_language?.toUpperCase()}</span>
+              ${detail.status ? `<span><i class="fas fa-info-circle"></i> ${detail.status}</span>` : ''}
+            </div>
+            <div class="detail-genres">
+              ${(detail.genres || []).map(g => `<span class="genre-tag">${g.name}</span>`).join('')}
+            </div>
+            <div class="detail-actions">
+              ${trailer ? `<button class="btn btn-primary" onclick="document.getElementById('trailerFrame').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play"></i> Watch Trailer</button>` : ''}
+              <button class="btn btn-secondary" onclick="window.open('https://www.themoviedb.org/${type}/${id}','_blank')"><i class="fas fa-external-link-alt"></i> TMDB</button>
+            </div>
+            <p class="detail-overview">${detail.overview || 'No overview available.'}</p>
+          </div>
+        </div>
+
+        ${trailer ? `
+          <div class="video-container" id="trailerFrame">
+            <h3 class="detail-section-title"><i class="fas fa-play-circle" style="color:var(--accent);margin-right:8px"></i>Trailer</h3>
+            <iframe src="https://www.youtube.com/embed/${trailer.key}" allowfullscreen allow="autoplay;encrypted-media"></iframe>
+          </div>` : ''}
+
+        ${cast.length ? `
+          <div style="margin-top:30px">
+            <h3 class="detail-section-title"><i class="fas fa-users" style="color:var(--accent);margin-right:8px"></i>Cast</h3>
+            <div class="cast-row">
+              ${cast.map(c => `
+                <div class="cast-card">
+                  <img src="${c.profile_path ? IMG + 'w185' + c.profile_path : 'https://via.placeholder.com/185x185/1a1a24/555?text=' + c.name.charAt(0)}" alt="${c.name}" loading="lazy">
+                  <div class="cast-name">${c.name}</div>
+                  <div class="cast-char">${c.character || ''}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>` : ''}
+
+        ${seasonsHTML}
+
+        ${similar.results?.length ? `
+          <div style="margin-top:30px">
+            <h3 class="detail-section-title"><i class="fas fa-th-large" style="color:var(--accent);margin-right:8px"></i>Similar</h3>
+            <div class="row">
+              ${similar.results.filter(i => i.poster_path).slice(0, 12).map(item => {
+                const sName = item.title || item.name;
+                return `
+                  <div class="card" onclick="openDetail(${item.id},'${type}')">
+                    <img class="card-img" src="${IMG}w342${item.poster_path}" alt="${sName}" loading="lazy">
+                    <div class="card-overlay">
+                      <div class="card-title">${sName}</div>
+                      <div class="card-info">
+                        <span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span>
+                      </div>
                     </div>
-                    <div class="player-wrapper" id="player-wrapper">
-                        <iframe id="player-iframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-                    </div>
-                </div>
-
-                <!-- Cast -->
-                <div class="cast-section" id="cast-section">
-                    <h3>Cast</h3>
-                    <div class="cast-list" id="cast-list"></div>
-                </div>
-
-                <!-- Similar -->
-                <div class="similar-section" id="similar-section">
-                    <h3>Similar</h3>
-                    <div class="card-row" id="similar-list"></div>
-                </div>
+                  </div>`;
+              }).join('')}
             </div>
-        </div>
-    </div>
+          </div>` : ''}
+      </div>`;
 
-    <!-- Back to Top -->
-    <button class="back-to-top" id="back-to-top"><i class="fas fa-arrow-up"></i></button>
+    overlay.scrollTop = 0;
+  } catch (e) {
+    content.innerHTML = `<div style="text-align:center;padding:40vh 20px"><h2>Error loading details</h2><p style="color:var(--text-muted)">${e.message}</p></div>`;
+  }
+}
 
-    <footer class="footer">
-        <p>Powered by TMDB API. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
-    </footer>
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
-    <script src="js/app.js"></script>
+// ===== NAV HELPERS =====
+function setActiveNav(section) {
+  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(a => a.classList.remove('active'));
+  const map = { home: ['nav-home', 'mnav-home'], movies: ['nav-movies', 'mnav-movies'], tv: ['nav-tv', 'mnav-tv'], genres: ['nav-genres'] };
+  (map[section] || []).forEach(id => document.getElementById(id)?.classList.add('active'));
+}
+
+// ===== INIT =====
+goHome();
+</script>
 </body>
 </html>
