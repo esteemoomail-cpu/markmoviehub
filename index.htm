@@ -30,7 +30,6 @@ img{display:block;max-width:100%}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:linear-gradient(var(--accent),var(--accent2));border-radius:2px}
 
-/* PARTICLES BG */
 .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
 .particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;opacity:.4;animation:float linear infinite}
 @keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
@@ -151,11 +150,50 @@ img{display:block;max-width:100%}
 .server-btn.active{background:var(--gradient);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(0,212,255,.3)}
 .server-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
 
-.player-frame-wrapper{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--border)}
-.player-frame-wrapper iframe{width:100%;height:100%;border:none;display:block}
-.player-frame-wrapper:fullscreen{width:100vw;height:100vh;border-radius:0;aspect-ratio:auto}
-.player-frame-wrapper:-webkit-full-screen{width:100vw;height:100vh;border-radius:0;aspect-ratio:auto}
-.player-frame-wrapper:fullscreen iframe,.player-frame-wrapper:-webkit-full-screen iframe{width:100%;height:100%}
+/* ===== PLAYER FRAME — FULLSCREEN FIX ===== */
+.player-frame-wrapper{
+  position:relative;width:100%;aspect-ratio:16/9;
+  border-radius:16px;overflow:hidden;background:#000;
+  border:1px solid var(--border);
+}
+.player-frame-wrapper iframe{
+  width:100%;height:100%;border:none;display:block;
+}
+
+/* Wrapper fullscreen (our toggle button) */
+.player-frame-wrapper:fullscreen,
+.player-frame-wrapper:-webkit-full-screen,
+.player-frame-wrapper:-moz-full-screen,
+.player-frame-wrapper:-ms-fullscreen{
+  width:100vw!important;height:100vh!important;
+  border-radius:0!important;aspect-ratio:auto!important;
+  border:none!important;background:#000!important;
+}
+.player-frame-wrapper:fullscreen iframe,
+.player-frame-wrapper:-webkit-full-screen iframe,
+.player-frame-wrapper:-moz-full-screen iframe,
+.player-frame-wrapper:-ms-fullscreen iframe{
+  width:100%!important;height:100%!important;
+}
+
+/* iframe itself fullscreen (player's internal button) */
+iframe:fullscreen,
+iframe:-webkit-full-screen,
+iframe:-moz-full-screen,
+iframe:-ms-fullscreen{
+  width:100vw!important;height:100vh!important;
+  position:fixed!important;top:0!important;left:0!important;
+  z-index:2147483647!important;border:none!important;
+}
+
+/* Remove overflow clipping from ancestors during fullscreen */
+.detail-overlay:has(iframe:fullscreen),
+.detail-overlay:has(:fullscreen),
+.player-section:has(iframe:fullscreen),
+.player-section:has(:fullscreen){
+  overflow:visible!important;
+}
+/* ===== END FULLSCREEN FIX ===== */
 
 .player-placeholder{width:100%;aspect-ratio:16/9;border-radius:16px;background:linear-gradient(135deg,var(--surface2),rgba(0,212,255,.03));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border:2px dashed var(--border);cursor:pointer;transition:all .4s;position:relative;overflow:hidden}
 .player-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,212,255,.05) 0%,transparent 70%);opacity:0;transition:opacity .4s}
@@ -190,7 +228,6 @@ img{display:block;max-width:100%}
 .spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent);border-right-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;box-shadow:0 0 20px rgba(0,212,255,.15)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* GENRE BUTTONS */
 .genre-btn-cool{padding:24px 16px;border-radius:14px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;font-family:'Space Grotesk',sans-serif}
 .genre-btn-cool::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
 .genre-btn-cool:hover{transform:translateY(-4px) scale(1.03)}
@@ -314,52 +351,86 @@ function getStreamUrl(tmdbId,type,season,episode,server=0,lang='en'){
     :`${STREAM_BASE}/embed/tv/${tmdbId}/${season}/${episode}`;
 }
 
+/* ===== FULLSCREEN-FIXED IFRAME CREATION ===== */
 function setIframeSrc(url){
   const wrapper=document.getElementById('playerFrameWrapper');
   if(!wrapper)return;
-  wrapper.innerHTML=`<iframe
-    src="${url}"
-    allowfullscreen="true"
-    webkitallowfullscreen="true"
-    mozallowfullscreen="true"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-    referrerpolicy="no-referrer"
-    frameborder="0"
-    scrolling="no"
-    style="width:100%;height:100%;border:none;display:block;"
-  ></iframe>`;
+
+  // Create iframe via DOM API so boolean attributes are set correctly
+  wrapper.innerHTML='';
+  const iframe=document.createElement('iframe');
+  iframe.src=url;
+  iframe.setAttribute('allowfullscreen','');           // boolean – no value
+  iframe.setAttribute('webkitallowfullscreen','');     // Safari legacy
+  iframe.setAttribute('mozallowfullscreen','');        // Firefox legacy
+  iframe.setAttribute('allow',
+    'fullscreen *; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+  );
+  iframe.setAttribute('referrerpolicy','origin');      // origin instead of no-referrer
+  iframe.setAttribute('frameborder','0');
+  iframe.setAttribute('scrolling','no');
+  iframe.style.cssText='width:100%;height:100%;border:none;display:block;';
+  wrapper.appendChild(iframe);
+}
+/* ===== END ===== */
+
+/* ===== FULLSCREEN HELPERS (all vendor prefixes) ===== */
+function getFullscreenElement(){
+  return document.fullscreenElement
+      || document.webkitFullscreenElement
+      || document.mozFullScreenElement
+      || document.msFullscreenElement;
 }
 
-function getFullscreenElement(){
-  return document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement;
-}
 function enterFullscreen(el){
-  if(el.requestFullscreen)return el.requestFullscreen();
-  if(el.webkitRequestFullscreen)return el.webkitRequestFullscreen();
-  if(el.mozRequestFullScreen)return el.mozRequestFullScreen();
-  if(el.msRequestFullscreen)return el.msRequestFullscreen();
+  if(el.requestFullscreen)           return el.requestFullscreen();
+  if(el.webkitRequestFullscreen)     return el.webkitRequestFullscreen();  // Safari
+  if(el.webkitEnterFullscreen)       return el.webkitEnterFullscreen();    // iOS Safari
+  if(el.mozRequestFullScreen)        return el.mozRequestFullScreen();
+  if(el.msRequestFullscreen)         return el.msRequestFullscreen();
 }
+
 function exitFullscreen(){
-  if(document.exitFullscreen)return document.exitFullscreen();
-  if(document.webkitExitFullscreen)return document.webkitExitFullscreen();
-  if(document.mozCancelFullScreen)return document.mozCancelFullScreen();
-  if(document.msExitFullscreen)return document.msExitFullscreen();
+  if(document.exitFullscreen)         return document.exitFullscreen();
+  if(document.webkitExitFullscreen)   return document.webkitExitFullscreen();
+  if(document.mozCancelFullScreen)    return document.mozCancelFullScreen();
+  if(document.msExitFullscreen)       return document.msExitFullscreen();
 }
+
 function toggleFullscreen(){
-  const wrapper=document.getElementById('playerFrameWrapper');
-  if(!wrapper)return;
-  if(getFullscreenElement()) exitFullscreen();
-  else enterFullscreen(wrapper);
+  const wrapper = document.getElementById('playerFrameWrapper');
+  if(!wrapper) return;
+
+  if(getFullscreenElement()){
+    exitFullscreen();
+    return;
+  }
+
+  // Try the wrapper first (keeps our border-radius, etc. in non-fs mode)
+  // If that fails, try the iframe directly as a fallback
+  const iframe = wrapper.querySelector('iframe');
+
+  const tryFs = enterFullscreen(wrapper);
+  if(tryFs && typeof tryFs.catch === 'function'){
+    tryFs.catch(()=>{
+      if(iframe) enterFullscreen(iframe);
+    });
+  }
 }
+
 function updateFsButton(){
   const btn=document.getElementById('fsToggleBtn');
-  if(!btn)return;
-  btn.innerHTML=getFullscreenElement()
-    ?'<i class="fas fa-compress"></i> Exit Fullscreen'
-    :'<i class="fas fa-expand"></i> Fullscreen';
+  if(!btn) return;
+  const isFs = !!getFullscreenElement();
+  btn.innerHTML = isFs
+    ? '<i class="fas fa-compress"></i> Exit Fullscreen'
+    : '<i class="fas fa-expand"></i> Fullscreen';
 }
-document.addEventListener('fullscreenchange',updateFsButton);
-document.addEventListener('webkitfullscreenchange',updateFsButton);
+
+// Listen for fullscreen changes on every vendor prefix
+['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
+  .forEach(evt => document.addEventListener(evt, updateFsButton));
+/* ===== END FULLSCREEN HELPERS ===== */
 
 function loadPlayer(){
   const url=getStreamUrl(playerState.tmdbId,playerState.type,playerState.season,playerState.episode,playerState.server,playerState.language);
@@ -413,10 +484,6 @@ function startWatching(){
   loadPlayer();
   const ps=document.getElementById('playerSection');
   if(ps) ps.scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{
-    const wrapper=document.getElementById('playerFrameWrapper');
-    if(wrapper) enterFullscreen(wrapper);
-  },500);
 }
 
 function buildPlayerSection(detail,type){
