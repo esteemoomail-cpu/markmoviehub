@@ -34,10 +34,8 @@ img{display:block;max-width:100%}
 .particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;opacity:.4;animation:float linear infinite}
 @keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 
-/* ===== NAVBAR — z-index above detail overlay ===== */
 .navbar{position:fixed;top:0;left:0;right:0;z-index:5000;padding:0 40px;height:70px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
 .navbar.scrolled,.navbar.detail-open{background:rgba(5,5,16,.95);backdrop-filter:blur(30px) saturate(1.5);border-bottom:1px solid rgba(0,212,255,.1);box-shadow:0 4px 30px rgba(0,0,0,.5)}
-/* ===== END ===== */
 
 .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:3px;cursor:pointer;position:relative}
 .nav-logo-icon{width:38px;height:38px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:var(--glow);position:relative;overflow:hidden}
@@ -53,11 +51,9 @@ img{display:block;max-width:100%}
 .nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--gradient);border-radius:1px;box-shadow:0 0 10px rgba(0,212,255,.5)}
 .nav-right{display:flex;align-items:center;gap:16px}
 
-/* ===== CLOSE DETAIL BUTTON (now sits in nav-right area) ===== */
 .nav-close-detail{display:none;width:42px;height:42px;border-radius:12px;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border);color:var(--text-muted)}
 .nav-close-detail.visible{display:flex}
 .nav-close-detail:hover{background:transparent;border-color:var(--accent3);color:var(--accent3);box-shadow:var(--glow2);transform:scale(1.1) rotate(90deg)}
-/* ===== END ===== */
 
 .search-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border)}
 .search-btn:hover{background:transparent;border-color:var(--accent);color:var(--accent);box-shadow:var(--glow);transform:scale(1.1)}
@@ -112,7 +108,6 @@ img{display:block;max-width:100%}
 .card-badge{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:6px;font-size:.65rem;font-weight:700;z-index:2;font-family:'Orbitron',sans-serif;letter-spacing:1px}
 .card-badge.trending{background:linear-gradient(135deg,rgba(255,45,117,.9),rgba(123,47,247,.9));box-shadow:0 2px 15px rgba(255,45,117,.4)}
 
-/* ===== SEARCH OVERLAY — above navbar ===== */
 .search-overlay{position:fixed;inset:0;z-index:6000;background:rgba(5,5,16,.92);backdrop-filter:blur(30px);display:none;flex-direction:column;align-items:center;padding:80px 20px 20px;overflow-y:auto}
 .search-overlay.active{display:flex;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -124,10 +119,8 @@ img{display:block;max-width:100%}
 .search-bar i{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1.1rem}
 .search-results{width:100%;max-width:900px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
 
-/* ===== DETAIL OVERLAY — below navbar ===== */
 .detail-overlay{position:fixed;inset:0;z-index:3000;background:rgba(5,5,16,.95);backdrop-filter:blur(10px);display:none;overflow-y:auto}
 .detail-overlay.active{display:block;animation:fadeIn .3s ease}
-/* Old close button removed — now in navbar */
 
 .detail-backdrop{width:100%;height:60vh;position:relative}
 .detail-backdrop img{width:100%;height:100%;object-fit:cover}
@@ -250,7 +243,6 @@ iframe:-ms-fullscreen{
   .hero-content{animation:none}
 }
 
-/* ===== MOBILE NAV — z-index above detail overlay ===== */
 .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:5000;background:rgba(5,5,16,.95);backdrop-filter:blur(30px);border-top:1px solid var(--border);padding:8px 0}
 @media(max-width:768px){.mobile-nav{display:flex;justify-content:space-around}}
 .mobile-nav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.6rem;color:var(--text-muted);padding:8px 14px;transition:all .3s;letter-spacing:.5px;text-transform:uppercase;font-weight:500}
@@ -263,7 +255,6 @@ iframe:-ms-fullscreen{
 
 <div class="particles" id="particles"></div>
 
-<!-- ===== NAVBAR with close button added to nav-right ===== -->
 <nav class="navbar" id="navbar">
   <a href="#" class="nav-logo" onclick="goHome()">
     <div class="nav-logo-icon"><i class="fas fa-play"></i></div>
@@ -300,7 +291,6 @@ iframe:-ms-fullscreen{
   <div class="search-results" id="searchResults"></div>
 </div>
 
-<!-- ===== DETAIL OVERLAY — old close button removed ===== -->
 <div class="detail-overlay" id="detailOverlay">
   <div id="detailContent"></div>
 </div>
@@ -376,6 +366,18 @@ function setIframeSrc(url){
   iframe.setAttribute('scrolling','no');
   iframe.style.cssText='width:100%;height:100%;border:none;display:block;';
   wrapper.appendChild(iframe);
+}
+
+function destroyPlayer(){
+  const wrapper=document.getElementById('playerFrameWrapper');
+  if(wrapper){
+    const iframe=wrapper.querySelector('iframe');
+    if(iframe){
+      iframe.src='about:blank';
+      iframe.remove();
+    }
+  }
+  playerState.isPlaying=false;
 }
 
 function getFullscreenElement(){
@@ -469,7 +471,6 @@ function startWatching(){
   loadPlayer();
   const ps=document.getElementById('playerSection');
   if(ps)ps.scrollIntoView({behavior:'smooth'});
-  // Auto-enter fullscreen after a short delay to ensure iframe is loaded
   setTimeout(()=>{
     const wrapper=document.getElementById('playerFrameWrapper');
     if(wrapper){
@@ -549,13 +550,11 @@ function scrollRow(id,dir){const el=document.getElementById(id);if(el)el.scrollB
 
 window.addEventListener('scroll',()=>{
   const nb=document.getElementById('navbar');
-  // Don't remove detail-open class based on scroll
   if(!nb.classList.contains('detail-open')){
     nb.classList.toggle('scrolled',window.scrollY>50);
   }
 });
 
-/* ===== SHOW / HIDE close button + navbar style on detail open/close ===== */
 function showNavCloseBtn(){
   document.getElementById('navCloseDetail').classList.add('visible');
   document.getElementById('navbar').classList.add('detail-open');
@@ -565,10 +564,9 @@ function hideNavCloseBtn(){
   document.getElementById('navbar').classList.remove('detail-open');
   document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
 }
-/* ===== END ===== */
 
 async function goHome(){
-  closeDetail(); // Close any open detail overlay
+  closeDetail();
   setActiveNav('home');
   const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader"><div class="spinner"></div></div>';
@@ -619,7 +617,7 @@ function buildRow(title,items,icon,isTrending=false,forceType=''){
 }
 
 async function showPage(type,page=1){
-  closeDetail(); // Close any open detail overlay
+  closeDetail();
   setActiveNav(type==='movie'?'movies':'tv');
   const m=document.getElementById('mainContent'),l=type==='movie'?'Movies':'TV Shows';
   if(page===1)m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
@@ -635,7 +633,7 @@ async function showPage(type,page=1){
 }
 
 async function showGenreResults(gid,type,gname){
-  closeDetail(); // Close any open detail overlay
+  closeDetail();
   const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const d=await api(`/discover/${type}`,{with_genres:gid,sort_by:'popularity.desc'});
@@ -646,7 +644,7 @@ async function showGenreResults(gid,type,gname){
 }
 
 async function showGenrePage(){
-  closeDetail(); // Close any open detail overlay
+  closeDetail();
   setActiveNav('genres');const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const[mg,tg]=await Promise.all([api('/genre/movie/list'),api('/genre/tv/list')]);
@@ -683,7 +681,7 @@ async function openDetail(id,type){
   const o=document.getElementById('detailOverlay'),c=document.getElementById('detailContent');
   o.classList.add('active');
   document.body.style.overflow='hidden';
-  showNavCloseBtn();  // ← show ✕ in navbar + solid bg
+  showNavCloseBtn();
   c.innerHTML='<div class="loader" style="padding-top:40vh"><div class="spinner"></div></div>';
   try{
     const[d,s]=await Promise.all([api(`/${type}/${id}`),api(`/${type}/${id}/similar`)]);
@@ -732,14 +730,20 @@ async function openDetail(id,type){
 }
 
 function closeDetail(){
-  document.getElementById('detailOverlay').classList.remove('active');
-  document.body.style.overflow='';
-  playerState.isPlaying=false;
-  // Exit fullscreen if active when closing detail
+  const overlay=document.getElementById('detailOverlay');
+  const content=document.getElementById('detailContent');
+  // Exit fullscreen first if active
   if(getFullscreenElement()){
     exitFullscreen();
   }
-  hideNavCloseBtn();  // ← hide ✕ + restore navbar style
+  // Destroy the player iframe to stop all playback
+  destroyPlayer();
+  // Clear detail content entirely so nothing keeps running
+  if(content) content.innerHTML='';
+  overlay.classList.remove('active');
+  document.body.style.overflow='';
+  playerState.isPlaying=false;
+  hideNavCloseBtn();
 }
 
 function setActiveNav(s){
