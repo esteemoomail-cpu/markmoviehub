@@ -58,21 +58,46 @@ img{display:block;max-width:100%}
 .search-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border)}
 .search-btn:hover{background:transparent;border-color:var(--accent);color:var(--accent);box-shadow:var(--glow);transform:scale(1.1)}
 
-.hero{position:relative;height:90vh;min-height:550px;display:flex;align-items:end;padding:0 40px 80px}
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg img{width:100%;height:100%;object-fit:cover}
-.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(5,5,16,.3) 40%,transparent 60%),linear-gradient(to right,rgba(5,5,16,.95) 0%,transparent 70%),linear-gradient(135deg,rgba(0,212,255,.05) 0%,transparent 50%)}
-.hero-content{position:relative;z-index:1;max-width:650px;animation:heroIn .8s ease-out}
-@keyframes heroIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:6px;background:linear-gradient(135deg,rgba(255,45,117,.2),rgba(123,47,247,.2));border:1px solid rgba(255,45,117,.3);font-size:.75rem;font-weight:600;text-transform:uppercase;margin-bottom:20px;letter-spacing:1px;color:var(--accent3);backdrop-filter:blur(10px)}
-.hero-badge i{animation:pulse 1.5s ease-in-out infinite}
+/* ===== HERO CAROUSEL ===== */
+.hero-carousel{position:relative;height:92vh;min-height:580px;overflow:hidden}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1s ease,transform 1s ease;transform:scale(1.05);pointer-events:none}
+.hero-slide.active{opacity:1;transform:scale(1);pointer-events:auto;z-index:2}
+.hero-slide.prev{opacity:0;transform:scale(.95);z-index:1}
+.hero-slide-bg{position:absolute;inset:0}
+.hero-slide-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.7)}
+.hero-slide-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(5,5,16,.4) 35%,transparent 55%),linear-gradient(to right,rgba(5,5,16,.95) 0%,transparent 65%),linear-gradient(135deg,rgba(0,212,255,.04) 0%,transparent 50%)}
+.hero-slide-content{position:absolute;bottom:0;left:0;right:0;padding:0 60px 100px;z-index:3;max-width:680px}
+.hero-slide-content .hero-rank{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:6px;background:linear-gradient(135deg,rgba(255,45,117,.25),rgba(123,47,247,.25));border:1px solid rgba(255,45,117,.35);font-size:.7rem;font-weight:700;text-transform:uppercase;margin-bottom:16px;letter-spacing:1.5px;color:var(--accent3);backdrop-filter:blur(10px);font-family:'Orbitron',sans-serif}
+.hero-slide-content .hero-rank i{animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero-title{font-size:3.5rem;font-weight:700;line-height:1.05;margin-bottom:18px;letter-spacing:-1px}
-.hero-meta{display:flex;align-items:center;gap:18px;margin-bottom:18px;font-size:.9rem;color:var(--text-muted)}
-.hero-meta .rating{color:var(--accent);font-weight:600;display:flex;align-items:center;gap:4px}
-.hero-meta .rating i{color:#fbbf24}
-.hero-overview{font-size:.95rem;color:var(--text-muted);line-height:1.7;margin-bottom:28px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.hero-buttons{display:flex;gap:14px;flex-wrap:wrap}
+.hero-slide-content h1{font-size:3.2rem;font-weight:700;line-height:1.05;margin-bottom:14px;letter-spacing:-1px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.hero-slide-content .hero-meta{display:flex;align-items:center;gap:16px;margin-bottom:14px;font-size:.88rem;color:var(--text-muted)}
+.hero-slide-content .hero-meta .rating{color:var(--accent);font-weight:600;display:flex;align-items:center;gap:4px}
+.hero-slide-content .hero-meta .rating i{color:#fbbf24}
+.hero-slide-content .hero-meta .type-badge{padding:2px 10px;border-radius:4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
+.hero-slide-content .hero-meta .type-badge.movie-b{background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.3);color:var(--accent)}
+.hero-slide-content .hero-meta .type-badge.tv-b{background:rgba(123,47,247,.15);border:1px solid rgba(123,47,247,.3);color:var(--accent2)}
+.hero-slide-content .hero-overview{font-size:.92rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hero-slide-content .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+
+.hero-progress-bar{position:absolute;bottom:0;left:0;right:0;height:3px;z-index:10;background:rgba(255,255,255,.06)}
+.hero-progress-fill{height:100%;width:0;background:var(--gradient3);transition:width .1s linear;border-radius:0 2px 2px 0;box-shadow:0 0 12px rgba(0,212,255,.4)}
+
+.hero-nav-arrows{position:absolute;bottom:50%;z-index:10;display:flex;justify-content:space-between;width:100%;padding:0 16px;pointer-events:none;transform:translateY(50%)}
+.hero-nav-arrows button{pointer-events:auto;width:48px;height:48px;border-radius:50%;background:rgba(5,5,16,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:1rem;color:rgba(255,255,255,.7);transition:all .35s;cursor:pointer}
+.hero-nav-arrows button:hover{border-color:var(--accent);color:#fff;background:rgba(0,212,255,.15);box-shadow:var(--glow);transform:scale(1.12)}
+
+.hero-indicators{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px;align-items:center}
+.hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;transition:all .4s;padding:0}
+.hero-dot.active{width:32px;border-radius:4px;background:var(--gradient3);box-shadow:0 0 12px rgba(0,212,255,.4)}
+.hero-dot:hover:not(.active){background:rgba(255,255,255,.5)}
+
+.hero-thumbs{position:absolute;bottom:26px;right:60px;z-index:10;display:flex;gap:8px;align-items:end}
+.hero-thumb{width:56px;height:80px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .35s;opacity:.5;transform:scale(.9)}
+.hero-thumb.active{border-color:var(--accent);opacity:1;transform:scale(1);box-shadow:0 0 18px rgba(0,212,255,.35)}
+.hero-thumb:hover:not(.active){opacity:.8;transform:scale(.95)}
+.hero-thumb img{width:100%;height:100%;object-fit:cover}
+
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:12px;font-size:.9rem;font-weight:600;transition:all .3s;letter-spacing:.5px;position:relative;overflow:hidden}
 .btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
 .btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 20px rgba(0,212,255,.3)}
@@ -155,42 +180,11 @@ img{display:block;max-width:100%}
 .server-btn.active{background:var(--gradient);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(0,212,255,.3)}
 .server-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
 
-.player-frame-wrapper{
-  position:relative;width:100%;aspect-ratio:16/9;
-  border-radius:16px;overflow:hidden;background:#000;
-  border:1px solid var(--border);
-}
-.player-frame-wrapper iframe{
-  width:100%;height:100%;border:none;display:block;
-}
-.player-frame-wrapper:fullscreen,
-.player-frame-wrapper:-webkit-full-screen,
-.player-frame-wrapper:-moz-full-screen,
-.player-frame-wrapper:-ms-fullscreen{
-  width:100vw!important;height:100vh!important;
-  border-radius:0!important;aspect-ratio:auto!important;
-  border:none!important;background:#000!important;
-}
-.player-frame-wrapper:fullscreen iframe,
-.player-frame-wrapper:-webkit-full-screen iframe,
-.player-frame-wrapper:-moz-full-screen iframe,
-.player-frame-wrapper:-ms-fullscreen iframe{
-  width:100%!important;height:100%!important;
-}
-iframe:fullscreen,
-iframe:-webkit-full-screen,
-iframe:-moz-full-screen,
-iframe:-ms-fullscreen{
-  width:100vw!important;height:100vh!important;
-  position:fixed!important;top:0!important;left:0!important;
-  z-index:2147483647!important;border:none!important;
-}
-.detail-overlay:has(iframe:fullscreen),
-.detail-overlay:has(:fullscreen),
-.player-section:has(iframe:fullscreen),
-.player-section:has(:fullscreen){
-  overflow:visible!important;
-}
+.player-frame-wrapper{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--border)}
+.player-frame-wrapper iframe{width:100%;height:100%;border:none;display:block}
+.player-frame-wrapper:fullscreen,.player-frame-wrapper:-webkit-full-screen,.player-frame-wrapper:-moz-full-screen,.player-frame-wrapper:-ms-fullscreen{width:100vw!important;height:100vh!important;border-radius:0!important;aspect-ratio:auto!important;border:none!important;background:#000!important}
+.player-frame-wrapper:fullscreen iframe,.player-frame-wrapper:-webkit-full-screen iframe,.player-frame-wrapper:-moz-full-screen iframe,.player-frame-wrapper:-ms-fullscreen iframe{width:100%!important;height:100%!important}
+iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-fullscreen{width:100vw!important;height:100vh!important;position:fixed!important;top:0!important;left:0!important;z-index:2147483647!important;border:none!important}
 
 .player-placeholder{width:100%;aspect-ratio:16/9;border-radius:16px;background:linear-gradient(135deg,var(--surface2),rgba(0,212,255,.03));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border:2px dashed var(--border);cursor:pointer;transition:all .4s;position:relative;overflow:hidden}
 .player-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,212,255,.05) 0%,transparent 70%);opacity:0;transition:opacity .4s}
@@ -216,11 +210,6 @@ iframe:-ms-fullscreen{
 .page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:20px 40px 40px;position:relative;z-index:1}
 .page-title-bar{padding:100px 40px 20px;font-size:1.8rem;font-weight:700;position:relative;z-index:1;letter-spacing:-.5px}
 
-.footer{text-align:center;padding:80px 20px 30px;color:var(--text-muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:80px;position:relative;z-index:1}
-.footer::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:var(--gradient3)}
-.footer-logo{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:800;background:var(--gradient3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;letter-spacing:3px;display:flex;align-items:center;justify-content:center;gap:8px}
-.footer-logo i{font-size:.9rem}
-.footer p{margin-top:4px;opacity:.6}
 .loader{display:flex;justify-content:center;padding:40px}
 .spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent);border-right-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;box-shadow:0 0 20px rgba(0,212,255,.15)}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -230,7 +219,12 @@ iframe:-ms-fullscreen{
 .genre-btn-cool:hover{transform:translateY(-4px) scale(1.03)}
 
 @media(max-width:768px){
-  .navbar{padding:0 16px;height:60px}.nav-links{display:none}.hero{height:75vh;padding:0 16px 50px}.hero-title{font-size:2.2rem}
+  .navbar{padding:0 16px;height:60px}.nav-links{display:none}
+  .hero-carousel{height:80vh;min-height:480px}
+  .hero-slide-content{padding:0 20px 80px}.hero-slide-content h1{font-size:2rem}
+  .hero-nav-arrows button{width:36px;height:36px;font-size:.85rem}
+  .hero-thumbs{display:none}
+  .hero-indicators{bottom:20px}
   .section{padding:30px 16px 0}.card{flex:0 0 140px}.detail-poster-row{flex-direction:column;align-items:center}
   .detail-poster{width:160px}.detail-body{padding:0 16px 40px}
   .page-grid{padding:20px 16px 40px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
@@ -240,7 +234,6 @@ iframe:-ms-fullscreen{
   .episode-grid{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
   .row-arrow{width:36px;height:36px;font-size:.85rem;border-radius:10px}.row-arrow.left{left:2px}.row-arrow.right{right:2px}
   .nav-logo{gap:8px}.nav-logo-icon{width:32px;height:32px;font-size:.9rem}.nav-logo-text{font-size:.9rem}
-  .hero-content{animation:none}
 }
 
 .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:5000;background:rgba(5,5,16,.95);backdrop-filter:blur(30px);border-top:1px solid var(--border);padding:8px 0}
@@ -297,11 +290,6 @@ iframe:-ms-fullscreen{
 
 <main id="mainContent"></main>
 
-<div class="footer">
-  <div class="footer-logo"><i class="fas fa-play-circle"></i> MARK MOVIE HUB</div>
-  <p>Powered by TMDB API &bull; Built with ❤️ &bull; Stream the Universe</p>
-</div>
-
 <script>
 // Particles
 (function(){
@@ -329,6 +317,14 @@ let playerState={
   language:'en',isPlaying:false,detail:null,
   totalEpisodes:1,seasons:[]
 };
+
+// Hero carousel state
+let heroSlides=[];
+let heroCurrentIndex=0;
+let heroTimer=null;
+let heroProgressTimer=null;
+let heroProgressValue=0;
+const HERO_INTERVAL=7000;
 
 async function api(endpoint,params={}){
   const url=new URL(`${BASE}${endpoint}`);
@@ -358,9 +354,7 @@ function setIframeSrc(url){
   iframe.setAttribute('allowfullscreen','');
   iframe.setAttribute('webkitallowfullscreen','');
   iframe.setAttribute('mozallowfullscreen','');
-  iframe.setAttribute('allow',
-    'fullscreen *; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-  );
+  iframe.setAttribute('allow','fullscreen *; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
   iframe.setAttribute('referrerpolicy','origin');
   iframe.setAttribute('frameborder','0');
   iframe.setAttribute('scrolling','no');
@@ -372,17 +366,12 @@ function destroyPlayer(){
   const wrapper=document.getElementById('playerFrameWrapper');
   if(wrapper){
     const iframe=wrapper.querySelector('iframe');
-    if(iframe){
-      iframe.src='about:blank';
-      iframe.remove();
-    }
+    if(iframe){iframe.src='about:blank';iframe.remove()}
   }
   playerState.isPlaying=false;
 }
 
-function getFullscreenElement(){
-  return document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement;
-}
+function getFullscreenElement(){return document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement}
 function enterFullscreen(el){
   if(el.requestFullscreen)return el.requestFullscreen();
   if(el.webkitRequestFullscreen)return el.webkitRequestFullscreen();
@@ -399,25 +388,17 @@ function exitFullscreen(){
 function toggleFullscreen(){
   const wrapper=document.getElementById('playerFrameWrapper');
   if(!wrapper)return;
-  if(getFullscreenElement()){
-    exitFullscreen();
-    return;
-  }
+  if(getFullscreenElement()){exitFullscreen();return}
   const iframe=wrapper.querySelector('iframe');
   const tryFs=enterFullscreen(wrapper);
-  if(tryFs&&typeof tryFs.catch==='function'){
-    tryFs.catch(()=>{if(iframe)enterFullscreen(iframe)});
-  }
+  if(tryFs&&typeof tryFs.catch==='function'){tryFs.catch(()=>{if(iframe)enterFullscreen(iframe)})}
 }
 function updateFsButton(){
   const btn=document.getElementById('fsToggleBtn');
   if(!btn)return;
-  btn.innerHTML=getFullscreenElement()
-    ?'<i class="fas fa-compress"></i> Exit Fullscreen'
-    :'<i class="fas fa-expand"></i> Fullscreen';
+  btn.innerHTML=getFullscreenElement()?'<i class="fas fa-compress"></i> Exit Fullscreen':'<i class="fas fa-expand"></i> Fullscreen';
 }
-['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
-  .forEach(evt=>document.addEventListener(evt,updateFsButton));
+['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange'].forEach(evt=>document.addEventListener(evt,updateFsButton));
 
 function loadPlayer(){
   const url=getStreamUrl(playerState.tmdbId,playerState.type,playerState.season,playerState.episode,playerState.server,playerState.language);
@@ -437,9 +418,7 @@ function updateNowPlaying(){
   npi.style.display='flex';
 }
 
-function updateActiveEpisode(){
-  document.querySelectorAll('.episode-btn').forEach(b=>b.classList.toggle('active',+b.dataset.ep===playerState.episode));
-}
+function updateActiveEpisode(){document.querySelectorAll('.episode-btn').forEach(b=>b.classList.toggle('active',+b.dataset.ep===playerState.episode))}
 
 function changeServer(s){
   playerState.server=s;
@@ -448,8 +427,7 @@ function changeServer(s){
 }
 
 async function changeSeason(n){
-  playerState.season=n;
-  playerState.episode=1;
+  playerState.season=n;playerState.episode=1;
   try{
     const d=await api(`/tv/${playerState.tmdbId}/season/${n}`);
     const g=document.getElementById('episodeGrid');
@@ -461,11 +439,7 @@ async function changeSeason(n){
   if(playerState.isPlaying)loadPlayer();
 }
 
-function changeEpisode(n){
-  playerState.episode=n;
-  updateActiveEpisode();
-  if(playerState.isPlaying)loadPlayer();
-}
+function changeEpisode(n){playerState.episode=n;updateActiveEpisode();if(playerState.isPlaying)loadPlayer()}
 
 function startWatching(){
   loadPlayer();
@@ -475,74 +449,41 @@ function startWatching(){
     const wrapper=document.getElementById('playerFrameWrapper');
     if(wrapper){
       const tryFs=enterFullscreen(wrapper);
-      if(tryFs&&typeof tryFs.catch==='function'){
-        tryFs.catch(()=>{
-          const iframe=wrapper.querySelector('iframe');
-          if(iframe)enterFullscreen(iframe);
-        });
-      }
+      if(tryFs&&typeof tryFs.catch==='function'){tryFs.catch(()=>{const iframe=wrapper.querySelector('iframe');if(iframe)enterFullscreen(iframe)})}
     }
   },800);
 }
 
 function buildPlayerSection(detail,type){
-  playerState.tmdbId=detail.id;
-  playerState.type=type;
-  playerState.detail=detail;
-  playerState.season=1;
-  playerState.episode=1;
-  playerState.server=0;
-  playerState.isPlaying=false;
+  playerState.tmdbId=detail.id;playerState.type=type;playerState.detail=detail;
+  playerState.season=1;playerState.episode=1;playerState.server=0;playerState.isPlaying=false;
 
   let tvControls='';
   if(type==='tv'&&detail.seasons){
     const vs=detail.seasons.filter(s=>s.season_number>0);
-    playerState.seasons=vs;
-    playerState.totalEpisodes=vs[0]?.episode_count||1;
-    tvControls=`
-      <div class="tv-selectors">
-        <div class="selector-group">
-          <span class="selector-label">Season</span>
-          <select class="player-select" id="seasonSelect" onchange="changeSeason(+this.value)">
-            ${vs.map(s=>`<option value="${s.season_number}">Season ${s.season_number} (${s.episode_count} ep)</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div style="margin-top:14px">
-        <span class="selector-label" style="display:block;margin-bottom:8px">Episodes</span>
-        <div class="episode-grid" id="episodeGrid">
-          ${Array.from({length:vs[0]?.episode_count||1},(_,i)=>`<button class="episode-btn ${i===0?'active':''}" data-ep="${i+1}" onclick="changeEpisode(${i+1})">${i+1}</button>`).join('')}
-        </div>
-      </div>`;
-  }else{
-    playerState.seasons=[];
-    playerState.totalEpisodes=1;
-  }
+    playerState.seasons=vs;playerState.totalEpisodes=vs[0]?.episode_count||1;
+    tvControls=`<div class="tv-selectors"><div class="selector-group"><span class="selector-label">Season</span>
+      <select class="player-select" id="seasonSelect" onchange="changeSeason(+this.value)">
+      ${vs.map(s=>`<option value="${s.season_number}">Season ${s.season_number} (${s.episode_count} ep)</option>`).join('')}
+      </select></div></div>
+      <div style="margin-top:14px"><span class="selector-label" style="display:block;margin-bottom:8px">Episodes</span>
+      <div class="episode-grid" id="episodeGrid">
+      ${Array.from({length:vs[0]?.episode_count||1},(_,i)=>`<button class="episode-btn ${i===0?'active':''}" data-ep="${i+1}" onclick="changeEpisode(${i+1})">${i+1}</button>`).join('')}
+      </div></div>`;
+  }else{playerState.seasons=[];playerState.totalEpisodes=1}
 
-  return`
-    <div class="player-section" id="playerSection">
-      <div class="player-header">
-        <div class="player-title"><i class="fas fa-play-circle"></i> Watch ${type==='tv'?'TV Show':'Movie'}</div>
-        <div class="player-controls">
-          <span class="selector-label" style="margin-right:4px">Server:</span>
-          <button class="server-btn active" data-server="0" onclick="changeServer(0)">Server 1</button>
-          <button class="server-btn" data-server="1" onclick="changeServer(1)">Server 2</button>
-          <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
-          <button class="fs-toggle-btn" id="fsToggleBtn" onclick="toggleFullscreen()"><i class="fas fa-expand"></i> Fullscreen</button>
-        </div>
-      </div>
-      ${tvControls}
-      <div style="margin-top:18px">
-        <div class="player-frame-wrapper" id="playerFrameWrapper">
-          <div class="player-placeholder" onclick="startWatching()">
-            <i class="fas fa-play-circle"></i>
-            <span>Click to Start Watching</span>
-            <small>${detail.title||detail.name}${type==='tv'?' — S1 E1':''}</small>
-          </div>
-        </div>
-      </div>
-      <div class="now-playing-info" id="nowPlayingInfo" style="display:none"></div>
-    </div>`;
+  return`<div class="player-section" id="playerSection">
+    <div class="player-header"><div class="player-title"><i class="fas fa-play-circle"></i> Watch ${type==='tv'?'TV Show':'Movie'}</div>
+    <div class="player-controls"><span class="selector-label" style="margin-right:4px">Server:</span>
+    <button class="server-btn active" data-server="0" onclick="changeServer(0)">Server 1</button>
+    <button class="server-btn" data-server="1" onclick="changeServer(1)">Server 2</button>
+    <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+    <button class="fs-toggle-btn" id="fsToggleBtn" onclick="toggleFullscreen()"><i class="fas fa-expand"></i> Fullscreen</button>
+    </div></div>${tvControls}
+    <div style="margin-top:18px"><div class="player-frame-wrapper" id="playerFrameWrapper">
+    <div class="player-placeholder" onclick="startWatching()"><i class="fas fa-play-circle"></i>
+    <span>Click to Start Watching</span><small>${detail.title||detail.name}${type==='tv'?' — S1 E1':''}</small></div></div></div>
+    <div class="now-playing-info" id="nowPlayingInfo" style="display:none"></div></div>`;
 }
 
 let rowCounter=0;
@@ -550,23 +491,108 @@ function scrollRow(id,dir){const el=document.getElementById(id);if(el)el.scrollB
 
 window.addEventListener('scroll',()=>{
   const nb=document.getElementById('navbar');
-  if(!nb.classList.contains('detail-open')){
-    nb.classList.toggle('scrolled',window.scrollY>50);
-  }
+  if(!nb.classList.contains('detail-open')){nb.classList.toggle('scrolled',window.scrollY>50)}
 });
 
-function showNavCloseBtn(){
-  document.getElementById('navCloseDetail').classList.add('visible');
-  document.getElementById('navbar').classList.add('detail-open');
+function showNavCloseBtn(){document.getElementById('navCloseDetail').classList.add('visible');document.getElementById('navbar').classList.add('detail-open')}
+function hideNavCloseBtn(){document.getElementById('navCloseDetail').classList.remove('visible');document.getElementById('navbar').classList.remove('detail-open');document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)}
+
+// ===== HERO CAROUSEL =====
+function stopHeroCarousel(){
+  clearInterval(heroTimer);clearInterval(heroProgressTimer);
+  heroTimer=null;heroProgressTimer=null;
 }
-function hideNavCloseBtn(){
-  document.getElementById('navCloseDetail').classList.remove('visible');
-  document.getElementById('navbar').classList.remove('detail-open');
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
+
+function startHeroProgress(){
+  heroProgressValue=0;
+  const fill=document.getElementById('heroProgressFill');
+  if(fill)fill.style.width='0%';
+  clearInterval(heroProgressTimer);
+  heroProgressTimer=setInterval(()=>{
+    heroProgressValue+=100/((HERO_INTERVAL)/50);
+    if(heroProgressValue>=100)heroProgressValue=100;
+    const fill=document.getElementById('heroProgressFill');
+    if(fill)fill.style.width=heroProgressValue+'%';
+  },50);
+}
+
+function goToHeroSlide(idx,manual=false){
+  if(idx===heroCurrentIndex&&!manual)return;
+  const slides=document.querySelectorAll('.hero-slide');
+  const dots=document.querySelectorAll('.hero-dot');
+  const thumbs=document.querySelectorAll('.hero-thumb');
+  if(!slides.length)return;
+
+  slides.forEach(s=>{s.classList.remove('active','prev')});
+  slides[heroCurrentIndex]?.classList.add('prev');
+  heroCurrentIndex=((idx%slides.length)+slides.length)%slides.length;
+  slides[heroCurrentIndex]?.classList.add('active');
+
+  dots.forEach((d,i)=>d.classList.toggle('active',i===heroCurrentIndex));
+  thumbs.forEach((t,i)=>t.classList.toggle('active',i===heroCurrentIndex));
+
+  if(manual){
+    stopHeroCarousel();
+    startHeroAutoplay();
+  }
+  startHeroProgress();
+}
+
+function startHeroAutoplay(){
+  stopHeroCarousel();
+  startHeroProgress();
+  heroTimer=setInterval(()=>{goToHeroSlide(heroCurrentIndex+1)},HERO_INTERVAL);
+}
+
+function buildHeroCarousel(items){
+  heroSlides=items.filter(i=>i.backdrop_path).slice(0,8);
+  if(!heroSlides.length)return'';
+
+  const slides=heroSlides.map((h,i)=>{
+    const ht=h.media_type||'movie';
+    const hn=h.title||h.name;
+    const hy=(h.release_date||h.first_air_date||'').slice(0,4);
+    const typeClass=ht==='tv'?'tv-b':'movie-b';
+    const typeLabel=ht==='tv'?'TV Show':'Movie';
+    return`<div class="hero-slide ${i===0?'active':''}">
+      <div class="hero-slide-bg"><img src="${IMG}original${h.backdrop_path}" alt="${hn}" onerror="this.src='https://via.placeholder.com/1920x1080/0d0d1a/333?text=Mark+Movie+Hub'"></div>
+      <div class="hero-slide-content">
+        <div class="hero-rank"><i class="fas fa-fire"></i> #${i+1} Trending This Week</div>
+        <h1>${hn}</h1>
+        <div class="hero-meta">
+          <span class="rating"><i class="fas fa-star"></i> ${h.vote_average?.toFixed(1)}</span>
+          <span>${hy}</span>
+          <span class="type-badge ${typeClass}">${typeLabel}</span>
+        </div>
+        <p class="hero-overview">${h.overview||''}</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-play"></i> Watch Now</button>
+          <button class="btn btn-secondary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-info-circle"></i> More Info</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const dots=heroSlides.map((_,i)=>`<button class="hero-dot ${i===0?'active':''}" onclick="goToHeroSlide(${i},true)"></button>`).join('');
+
+  const thumbs=heroSlides.map((h,i)=>`<div class="hero-thumb ${i===0?'active':''}" onclick="goToHeroSlide(${i},true)">
+    <img src="${IMG}w185${h.poster_path}" alt="" onerror="this.parentElement.style.display='none'">
+  </div>`).join('');
+
+  return`<section class="hero-carousel" id="heroCarousel">
+    ${slides}
+    <div class="hero-nav-arrows">
+      <button onclick="goToHeroSlide(heroCurrentIndex-1,true)"><i class="fas fa-chevron-left"></i></button>
+      <button onclick="goToHeroSlide(heroCurrentIndex+1,true)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="hero-indicators">${dots}</div>
+    <div class="hero-thumbs">${thumbs}</div>
+    <div class="hero-progress-bar"><div class="hero-progress-fill" id="heroProgressFill"></div></div>
+  </section>`;
 }
 
 async function goHome(){
-  closeDetail();
+  closeDetail();stopHeroCarousel();
   setActiveNav('home');
   const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader"><div class="spinner"></div></div>';
@@ -575,21 +601,9 @@ async function goHome(){
       api('/trending/all/week'),api('/movie/popular'),api('/movie/top_rated'),
       api('/movie/upcoming'),api('/tv/airing_today'),api('/tv/popular'),api('/tv/top_rated')
     ]);
-    const h=t.results[0],ht=h.media_type||'movie',hn=h.title||h.name,hy=(h.release_date||h.first_air_date||'').slice(0,4);
+
     m.innerHTML=`
-      <section class="hero">
-        <div class="hero-bg"><img src="${IMG}original${h.backdrop_path}" alt="${hn}" onerror="this.src='https://via.placeholder.com/1920x1080/0d0d1a/333?text=Mark+Movie+Hub'"></div>
-        <div class="hero-content">
-          <div class="hero-badge"><i class="fas fa-fire"></i> Trending Now</div>
-          <h1 class="hero-title">${hn}</h1>
-          <div class="hero-meta"><span class="rating"><i class="fas fa-star"></i> ${h.vote_average?.toFixed(1)}</span><span>${hy}</span><span>${ht==='tv'?'TV Show':'Movie'}</span></div>
-          <p class="hero-overview">${h.overview}</p>
-          <div class="hero-buttons">
-            <button class="btn btn-primary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-play"></i> Watch Now</button>
-            <button class="btn btn-secondary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-info-circle"></i> More Info</button>
-          </div>
-        </div>
-      </section>
+      ${buildHeroCarousel(t.results)}
       ${buildRow('Trending This Week',t.results,'fa-fire',true)}
       ${buildRow('Popular Movies',p.results,'fa-star',false,'movie')}
       ${buildRow('Top Rated Movies',tr.results,'fa-trophy',false,'movie')}
@@ -597,6 +611,9 @@ async function goHome(){
       ${buildRow('Airing Today',at.results,'fa-broadcast-tower',false,'tv')}
       ${buildRow('Popular TV Shows',pt.results,'fa-tv',false,'tv')}
       ${buildRow('Top Rated TV Shows',tt.results,'fa-award',false,'tv')}`;
+
+    heroCurrentIndex=0;
+    startHeroAutoplay();
   }catch(e){m.innerHTML=`<div style="text-align:center;padding:200px 20px"><h2>Error</h2><p style="color:var(--text-muted)">${e.message}</p></div>`}
 }
 
@@ -617,7 +634,7 @@ function buildRow(title,items,icon,isTrending=false,forceType=''){
 }
 
 async function showPage(type,page=1){
-  closeDetail();
+  closeDetail();stopHeroCarousel();
   setActiveNav(type==='movie'?'movies':'tv');
   const m=document.getElementById('mainContent'),l=type==='movie'?'Movies':'TV Shows';
   if(page===1)m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
@@ -633,7 +650,7 @@ async function showPage(type,page=1){
 }
 
 async function showGenreResults(gid,type,gname){
-  closeDetail();
+  closeDetail();stopHeroCarousel();
   const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const d=await api(`/discover/${type}`,{with_genres:gid,sort_by:'popularity.desc'});
@@ -644,19 +661,19 @@ async function showGenreResults(gid,type,gname){
 }
 
 async function showGenrePage(){
-  closeDetail();
-  setActiveNav('genres');const m=document.getElementById('mainContent');
+  closeDetail();stopHeroCarousel();setActiveNav('genres');
+  const m=document.getElementById('mainContent');
   m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const[mg,tg]=await Promise.all([api('/genre/movie/list'),api('/genre/tv/list')]);
   const c=['#00d4ff','#7b2ff7','#ff2d75','#39ff14','#fbbf24','#ec4899','#f97316','#06b6d4','#8b5cf6','#10b981'];
   let h=`<div class="page-title-bar">🎭 Genres</div>`;
   h+=`<section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-film"></i> Movie Genres</h2></section>`;
   h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;
-  mg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'movie','${g.name}')" style="background:${c[i%c.length]}11;border:1px solid ${c[i%c.length]}33;color:${c[i%c.length]};box-shadow:0 0 20px ${c[i%c.length]}08" onmouseover="this.style.transform='translateY(-4px) scale(1.03)';this.style.boxShadow='0 8px 30px ${c[i%c.length]}22'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 20px ${c[i%c.length]}08'">${g.name}</button>`});
+  mg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'movie','${g.name}')" style="background:${c[i%c.length]}11;border:1px solid ${c[i%c.length]}33;color:${c[i%c.length]};box-shadow:0 0 20px ${c[i%c.length]}08">${g.name}</button>`});
   h+=`</div>`;
   h+=`<section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-tv"></i> TV Genres</h2></section>`;
   h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;
-  tg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'tv','${g.name}')" style="background:${c[(i+3)%c.length]}11;border:1px solid ${c[(i+3)%c.length]}33;color:${c[(i+3)%c.length]};box-shadow:0 0 20px ${c[(i+3)%c.length]}08" onmouseover="this.style.transform='translateY(-4px) scale(1.03)';this.style.boxShadow='0 8px 30px ${c[(i+3)%c.length]}22'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 20px ${c[(i+3)%c.length]}08'">${g.name}</button>`});
+  tg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'tv','${g.name}')" style="background:${c[(i+3)%c.length]}11;border:1px solid ${c[(i+3)%c.length]}33;color:${c[(i+3)%c.length]};box-shadow:0 0 20px ${c[(i+3)%c.length]}08">${g.name}</button>`});
   h+=`</div>`;m.innerHTML=h;window.scrollTo(0,0);
 }
 
@@ -678,10 +695,9 @@ document.getElementById('searchInput').addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();closeDetail()}});
 
 async function openDetail(id,type){
+  stopHeroCarousel();
   const o=document.getElementById('detailOverlay'),c=document.getElementById('detailContent');
-  o.classList.add('active');
-  document.body.style.overflow='hidden';
-  showNavCloseBtn();
+  o.classList.add('active');document.body.style.overflow='hidden';showNavCloseBtn();
   c.innerHTML='<div class="loader" style="padding-top:40vh"><div class="spinner"></div></div>';
   try{
     const[d,s]=await Promise.all([api(`/${type}/${id}`),api(`/${type}/${id}/similar`)]);
@@ -713,9 +729,7 @@ async function openDetail(id,type){
               ${d.status?`<span><i class="fas fa-info-circle"></i> ${d.status}</span>`:''}
             </div>
             <div class="detail-genres">${(d.genres||[]).map(g=>`<span class="genre-tag">${g.name}</span>`).join('')}</div>
-            <div class="detail-actions">
-              <button class="btn btn-primary" onclick="startWatching()"><i class="fas fa-play"></i> Watch Now</button>
-            </div>
+            <div class="detail-actions"><button class="btn btn-primary" onclick="startWatching()"><i class="fas fa-play"></i> Watch Now</button></div>
             <p class="detail-overview">${d.overview||'No overview available.'}</p>
           </div>
         </div>
@@ -732,14 +746,9 @@ async function openDetail(id,type){
 function closeDetail(){
   const overlay=document.getElementById('detailOverlay');
   const content=document.getElementById('detailContent');
-  // Exit fullscreen first if active
-  if(getFullscreenElement()){
-    exitFullscreen();
-  }
-  // Destroy the player iframe to stop all playback
+  if(getFullscreenElement())exitFullscreen();
   destroyPlayer();
-  // Clear detail content entirely so nothing keeps running
-  if(content) content.innerHTML='';
+  if(content)content.innerHTML='';
   overlay.classList.remove('active');
   document.body.style.overflow='';
   playerState.isPlaying=false;
@@ -750,8 +759,27 @@ function setActiveNav(s){
   document.querySelectorAll('.nav-links a,.mobile-nav a').forEach(a=>a.classList.remove('active'));
   ({home:['nav-home','mnav-home'],movies:['nav-movies','mnav-movies'],tv:['nav-tv','mnav-tv'],genres:['nav-genres']}[s]||[]).forEach(id=>document.getElementById(id)?.classList.add('active'));
 }
+
+// Touch/swipe support for hero carousel
+(function(){
+  let startX=0,startY=0,swiping=false;
+  document.addEventListener('touchstart',e=>{
+    const carousel=document.getElementById('heroCarousel');
+    if(!carousel||!carousel.contains(e.target))return;
+    startX=e.touches[0].clientX;startY=e.touches[0].clientY;swiping=true;
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(!swiping)return;swiping=false;
+    const dx=e.changedTouches[0].clientX-startX;
+    const dy=e.changedTouches[0].clientY-startY;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){
+      if(dx<0)goToHeroSlide(heroCurrentIndex+1,true);
+      else goToHeroSlide(heroCurrentIndex-1,true);
+    }
+  },{passive:true});
+})();
+
 goHome();
 </script>
 </body>
 </html>
-
