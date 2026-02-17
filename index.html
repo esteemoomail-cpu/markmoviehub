@@ -34,10 +34,10 @@ img{display:block;max-width:100%}
 .particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;opacity:.4;animation:float linear infinite}
 @keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 
-.navbar{position:fixed;top:0;left:0;right:0;z-index:5000;padding:0 40px;height:70px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:5000;padding:0 40px;height:70px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;gap:16px}
 .navbar.scrolled,.navbar.detail-open{background:rgba(5,5,16,.95);backdrop-filter:blur(30px) saturate(1.5);border-bottom:1px solid rgba(0,212,255,.1);box-shadow:0 4px 30px rgba(0,0,0,.5)}
 
-.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:3px;cursor:pointer;position:relative}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:3px;cursor:pointer;position:relative;flex-shrink:0}
 .nav-logo-icon{width:38px;height:38px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:var(--glow);position:relative;overflow:hidden}
 .nav-logo-icon::before{content:'';position:absolute;inset:-2px;background:var(--gradient3);border-radius:12px;z-index:-1;animation:logoPulse 3s ease-in-out infinite}
 @keyframes logoPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
@@ -45,30 +45,53 @@ img{display:block;max-width:100%}
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .nav-logo-sub{font-family:'Space Grotesk',sans-serif;font-size:.55rem;font-weight:400;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;-webkit-text-fill-color:var(--text-muted)}
 
-.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links{display:flex;gap:32px;align-items:center;flex-shrink:0}
 .nav-links a{font-size:.85rem;font-weight:500;color:var(--text-muted);transition:all .3s;position:relative;letter-spacing:.5px;text-transform:uppercase;padding:4px 0}
 .nav-links a:hover,.nav-links a.active{color:var(--accent);text-shadow:0 0 20px rgba(0,212,255,.5)}
 .nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--gradient);border-radius:1px;box-shadow:0 0 10px rgba(0,212,255,.5)}
-.nav-right{display:flex;align-items:center;gap:16px}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+
+/* ===== INLINE SEARCH BAR ===== */
+.nav-search-bar{position:relative;flex:1;max-width:360px;min-width:0}
+.nav-search-bar input{width:100%;padding:10px 16px 10px 40px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:.88rem;outline:none;transition:all .3s;font-family:'Space Grotesk',sans-serif}
+.nav-search-bar input:focus{border-color:var(--accent);box-shadow:0 0 20px rgba(0,212,255,.12);background:var(--surface)}
+.nav-search-bar input::placeholder{color:var(--text-muted);opacity:.6}
+.nav-search-bar i.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:.85rem;pointer-events:none;transition:color .3s}
+.nav-search-bar input:focus~i.search-icon{color:var(--accent)}
+.nav-search-bar .search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:6px;display:none;align-items:center;justify-content:center;font-size:.7rem;color:var(--text-muted);cursor:pointer;transition:all .2s;background:transparent}
+.nav-search-bar .search-clear.visible{display:flex}
+.nav-search-bar .search-clear:hover{color:var(--accent3);background:rgba(255,45,117,.1)}
+
+.nav-search-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;max-height:420px;overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;display:none;z-index:5500;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 30px rgba(0,212,255,.08);padding:8px}
+.nav-search-dropdown.active{display:block;animation:fadeIn .2s ease}
+.nav-search-dropdown::-webkit-scrollbar{width:4px}
+.search-dropdown-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;cursor:pointer;transition:all .2s}
+.search-dropdown-item:hover{background:var(--surface2)}
+.search-dropdown-item img{width:44px;height:66px;object-fit:cover;border-radius:8px;flex-shrink:0}
+.search-dropdown-item-info{flex:1;min-width:0}
+.search-dropdown-item-title{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-dropdown-item-meta{font-size:.72rem;color:var(--text-muted);display:flex;align-items:center;gap:6px;margin-top:3px}
+.search-dropdown-item-meta .sdi-rating{color:#fbbf24}
+.search-dropdown-item-type{padding:2px 8px;border-radius:4px;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif;flex-shrink:0}
+.search-dropdown-item-type.movie-t{background:rgba(0,212,255,.12);color:var(--accent);border:1px solid rgba(0,212,255,.2)}
+.search-dropdown-item-type.tv-t{background:rgba(123,47,247,.12);color:var(--accent2);border:1px solid rgba(123,47,247,.2)}
+.search-dropdown-empty{text-align:center;padding:30px 16px;color:var(--text-muted);font-size:.85rem}
+.search-dropdown-loading{text-align:center;padding:24px 16px}
 
 .nav-close-detail{display:none;width:42px;height:42px;border-radius:12px;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border);color:var(--text-muted)}
 .nav-close-detail.visible{display:flex}
 .nav-close-detail:hover{background:transparent;border-color:var(--accent3);color:var(--accent3);box-shadow:var(--glow2);transform:scale(1.1) rotate(90deg)}
 
-.search-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border)}
-.search-btn:hover{background:transparent;border-color:var(--accent);color:var(--accent);box-shadow:var(--glow);transform:scale(1.1)}
-
-/* ===== LOGIN BUTTON & MODAL ===== */
+/* ===== LOGIN ===== */
 .login-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border);position:relative}
 .login-btn:hover{background:transparent;border-color:var(--accent2);color:var(--accent2);box-shadow:0 0 20px rgba(123,47,247,.3),0 0 40px rgba(123,47,247,.2);transform:scale(1.1)}
-.login-btn.logged-in{border-color:var(--neon-green);color:var(--neon-green)}
-.login-btn.logged-in:hover{box-shadow:0 0 20px rgba(57,255,20,.3)}
 
 .user-avatar-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--gradient);font-size:.85rem;font-weight:700;transition:all .3s;border:2px solid rgba(0,212,255,.3);cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
 .user-avatar-btn:hover{transform:scale(1.1);box-shadow:var(--glow)}
 
 .login-overlay{position:fixed;inset:0;z-index:7000;background:rgba(5,5,16,.92);backdrop-filter:blur(30px);display:none;align-items:center;justify-content:center;padding:20px}
 .login-overlay.active{display:flex;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
 .login-modal{width:100%;max-width:420px;background:var(--surface);border-radius:24px;border:1px solid var(--border);padding:40px 36px;position:relative;overflow:hidden}
 .login-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient3);opacity:.7}
@@ -84,16 +107,21 @@ img{display:block;max-width:100%}
 .login-header p{font-size:.85rem;color:var(--text-muted)}
 
 .login-tabs{display:flex;gap:4px;margin-bottom:28px;background:var(--surface2);border-radius:12px;padding:4px;position:relative;z-index:1}
-.login-tab{flex:1;padding:10px;border-radius:10px;font-size:.85rem;font-weight:600;text-align:center;transition:all .3s;color:var(--text-muted);letter-spacing:.5px}
+.login-tab{flex:1;padding:10px;border-radius:10px;font-size:.82rem;font-weight:600;text-align:center;transition:all .3s;color:var(--text-muted);letter-spacing:.5px}
 .login-tab.active{background:var(--gradient);color:#fff;box-shadow:0 4px 15px rgba(0,212,255,.3)}
 .login-tab:hover:not(.active){color:var(--text)}
 
 .login-form{position:relative;z-index:1}
-.login-form-group{margin-bottom:18px}
+.login-form-group{margin-bottom:18px;position:relative}
 .login-form-group label{display:block;font-size:.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .login-form-group input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:.95rem;outline:none;transition:all .3s;font-family:'Space Grotesk',sans-serif}
 .login-form-group input:focus{border-color:var(--accent);box-shadow:0 0 20px rgba(0,212,255,.1)}
 .login-form-group input::placeholder{color:var(--text-muted);opacity:.5}
+.login-form-group input.input-error{border-color:var(--accent3);box-shadow:0 0 15px rgba(255,45,117,.1)}
+.login-form-group input.input-valid{border-color:var(--neon-green);box-shadow:0 0 15px rgba(57,255,20,.1)}
+.input-hint{font-size:.7rem;margin-top:5px;display:none;align-items:center;gap:5px}
+.input-hint.error{color:var(--accent3);display:flex}
+.input-hint.valid{color:var(--neon-green);display:flex}
 
 .login-submit{width:100%;padding:14px;border-radius:12px;background:var(--gradient);color:#fff;font-size:.95rem;font-weight:700;letter-spacing:.5px;transition:all .3s;box-shadow:0 4px 20px rgba(0,212,255,.3);margin-top:8px}
 .login-submit:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,212,255,.5),0 0 60px rgba(123,47,247,.3)}
@@ -102,15 +130,15 @@ img{display:block;max-width:100%}
 .login-error{background:rgba(255,45,117,.1);border:1px solid rgba(255,45,117,.25);border-radius:10px;padding:12px 16px;font-size:.85rem;color:var(--accent3);margin-bottom:16px;display:none;align-items:center;gap:8px}
 .login-error.visible{display:flex}
 .login-error i{flex-shrink:0}
-
 .login-success{background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.25);border-radius:10px;padding:12px 16px;font-size:.85rem;color:var(--neon-green);margin-bottom:16px;display:none;align-items:center;gap:8px}
 .login-success.visible{display:flex}
 .login-success i{flex-shrink:0}
 
-.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-muted);font-size:.75rem;text-transform:uppercase;letter-spacing:1px}
-.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.forgot-password-link{display:block;text-align:right;font-size:.78rem;color:var(--accent);margin-top:-10px;margin-bottom:16px;cursor:pointer;transition:all .2s;position:relative;z-index:1}
+.forgot-password-link:hover{color:var(--accent2);text-decoration:underline}
 
-/* User dropdown */
+.login-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
+
 .user-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:220px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:8px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 30px rgba(0,212,255,.1);display:none;z-index:5001;overflow:hidden}
 .user-dropdown::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gradient3);opacity:.5}
 .user-dropdown.active{display:block;animation:fadeIn .2s ease}
@@ -124,50 +152,47 @@ img{display:block;max-width:100%}
 .user-dropdown-item.logout:hover{background:rgba(255,45,117,.1)}
 .user-dropdown-item i{width:18px;text-align:center;font-size:.85rem}
 
-/* Loading spinner for login */
-.login-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
-
-/* ===== HERO CAROUSEL ===== */
-.hero-carousel{position:relative;height:92vh;min-height:580px;overflow:hidden}
+/* ===== HERO CAROUSEL — 3/4 of original (69vh) ===== */
+.hero-carousel{position:relative;height:69vh;min-height:435px;overflow:hidden}
 .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease,transform .5s ease;transform:scale(1.05);pointer-events:none}
 .hero-slide.active{opacity:1;transform:scale(1);pointer-events:auto;z-index:2}
 .hero-slide.prev{opacity:0;transform:scale(.95);z-index:1}
 .hero-slide-bg{position:absolute;inset:0}
 .hero-slide-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.7)}
 .hero-slide-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(5,5,16,.4) 35%,transparent 55%),linear-gradient(to right,rgba(5,5,16,.95) 0%,transparent 65%),linear-gradient(135deg,rgba(0,212,255,.04) 0%,transparent 50%)}
-.hero-slide-content{position:absolute;bottom:0;left:0;right:0;padding:0 60px 100px;z-index:3;max-width:680px}
-.hero-slide-content .hero-rank{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:6px;background:linear-gradient(135deg,rgba(255,45,117,.25),rgba(123,47,247,.25));border:1px solid rgba(255,45,117,.35);font-size:.7rem;font-weight:700;text-transform:uppercase;margin-bottom:16px;letter-spacing:1.5px;color:var(--accent3);backdrop-filter:blur(10px);font-family:'Orbitron',sans-serif}
+.hero-slide-content{position:absolute;bottom:0;left:0;right:0;padding:0 60px 70px;z-index:3;max-width:620px}
+.hero-slide-content .hero-rank{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:6px;background:linear-gradient(135deg,rgba(255,45,117,.25),rgba(123,47,247,.25));border:1px solid rgba(255,45,117,.35);font-size:.65rem;font-weight:700;text-transform:uppercase;margin-bottom:14px;letter-spacing:1.5px;color:var(--accent3);backdrop-filter:blur(10px);font-family:'Orbitron',sans-serif}
 .hero-slide-content .hero-rank i{animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero-slide-content h1{font-size:3.2rem;font-weight:700;line-height:1.05;margin-bottom:14px;letter-spacing:-1px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
-.hero-slide-content .hero-meta{display:flex;align-items:center;gap:16px;margin-bottom:14px;font-size:.88rem;color:var(--text-muted)}
+.hero-slide-content h1{font-size:2.6rem;font-weight:700;line-height:1.08;margin-bottom:12px;letter-spacing:-.5px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.hero-slide-content .hero-meta{display:flex;align-items:center;gap:14px;margin-bottom:12px;font-size:.82rem;color:var(--text-muted)}
 .hero-slide-content .hero-meta .rating{color:var(--accent);font-weight:600;display:flex;align-items:center;gap:4px}
 .hero-slide-content .hero-meta .rating i{color:#fbbf24}
-.hero-slide-content .hero-meta .type-badge{padding:2px 10px;border-radius:4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
+.hero-slide-content .hero-meta .type-badge{padding:2px 10px;border-radius:4px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
 .hero-slide-content .hero-meta .type-badge.movie-b{background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.3);color:var(--accent)}
 .hero-slide-content .hero-meta .type-badge.tv-b{background:rgba(123,47,247,.15);border:1px solid rgba(123,47,247,.3);color:var(--accent2)}
-.hero-slide-content .hero-overview{font-size:.92rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.hero-slide-content .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.hero-slide-content .hero-overview{font-size:.88rem;color:var(--text-muted);line-height:1.65;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hero-slide-content .hero-buttons{display:flex;gap:10px;flex-wrap:wrap}
 
-.hero-progress-bar{position:absolute;bottom:0;left:0;right:0;height:3px;z-index:10;background:rgba(255,255,255,.06);display:none}
+.hero-progress-bar{position:absolute;bottom:0;left:0;right:0;height:3px;z-index:10;background:rgba(255,255,255,.06)}
 .hero-progress-fill{height:100%;width:0;background:var(--gradient3);transition:width .1s linear;border-radius:0 2px 2px 0;box-shadow:0 0 12px rgba(0,212,255,.4)}
 
 .hero-nav-arrows{position:absolute;bottom:50%;z-index:10;display:flex;justify-content:space-between;width:100%;padding:0 16px;pointer-events:none;transform:translateY(50%)}
-.hero-nav-arrows button{pointer-events:auto;width:48px;height:48px;border-radius:50%;background:rgba(5,5,16,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:1rem;color:rgba(255,255,255,.7);transition:all .35s;cursor:pointer}
+.hero-nav-arrows button{pointer-events:auto;width:42px;height:42px;border-radius:50%;background:rgba(5,5,16,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:rgba(255,255,255,.7);transition:all .35s;cursor:pointer}
 .hero-nav-arrows button:hover{border-color:var(--accent);color:#fff;background:rgba(0,212,255,.15);box-shadow:var(--glow);transform:scale(1.12)}
 
-.hero-indicators{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px;align-items:center}
+.hero-indicators{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px;align-items:center}
 .hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;transition:all .4s;padding:0}
-.hero-dot.active{width:32px;border-radius:4px;background:var(--gradient3);box-shadow:0 0 12px rgba(0,212,255,.4)}
+.hero-dot.active{width:28px;border-radius:4px;background:var(--gradient3);box-shadow:0 0 12px rgba(0,212,255,.4)}
 .hero-dot:hover:not(.active){background:rgba(255,255,255,.5)}
 
-.hero-thumbs{position:absolute;bottom:26px;right:60px;z-index:10;display:flex;gap:8px;align-items:end}
-.hero-thumb{width:56px;height:80px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .35s;opacity:.5;transform:scale(.9)}
-.hero-thumb.active{border-color:var(--accent);opacity:1;transform:scale(1);box-shadow:0 0 18px rgba(0,212,255,.35)}
+.hero-thumbs{position:absolute;bottom:20px;right:60px;z-index:10;display:flex;gap:6px;align-items:end}
+.hero-thumb{width:48px;height:68px;border-radius:7px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .35s;opacity:.5;transform:scale(.9)}
+.hero-thumb.active{border-color:var(--accent);opacity:1;transform:scale(1);box-shadow:0 0 14px rgba(0,212,255,.35)}
 .hero-thumb:hover:not(.active){opacity:.8;transform:scale(.95)}
 .hero-thumb img{width:100%;height:100%;object-fit:cover}
 
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:12px;font-size:.9rem;font-weight:600;transition:all .3s;letter-spacing:.5px;position:relative;overflow:hidden}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-size:.85rem;font-weight:600;transition:all .3s;letter-spacing:.5px;position:relative;overflow:hidden}
 .btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
 .btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 20px rgba(0,212,255,.3)}
 .btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 40px rgba(0,212,255,.5),0 0 60px rgba(123,47,247,.3)}
@@ -201,17 +226,6 @@ img{display:block;max-width:100%}
 .card-rating{color:#fbbf24}
 .card-badge{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:6px;font-size:.65rem;font-weight:700;z-index:2;font-family:'Orbitron',sans-serif;letter-spacing:1px}
 .card-badge.trending{background:linear-gradient(135deg,rgba(255,45,117,.9),rgba(123,47,247,.9));box-shadow:0 2px 15px rgba(255,45,117,.4)}
-
-.search-overlay{position:fixed;inset:0;z-index:6000;background:rgba(5,5,16,.92);backdrop-filter:blur(30px);display:none;flex-direction:column;align-items:center;padding:80px 20px 20px;overflow-y:auto}
-.search-overlay.active{display:flex;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.search-close{position:absolute;top:20px;right:30px;font-size:1.5rem;color:var(--text-muted);transition:all .3s;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;z-index:6001}
-.search-close:hover{color:var(--accent3);transform:rotate(90deg)}
-.search-bar{width:100%;max-width:650px;position:relative;margin-bottom:40px}
-.search-bar input{width:100%;padding:18px 24px 18px 54px;border-radius:16px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-size:1.1rem;outline:none;transition:all .3s;font-family:'Space Grotesk',sans-serif}
-.search-bar input:focus{border-color:var(--accent);box-shadow:0 0 30px rgba(0,212,255,.15)}
-.search-bar i{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1.1rem}
-.search-results{width:100%;max-width:900px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
 
 .detail-overlay{position:fixed;inset:0;z-index:3000;background:rgba(5,5,16,.95);backdrop-filter:blur(10px);display:none;overflow-y:auto}
 .detail-overlay.active{display:block;animation:fadeIn .3s ease}
@@ -251,9 +265,8 @@ img{display:block;max-width:100%}
 
 .player-frame-wrapper{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--border)}
 .player-frame-wrapper iframe{width:100%;height:100%;border:none;display:block}
-.player-frame-wrapper:fullscreen,.player-frame-wrapper:-webkit-full-screen,.player-frame-wrapper:-moz-full-screen,.player-frame-wrapper:-ms-fullscreen{width:100vw!important;height:100vh!important;border-radius:0!important;aspect-ratio:auto!important;border:none!important;background:#000!important}
-.player-frame-wrapper:fullscreen iframe,.player-frame-wrapper:-webkit-full-screen iframe,.player-frame-wrapper:-moz-full-screen iframe,.player-frame-wrapper:-ms-fullscreen iframe{width:100%!important;height:100%!important}
-iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-fullscreen{width:100vw!important;height:100vh!important;position:fixed!important;top:0!important;left:0!important;z-index:2147483647!important;border:none!important}
+.player-frame-wrapper:fullscreen,.player-frame-wrapper:-webkit-full-screen{width:100vw!important;height:100vh!important;border-radius:0!important;aspect-ratio:auto!important;border:none!important;background:#000!important}
+.player-frame-wrapper:fullscreen iframe,.player-frame-wrapper:-webkit-full-screen iframe{width:100%!important;height:100%!important}
 
 .player-placeholder{width:100%;aspect-ratio:16/9;border-radius:16px;background:linear-gradient(135deg,var(--surface2),rgba(0,212,255,.03));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border:2px dashed var(--border);cursor:pointer;transition:all .4s;position:relative;overflow:hidden}
 .player-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,212,255,.05) 0%,transparent 70%);opacity:0;transition:opacity .4s}
@@ -288,12 +301,17 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
 .genre-btn-cool:hover{transform:translateY(-4px) scale(1.03)}
 
 @media(max-width:768px){
-  .navbar{padding:0 16px;height:60px}.nav-links{display:none}
-  .hero-carousel{height:80vh;min-height:480px}
-  .hero-slide-content{padding:0 20px 80px}.hero-slide-content h1{font-size:2rem}
-  .hero-nav-arrows button{width:36px;height:36px;font-size:.85rem}
+  .navbar{padding:0 12px;height:60px;gap:8px}.nav-links{display:none}
+  .nav-search-bar{max-width:none;min-width:80px}
+  .nav-search-bar input{padding:8px 12px 8px 34px;font-size:.8rem;border-radius:10px}
+  .nav-search-bar i.search-icon{left:10px;font-size:.75rem}
+  .hero-carousel{height:55vh;min-height:320px}
+  .hero-slide-content{padding:0 20px 60px}.hero-slide-content h1{font-size:1.6rem}
+  .hero-slide-content .hero-overview{-webkit-line-clamp:2;font-size:.8rem}
+  .hero-slide-content .hero-buttons .btn{padding:10px 20px;font-size:.78rem}
+  .hero-nav-arrows button{width:34px;height:34px;font-size:.8rem}
   .hero-thumbs{display:none}
-  .hero-indicators{bottom:20px}
+  .hero-indicators{bottom:14px}
   .section{padding:30px 16px 0}.card{flex:0 0 140px}.detail-poster-row{flex-direction:column;align-items:center}
   .detail-poster{width:160px}.detail-body{padding:0 16px 40px}
   .page-grid{padding:20px 16px 40px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
@@ -302,9 +320,11 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
   .tv-selectors{flex-direction:column;width:100%}.selector-group{width:100%}.player-select{width:100%}
   .episode-grid{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
   .row-arrow{width:36px;height:36px;font-size:.85rem;border-radius:10px}.row-arrow.left{left:2px}.row-arrow.right{right:2px}
-  .nav-logo{gap:8px}.nav-logo-icon{width:32px;height:32px;font-size:.9rem}.nav-logo-text{font-size:.9rem}
-  .login-modal{padding:30px 24px;margin:10px}
+  .nav-logo{gap:6px}.nav-logo-icon{width:30px;height:30px;font-size:.8rem}.nav-logo-text{font-size:.8rem}
+  .nav-logo-sub{display:none}
+  .login-modal{padding:28px 20px;margin:10px}
   .user-dropdown{right:-60px;width:200px}
+  .nav-search-dropdown{left:-40px;right:-40px}
 }
 
 .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:5000;background:rgba(5,5,16,.95);backdrop-filter:blur(30px);border-top:1px solid var(--border);padding:8px 0}
@@ -333,19 +353,22 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
     <a href="#" onclick="showPage('tv')" id="nav-tv">TV Shows</a>
     <a href="#" onclick="showGenrePage()" id="nav-genres">Genres</a>
   </div>
+  <div class="nav-search-bar" id="navSearchBar">
+    <input type="text" id="navSearchInput" placeholder="Search movies & TV shows..." autocomplete="off">
+    <i class="fas fa-search search-icon"></i>
+    <button class="search-clear" id="searchClearBtn" onclick="clearNavSearch()"><i class="fas fa-times"></i></button>
+    <div class="nav-search-dropdown" id="navSearchDropdown"></div>
+  </div>
   <div class="nav-right">
-    <button class="search-btn" id="searchBtn" onclick="openSearch()"><i class="fas fa-search"></i></button>
-    <!-- Login Button -->
     <div style="position:relative" id="authContainer">
       <button class="login-btn" id="loginBtn" onclick="toggleLoginModal()"><i class="fas fa-user"></i></button>
-      <!-- User dropdown (shown when logged in) -->
       <div class="user-dropdown" id="userDropdown">
         <div class="user-dropdown-header">
           <div class="user-dropdown-avatar" id="dropdownAvatar">U</div>
           <div class="user-dropdown-name" id="dropdownName">User</div>
           <div class="user-dropdown-email" id="dropdownEmail">user@email.com</div>
         </div>
-        <div class="user-dropdown-item" onclick="closeUserDropdown()"><i class="fas fa-home"></i> Home</div>
+        <div class="user-dropdown-item" onclick="closeUserDropdown();goHome()"><i class="fas fa-home"></i> Home</div>
         <div class="user-dropdown-item logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</div>
       </div>
     </div>
@@ -357,7 +380,7 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
   <a href="#" class="active" onclick="goHome()" id="mnav-home"><i class="fas fa-home"></i>Home</a>
   <a href="#" onclick="showPage('movie')" id="mnav-movies"><i class="fas fa-film"></i>Movies</a>
   <a href="#" onclick="showPage('tv')" id="mnav-tv"><i class="fas fa-tv"></i>TV</a>
-  <a href="#" onclick="openSearch()" id="mnav-search"><i class="fas fa-search"></i>Search</a>
+  <a href="#" onclick="document.getElementById('navSearchInput').focus()" id="mnav-search"><i class="fas fa-search"></i>Search</a>
   <a href="#" onclick="toggleLoginModal()" id="mnav-login"><i class="fas fa-user"></i>Login</a>
 </div>
 
@@ -370,936 +393,289 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
       <h2 id="loginModalTitle">Welcome Back</h2>
       <p id="loginModalSubtitle">Sign in to your account</p>
     </div>
-    
-    <div class="login-tabs">
+    <div class="login-tabs" id="loginTabs">
       <button class="login-tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</button>
       <button class="login-tab" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
+      <button class="login-tab" id="tabForgot" onclick="switchAuthTab('forgot')">Forgot</button>
     </div>
-
     <div class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i><span id="loginErrorText">Error</span></div>
     <div class="login-success" id="loginSuccess"><i class="fas fa-check-circle"></i><span id="loginSuccessText">Success</span></div>
-
-    <!-- Login Form -->
     <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
-      <div class="login-form-group">
-        <label>Username</label>
-        <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username">
-      </div>
-      <div class="login-form-group">
-        <label>Password</label>
-        <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
-      </div>
-      <button type="submit" class="login-submit" id="loginSubmitBtn">
-        <span id="loginSubmitText">Sign In</span>
-      </button>
+      <div class="login-form-group"><label>Username</label><input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username"></div>
+      <div class="login-form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password"></div>
+      <span class="forgot-password-link" onclick="switchAuthTab('forgot')">Forgot Password?</span>
+      <button type="submit" class="login-submit" id="loginSubmitBtn"><span id="loginSubmitText">Sign In</span></button>
     </form>
-
-    <!-- Register Form -->
     <form class="login-form" id="registerForm" style="display:none" onsubmit="handleRegister(event)">
-      <div class="login-form-group">
-        <label>Username</label>
-        <input type="text" id="regUsername" placeholder="Choose a username" required autocomplete="username">
-      </div>
-      <div class="login-form-group">
-        <label>Email</label>
-        <input type="email" id="regEmail" placeholder="Enter your email" required autocomplete="email">
-      </div>
-      <div class="login-form-group">
-        <label>Password</label>
-        <input type="password" id="regPassword" placeholder="Create a password" required minlength="4" autocomplete="new-password">
-      </div>
-      <button type="submit" class="login-submit" id="regSubmitBtn">
-        <span id="regSubmitText">Create Account</span>
-      </button>
+      <div class="login-form-group"><label>Username</label><input type="text" id="regUsername" placeholder="Choose a username" required autocomplete="username" minlength="3"></div>
+      <div class="login-form-group"><label>Email</label><input type="email" id="regEmail" placeholder="Enter a valid email" required autocomplete="email"><div class="input-hint" id="regEmailHint"></div></div>
+      <div class="login-form-group"><label>Password</label><input type="password" id="regPassword" placeholder="Create a password (min 4 chars)" required minlength="4" autocomplete="new-password"></div>
+      <button type="submit" class="login-submit" id="regSubmitBtn"><span id="regSubmitText">Create Account</span></button>
+    </form>
+    <form class="login-form" id="forgotForm" style="display:none" onsubmit="handleForgotPassword(event)">
+      <div class="login-form-group"><label>Email Address</label><input type="email" id="forgotEmail" placeholder="Enter your registered email" required autocomplete="email"><div class="input-hint" id="forgotEmailHint"></div></div>
+      <button type="submit" class="login-submit" id="forgotSubmitBtn"><span id="forgotSubmitText"><i class="fas fa-paper-plane" style="margin-right:6px"></i>Send Password to Email</span></button>
     </form>
   </div>
 </div>
 
-<div class="search-overlay" id="searchOverlay">
-  <button class="search-close" onclick="closeSearch()"><i class="fas fa-times"></i></button>
-  <div class="search-bar">
-    <i class="fas fa-search"></i>
-    <input type="text" id="searchInput" placeholder="Search movies & TV shows..." autocomplete="off">
-  </div>
-  <div class="search-results" id="searchResults"></div>
-</div>
-
-<div class="detail-overlay" id="detailOverlay">
-  <div id="detailContent"></div>
-</div>
+<div class="detail-overlay" id="detailOverlay"><div id="detailContent"></div></div>
 
 <main id="mainContent"></main>
 
 <script>
-// ===========================
-// GOOGLE SHEETS AUTH SYSTEM
-// ===========================
-// SETUP INSTRUCTIONS:
-// 1. Create a Google Sheet with columns: A=Username, B=Email, C=Password
-// 2. Add header row: Username | Email | Password
-// 3. Go to Extensions > Apps Script and paste the script below
-// 4. Deploy as Web App (Execute as: Me, Access: Anyone)
-// 5. Replace GOOGLE_SCRIPT_URL with your deployed URL
+(function(){const c=document.getElementById('particles');for(let i=0;i<40;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*15)+'s';p.style.animationDelay=Math.random()*10+'s';p.style.width=p.style.height=(1+Math.random()*2)+'px';const colors=['#00d4ff','#7b2ff7','#ff2d75','#39ff14'];p.style.background=colors[Math.floor(Math.random()*colors.length)];c.appendChild(p)}})();
 
 /*
-===== GOOGLE APPS SCRIPT (paste in Apps Script editor) =====
+===== GOOGLE APPS SCRIPT — paste into Extensions > Apps Script =====
 
-function doGet(e) {
-  return handleRequest(e);
+function doGet(e){return handleRequest(e)}
+function doPost(e){return handleRequest(e)}
+function handleRequest(e){
+  var params=e.parameter,action=params.action;
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  var sheet=ss.getSheetByName('Users')||ss.getSheets()[0];
+  var result={};
+  try{
+    if(action==='login')result=loginUser(sheet,params.username,params.password);
+    else if(action==='register')result=registerUser(sheet,params.username,params.email,params.password);
+    else if(action==='forgot')result=forgotPassword(sheet,params.email);
+    else result={success:false,message:'Invalid action'};
+  }catch(err){result={success:false,message:err.toString()}}
+  return ContentService.createTextOutput(params.callback+'('+JSON.stringify(result)+')').setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
-
-function doPost(e) {
-  return handleRequest(e);
+function loginUser(sheet,username,password){
+  var data=sheet.getDataRange().getValues();
+  for(var i=1;i<data.length;i++){if(data[i][0].toString().toLowerCase()===username.toLowerCase()&&data[i][2].toString()===password)return{success:true,message:'Login successful',user:{username:data[i][0],email:data[i][1]}}}
+  return{success:false,message:'Invalid username or password'};
 }
-
-function handleRequest(e) {
-  var params = e.parameter;
-  var action = params.action;
-  
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName('Users') || ss.getSheets()[0];
-  
-  var result = {};
-  
-  try {
-    if (action === 'login') {
-      result = loginUser(sheet, params.username, params.password);
-    } else if (action === 'register') {
-      result = registerUser(sheet, params.username, params.email, params.password);
-    } else {
-      result = { success: false, message: 'Invalid action' };
-    }
-  } catch (err) {
-    result = { success: false, message: err.toString() };
-  }
-  
-  return ContentService.createTextOutput(
-    params.callback + '(' + JSON.stringify(result) + ')'
-  ).setMimeType(ContentService.MimeType.JAVASCRIPT);
+function registerUser(sheet,username,email,password){
+  var data=sheet.getDataRange().getValues();
+  for(var i=1;i<data.length;i++){if(data[i][0].toString().toLowerCase()===username.toLowerCase())return{success:false,message:'Username already exists'};if(data[i][1].toString().toLowerCase()===email.toLowerCase())return{success:false,message:'Email already registered'}}
+  sheet.appendRow([username,email,password]);
+  return{success:true,message:'Account created successfully! You can now login.',user:{username:username,email:email}};
 }
-
-function loginUser(sheet, username, password) {
-  var data = sheet.getDataRange().getValues();
-  
-  for (var i = 1; i < data.length; i++) {
-    if (data[i][0].toString().toLowerCase() === username.toLowerCase() && 
-        data[i][2].toString() === password) {
-      return { 
-        success: true, 
-        message: 'Login successful', 
-        user: { 
-          username: data[i][0], 
-          email: data[i][1] 
-        } 
-      };
+function forgotPassword(sheet,email){
+  var data=sheet.getDataRange().getValues();
+  for(var i=1;i<data.length;i++){
+    if(data[i][1].toString().toLowerCase()===email.toLowerCase()){
+      var username=data[i][0],password=data[i][2];
+      try{
+        MailApp.sendEmail({to:email,subject:'Mark Movie Hub - Password Recovery',
+          htmlBody:'<div style="font-family:Arial;max-width:500px;margin:0 auto;padding:30px;background:#0d0d1a;border-radius:16px;border:1px solid #1e1e3a"><div style="text-align:center;margin-bottom:24px"><h1 style="color:#00d4ff;font-size:24px;margin:0">Mark Movie Hub</h1><p style="color:#7a7a9e;font-size:14px">Password Recovery</p></div><div style="background:#151528;border-radius:12px;padding:20px;border:1px solid #1e1e3a"><p style="color:#e8e8f0;margin:0 0 12px">Hello <strong>'+username+'</strong>,</p><p style="color:#7a7a9e;margin:0 0 16px">Here are your account details:</p><div style="background:#0d0d1a;border-radius:8px;padding:14px;border:1px solid #1e1e3a"><p style="color:#7a7a9e;margin:0 0 6px;font-size:13px">Username:</p><p style="color:#00d4ff;margin:0 0 12px;font-size:16px;font-weight:bold">'+username+'</p><p style="color:#7a7a9e;margin:0 0 6px;font-size:13px">Password:</p><p style="color:#39ff14;margin:0;font-size:16px;font-weight:bold">'+password+'</p></div></div><p style="color:#7a7a9e;font-size:12px;text-align:center;margin-top:20px">If you did not request this, please ignore this email.</p></div>'});
+        return{success:true,message:'Password sent to '+email+'. Check your inbox & spam folder.'};
+      }catch(e){return{success:false,message:'Account found but failed to send email: '+e.toString()}}
     }
   }
-  
-  return { success: false, message: 'Invalid username or password' };
-}
-
-function registerUser(sheet, username, email, password) {
-  var data = sheet.getDataRange().getValues();
-  
-  for (var i = 1; i < data.length; i++) {
-    if (data[i][0].toString().toLowerCase() === username.toLowerCase()) {
-      return { success: false, message: 'Username already exists' };
-    }
-    if (data[i][1].toString().toLowerCase() === email.toLowerCase()) {
-      return { success: false, message: 'Email already registered' };
-    }
-  }
-  
-  sheet.appendRow([username, email, password]);
-  
-  return { 
-    success: true, 
-    message: 'Account created successfully! You can now login.',
-    user: { username: username, email: email }
-  };
+  return{success:false,message:'No account found with this email address.'};
 }
 
 ===== END APPS SCRIPT =====
 */
 
-// REPLACE THIS with your actual Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSxXFB_-plm8PvhQ8ifMHLtczdiKs5QQFNikdmMw5xeAh5hUT_Jm8Ia8R--S9ZKUd9ZQ/exec';
+const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyQD_w4IPq1-p_Qb0Bgszgm12GH_6AlfbyRRO3g_HGaD_rw87f5lPlB3UCh79pkbPyAHw/exec';
+let currentUser=null,authCallbackCounter=0;
 
-let currentUser = null;
-let authCallbackCounter = 0;
+function isValidEmail(e){const r=/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;if(!r.test(e))return false;const p=e.split('@');if(p.length!==2)return false;const d=p[1];if(!d.includes('.'))return false;return d.split('.').pop().length>=2}
 
-// Check for saved session on load
-function checkSavedSession() {
-  const saved = localStorage.getItem('mmh_user');
-  if (saved) {
-    try {
-      currentUser = JSON.parse(saved);
-      updateUIForLoggedInUser();
-    } catch(e) {
-      localStorage.removeItem('mmh_user');
-    }
-  }
+async function verifyEmailDomain(email){
+  const domain=email.split('@')[1];if(!domain)return{valid:false,reason:'Invalid email format'};
+  try{const r=await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);const d=await r.json();if(d.Answer&&d.Answer.length>0)return{valid:true,reason:'Valid email domain'};const r2=await fetch(`https://dns.google/resolve?name=${domain}&type=A`);const d2=await r2.json();if(d2.Answer&&d2.Answer.length>0)return{valid:true,reason:'Valid email domain'};return{valid:false,reason:'Email domain does not exist'}}catch(e){return{valid:true,reason:'Format OK'}}
 }
 
-function updateUIForLoggedInUser() {
-  const loginBtn = document.getElementById('loginBtn');
-  const mnavLogin = document.getElementById('mnav-login');
-  
-  if (currentUser) {
-    const initials = currentUser.username.substring(0, 2).toUpperCase();
-    loginBtn.innerHTML = initials;
-    loginBtn.classList.add('logged-in');
-    loginBtn.className = 'user-avatar-btn';
-    loginBtn.onclick = toggleUserDropdown;
-    
-    // Update dropdown
-    document.getElementById('dropdownAvatar').textContent = initials;
-    document.getElementById('dropdownName').textContent = currentUser.username;
-    document.getElementById('dropdownEmail').textContent = currentUser.email;
-    
-    // Update mobile nav
-    if (mnavLogin) {
-      mnavLogin.innerHTML = `<i class="fas fa-user-check"></i>${currentUser.username.substring(0, 6)}`;
-      mnavLogin.onclick = function() { toggleUserDropdown(); };
-    }
-  } else {
-    loginBtn.innerHTML = '<i class="fas fa-user"></i>';
-    loginBtn.classList.remove('logged-in');
-    loginBtn.className = 'login-btn';
-    loginBtn.onclick = toggleLoginModal;
-    
-    if (mnavLogin) {
-      mnavLogin.innerHTML = '<i class="fas fa-user"></i>Login';
-      mnavLogin.onclick = function() { toggleLoginModal(); };
-    }
-  }
-}
-
-function toggleLoginModal() {
-  if (currentUser) {
-    toggleUserDropdown();
-    return;
-  }
-  const overlay = document.getElementById('loginOverlay');
-  if (overlay.classList.contains('active')) {
-    closeLoginModal();
-  } else {
-    openLoginModal();
-  }
-}
-
-function openLoginModal() {
-  if (currentUser) { toggleUserDropdown(); return; }
-  document.getElementById('loginOverlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
-  clearAuthMessages();
-  document.getElementById('loginUsername').focus();
-}
-
-function closeLoginModal() {
-  document.getElementById('loginOverlay').classList.remove('active');
-  if (!document.getElementById('detailOverlay').classList.contains('active')) {
-    document.body.style.overflow = '';
-  }
-  clearAuthMessages();
-}
-
-function toggleUserDropdown() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('active');
-  
-  // Close dropdown when clicking outside
-  if (dropdown.classList.contains('active')) {
-    setTimeout(() => {
-      document.addEventListener('click', closeDropdownOutside);
-    }, 10);
-  }
-}
-
-function closeUserDropdown() {
-  document.getElementById('userDropdown').classList.remove('active');
-  document.removeEventListener('click', closeDropdownOutside);
-}
-
-function closeDropdownOutside(e) {
-  const container = document.getElementById('authContainer');
-  if (!container.contains(e.target)) {
-    closeUserDropdown();
-  }
-}
-
-function switchAuthTab(tab) {
-  clearAuthMessages();
-  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
-  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
-  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
-  
-  if (tab === 'login') {
-    document.getElementById('loginModalTitle').textContent = 'Welcome Back';
-    document.getElementById('loginModalSubtitle').textContent = 'Sign in to your account';
-  } else {
-    document.getElementById('loginModalTitle').textContent = 'Join Us';
-    document.getElementById('loginModalSubtitle').textContent = 'Create a new account';
-  }
-}
-
-function clearAuthMessages() {
-  document.getElementById('loginError').classList.remove('visible');
-  document.getElementById('loginSuccess').classList.remove('visible');
-}
-
-function showAuthError(msg) {
-  const el = document.getElementById('loginError');
-  document.getElementById('loginErrorText').textContent = msg;
-  el.classList.add('visible');
-  document.getElementById('loginSuccess').classList.remove('visible');
-}
-
-function showAuthSuccess(msg) {
-  const el = document.getElementById('loginSuccess');
-  document.getElementById('loginSuccessText').textContent = msg;
-  el.classList.add('visible');
-  document.getElementById('loginError').classList.remove('visible');
-}
-
-function setButtonLoading(btnId, textId, loading) {
-  const btn = document.getElementById(btnId);
-  const text = document.getElementById(textId);
-  if (loading) {
-    btn.disabled = true;
-    text.innerHTML = '<span class="login-spinner"></span> Please wait...';
-  } else {
-    btn.disabled = false;
-    if (btnId === 'loginSubmitBtn') text.textContent = 'Sign In';
-    else text.textContent = 'Create Account';
-  }
-}
-
-function jsonpRequest(url, callback) {
-  const callbackName = 'authCallback_' + (++authCallbackCounter) + '_' + Date.now();
-  
-  window[callbackName] = function(data) {
-    callback(data);
-    delete window[callbackName];
-    const script = document.getElementById('script_' + callbackName);
-    if (script) script.remove();
-  };
-  
-  const script = document.createElement('script');
-  script.id = 'script_' + callbackName;
-  script.src = url + '&callback=' + callbackName;
-  
-  script.onerror = function() {
-    callback({ success: false, message: 'Network error. Check your connection or script URL.' });
-    delete window[callbackName];
-    script.remove();
-  };
-  
-  document.body.appendChild(script);
-  
-  // Timeout
-  setTimeout(() => {
-    if (window[callbackName]) {
-      callback({ success: false, message: 'Request timed out. Please try again.' });
-      delete window[callbackName];
-      script.remove();
-    }
-  }, 15000);
-}
-
-function handleLogin(e) {
-  e.preventDefault();
-  clearAuthMessages();
-  
-  const username = document.getElementById('loginUsername').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  
-  if (!username || !password) {
-    showAuthError('Please fill in all fields');
-    return;
-  }
-  
-  setButtonLoading('loginSubmitBtn', 'loginSubmitText', true);
-  
-  const url = `${GOOGLE_SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-  
-  jsonpRequest(url, function(result) {
-    setButtonLoading('loginSubmitBtn', 'loginSubmitText', false);
-    
-    if (result.success) {
-      currentUser = result.user;
-      localStorage.setItem('mmh_user', JSON.stringify(currentUser));
-      showAuthSuccess('Welcome back, ' + currentUser.username + '!');
-      updateUIForLoggedInUser();
-      
-      setTimeout(() => {
-        closeLoginModal();
-      }, 1200);
-    } else {
-      showAuthError(result.message);
-    }
-  });
-}
-
-function handleRegister(e) {
-  e.preventDefault();
-  clearAuthMessages();
-  
-  const username = document.getElementById('regUsername').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  
-  if (!username || !email || !password) {
-    showAuthError('Please fill in all fields');
-    return;
-  }
-  
-  if (username.length < 3) {
-    showAuthError('Username must be at least 3 characters');
-    return;
-  }
-  
-  if (password.length < 4) {
-    showAuthError('Password must be at least 4 characters');
-    return;
-  }
-  
-  setButtonLoading('regSubmitBtn', 'regSubmitText', true);
-  
-  const url = `${GOOGLE_SCRIPT_URL}?action=register&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-  
-  jsonpRequest(url, function(result) {
-    setButtonLoading('regSubmitBtn', 'regSubmitText', false);
-    
-    if (result.success) {
-      showAuthSuccess(result.message);
-      // Auto switch to login tab after registration
-      setTimeout(() => {
-        switchAuthTab('login');
-        document.getElementById('loginUsername').value = username;
-        document.getElementById('loginPassword').value = '';
-        document.getElementById('loginPassword').focus();
-      }, 1500);
-    } else {
-      showAuthError(result.message);
-    }
-  });
-}
-
-function logoutUser() {
-  currentUser = null;
-  localStorage.removeItem('mmh_user');
-  closeUserDropdown();
-  updateUIForLoggedInUser();
-}
-
-// Close login on escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    if (document.getElementById('loginOverlay').classList.contains('active')) {
-      closeLoginModal();
-    }
-  }
+let emailValidationTimeout;
+document.getElementById('regEmail').addEventListener('input',function(){
+  clearTimeout(emailValidationTimeout);const email=this.value.trim(),hint=document.getElementById('regEmailHint');
+  if(!email){this.classList.remove('input-error','input-valid');hint.className='input-hint';hint.innerHTML='';return}
+  if(!isValidEmail(email)){this.classList.add('input-error');this.classList.remove('input-valid');hint.className='input-hint error';hint.innerHTML='<i class="fas fa-times-circle"></i> Invalid email format';return}
+  this.classList.remove('input-error');hint.className='input-hint';hint.innerHTML='<i class="fas fa-spinner fa-spin" style="color:var(--text-muted)"></i> <span style="color:var(--text-muted)">Verifying...</span>';
+  emailValidationTimeout=setTimeout(async()=>{const r=await verifyEmailDomain(email);if(r.valid){this.classList.add('input-valid');this.classList.remove('input-error');hint.className='input-hint valid';hint.innerHTML='<i class="fas fa-check-circle"></i> Valid email'}else{this.classList.add('input-error');this.classList.remove('input-valid');hint.className='input-hint error';hint.innerHTML='<i class="fas fa-times-circle"></i> '+r.reason}},600);
 });
 
-// Close login on overlay click
-document.getElementById('loginOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeLoginModal();
+document.getElementById('forgotEmail').addEventListener('input',function(){
+  const email=this.value.trim(),hint=document.getElementById('forgotEmailHint');
+  if(!email){this.classList.remove('input-error','input-valid');hint.className='input-hint';hint.innerHTML='';return}
+  if(!isValidEmail(email)){this.classList.add('input-error');this.classList.remove('input-valid');hint.className='input-hint error';hint.innerHTML='<i class="fas fa-times-circle"></i> Invalid email format'}else{this.classList.remove('input-error');this.classList.add('input-valid');hint.className='input-hint valid';hint.innerHTML='<i class="fas fa-check-circle"></i> Valid email format'}
 });
 
+function checkSavedSession(){const s=localStorage.getItem('mmh_user');if(s){try{currentUser=JSON.parse(s);updateUIForLoggedInUser()}catch(e){localStorage.removeItem('mmh_user')}}}
 
-// ===========================
-// PARTICLES
-// ===========================
-(function(){
-  const c=document.getElementById('particles');
-  for(let i=0;i<40;i++){
-    const p=document.createElement('div');
-    p.className='particle';
-    p.style.left=Math.random()*100+'%';
-    p.style.animationDuration=(8+Math.random()*15)+'s';
-    p.style.animationDelay=Math.random()*10+'s';
-    p.style.width=p.style.height=(1+Math.random()*2)+'px';
-    const colors=['#00d4ff','#7b2ff7','#ff2d75','#39ff14'];
-    p.style.background=colors[Math.floor(Math.random()*colors.length)];
-    c.appendChild(p);
-  }
-})();
-
-const API_KEY='fa44f459ed63551cc23e7bf3f97438b9';
-const BASE='https://api.themoviedb.org/3';
-const IMG='https://image.tmdb.org/t/p/';
-const STREAM_BASE='https://zxcstream.xyz';
-
-let playerState={
-  tmdbId:null,type:null,season:1,episode:1,server:0,
-  language:'en',isPlaying:false,detail:null,
-  totalEpisodes:1,seasons:[]
-};
-
-// Hero carousel state
-let heroSlides=[];
-let heroCurrentIndex=0;
-let heroTimer=null;
-let heroProgressTimer=null;
-let heroProgressValue=0;
-const HERO_INTERVAL=7000;
-
-async function api(endpoint,params={}){
-  const url=new URL(`${BASE}${endpoint}`);
-  url.searchParams.set('api_key',API_KEY);
-  url.searchParams.set('language','en-US');
-  Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
-  return(await fetch(url)).json();
+function updateUIForLoggedInUser(){
+  const b=document.getElementById('loginBtn'),m=document.getElementById('mnav-login');
+  if(currentUser){const i=currentUser.username.substring(0,2).toUpperCase();b.innerHTML=i;b.className='user-avatar-btn';b.onclick=toggleUserDropdown;document.getElementById('dropdownAvatar').textContent=i;document.getElementById('dropdownName').textContent=currentUser.username;document.getElementById('dropdownEmail').textContent=currentUser.email;if(m){m.innerHTML=`<i class="fas fa-user-check"></i>${currentUser.username.substring(0,6)}`;m.onclick=function(){toggleUserDropdown()}}}
+  else{b.innerHTML='<i class="fas fa-user"></i>';b.className='login-btn';b.onclick=toggleLoginModal;if(m){m.innerHTML='<i class="fas fa-user"></i>Login';m.onclick=function(){toggleLoginModal()}}}
 }
 
-function getStreamUrl(tmdbId,type,season,episode,server=0,lang='en'){
-  if(type==='movie'){
-    return server===0
-      ?`${STREAM_BASE}/player/movie/${tmdbId}/${lang}?autoplay=false&back=true&server=0`
-      :`${STREAM_BASE}/embed/movie/${tmdbId}`;
-  }
-  return server===0
-    ?`${STREAM_BASE}/player/tv/${tmdbId}/${season}/${episode}/${lang}?autoplay=false&back=true&server=0`
-    :`${STREAM_BASE}/embed/tv/${tmdbId}/${season}/${episode}`;
+function toggleLoginModal(){if(currentUser){toggleUserDropdown();return}const o=document.getElementById('loginOverlay');o.classList.contains('active')?closeLoginModal():openLoginModal()}
+function openLoginModal(){if(currentUser){toggleUserDropdown();return}document.getElementById('loginOverlay').classList.add('active');document.body.style.overflow='hidden';clearAuthMessages();document.getElementById('loginUsername').focus()}
+function closeLoginModal(){document.getElementById('loginOverlay').classList.remove('active');if(!document.getElementById('detailOverlay').classList.contains('active'))document.body.style.overflow='';clearAuthMessages()}
+function toggleUserDropdown(){const d=document.getElementById('userDropdown');d.classList.toggle('active');if(d.classList.contains('active'))setTimeout(()=>document.addEventListener('click',closeDropdownOutside),10)}
+function closeUserDropdown(){document.getElementById('userDropdown').classList.remove('active');document.removeEventListener('click',closeDropdownOutside)}
+function closeDropdownOutside(e){if(!document.getElementById('authContainer').contains(e.target))closeUserDropdown()}
+
+function switchAuthTab(t){
+  clearAuthMessages();
+  document.getElementById('tabLogin').classList.toggle('active',t==='login');document.getElementById('tabRegister').classList.toggle('active',t==='register');document.getElementById('tabForgot').classList.toggle('active',t==='forgot');
+  document.getElementById('loginForm').style.display=t==='login'?'block':'none';document.getElementById('registerForm').style.display=t==='register'?'block':'none';document.getElementById('forgotForm').style.display=t==='forgot'?'block':'none';
+  const ti={login:['Welcome Back','Sign in to your account'],register:['Join Us','Create a new account'],forgot:['Forgot Password','We\'ll email your password']};
+  document.getElementById('loginModalTitle').textContent=ti[t][0];document.getElementById('loginModalSubtitle').textContent=ti[t][1];
 }
 
-function setIframeSrc(url){
-  const wrapper=document.getElementById('playerFrameWrapper');
-  if(!wrapper)return;
-  wrapper.innerHTML='';
-  const iframe=document.createElement('iframe');
-  iframe.src=url;
-  iframe.setAttribute('allowfullscreen','');
-  iframe.setAttribute('webkitallowfullscreen','');
-  iframe.setAttribute('mozallowfullscreen','');
-  iframe.setAttribute('allow','fullscreen *; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-  iframe.setAttribute('referrerpolicy','origin');
-  iframe.setAttribute('frameborder','0');
-  iframe.setAttribute('scrolling','no');
-  iframe.style.cssText='width:100%;height:100%;border:none;display:block;';
-  wrapper.appendChild(iframe);
+function clearAuthMessages(){document.getElementById('loginError').classList.remove('visible');document.getElementById('loginSuccess').classList.remove('visible')}
+function showAuthError(m){document.getElementById('loginErrorText').textContent=m;document.getElementById('loginError').classList.add('visible');document.getElementById('loginSuccess').classList.remove('visible')}
+function showAuthSuccess(m){document.getElementById('loginSuccessText').textContent=m;document.getElementById('loginSuccess').classList.add('visible');document.getElementById('loginError').classList.remove('visible')}
+function setButtonLoading(b,t,l){const btn=document.getElementById(b),txt=document.getElementById(t);if(l){btn.disabled=true;txt.innerHTML='<span class="login-spinner"></span> Please wait...'}else{btn.disabled=false;if(b==='loginSubmitBtn')txt.textContent='Sign In';else if(b==='regSubmitBtn')txt.textContent='Create Account';else txt.innerHTML='<i class="fas fa-paper-plane" style="margin-right:6px"></i>Send Password to Email'}}
+
+function jsonpRequest(url,cb){
+  const n='authCb_'+(++authCallbackCounter)+'_'+Date.now();
+  window[n]=function(d){cb(d);delete window[n];const s=document.getElementById('s_'+n);if(s)s.remove()};
+  const s=document.createElement('script');s.id='s_'+n;s.src=url+'&callback='+n;
+  s.onerror=function(){cb({success:false,message:'Network error.'});delete window[n];s.remove()};
+  document.body.appendChild(s);
+  setTimeout(()=>{if(window[n]){cb({success:false,message:'Request timed out.'});delete window[n];s.remove()}},15000);
 }
 
-function destroyPlayer(){
-  const wrapper=document.getElementById('playerFrameWrapper');
-  if(wrapper){
-    const iframe=wrapper.querySelector('iframe');
-    if(iframe){iframe.src='about:blank';iframe.remove()}
-  }
-  playerState.isPlaying=false;
+function handleLogin(e){
+  e.preventDefault();clearAuthMessages();const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value;
+  if(!u||!p){showAuthError('Please fill in all fields');return}
+  setButtonLoading('loginSubmitBtn','loginSubmitText',true);
+  jsonpRequest(`${GOOGLE_SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`,function(r){setButtonLoading('loginSubmitBtn','loginSubmitText',false);if(r.success){currentUser=r.user;localStorage.setItem('mmh_user',JSON.stringify(currentUser));showAuthSuccess('Welcome back, '+currentUser.username+'!');updateUIForLoggedInUser();setTimeout(()=>closeLoginModal(),1200)}else showAuthError(r.message)});
 }
 
+async function handleRegister(e){
+  e.preventDefault();clearAuthMessages();const u=document.getElementById('regUsername').value.trim(),em=document.getElementById('regEmail').value.trim(),p=document.getElementById('regPassword').value;
+  if(!u||!em||!p){showAuthError('Please fill in all fields');return}if(u.length<3){showAuthError('Username must be at least 3 characters');return}if(p.length<4){showAuthError('Password must be at least 4 characters');return}if(!isValidEmail(em)){showAuthError('Please enter a valid email address');return}
+  setButtonLoading('regSubmitBtn','regSubmitText',true);
+  const dc=await verifyEmailDomain(em);if(!dc.valid){setButtonLoading('regSubmitBtn','regSubmitText',false);showAuthError(dc.reason);return}
+  jsonpRequest(`${GOOGLE_SCRIPT_URL}?action=register&username=${encodeURIComponent(u)}&email=${encodeURIComponent(em)}&password=${encodeURIComponent(p)}`,function(r){setButtonLoading('regSubmitBtn','regSubmitText',false);if(r.success){showAuthSuccess(r.message);setTimeout(()=>{switchAuthTab('login');document.getElementById('loginUsername').value=u;document.getElementById('loginPassword').value='';document.getElementById('loginPassword').focus()},1500)}else showAuthError(r.message)});
+}
+
+function handleForgotPassword(e){
+  e.preventDefault();clearAuthMessages();const em=document.getElementById('forgotEmail').value.trim();
+  if(!em){showAuthError('Please enter your email');return}if(!isValidEmail(em)){showAuthError('Please enter a valid email');return}
+  setButtonLoading('forgotSubmitBtn','forgotSubmitText',true);
+  jsonpRequest(`${GOOGLE_SCRIPT_URL}?action=forgot&email=${encodeURIComponent(em)}`,function(r){setButtonLoading('forgotSubmitBtn','forgotSubmitText',false);if(r.success)showAuthSuccess(r.message);else showAuthError(r.message)});
+}
+
+function logoutUser(){currentUser=null;localStorage.removeItem('mmh_user');closeUserDropdown();updateUIForLoggedInUser()}
+document.getElementById('loginOverlay').addEventListener('click',function(e){if(e.target===this)closeLoginModal()});
+
+// ===== INLINE SEARCH =====
+let navSearchTimeout;const navSearchInput=document.getElementById('navSearchInput'),navSearchDropdown=document.getElementById('navSearchDropdown'),searchClearBtn=document.getElementById('searchClearBtn');
+
+navSearchInput.addEventListener('input',function(){
+  clearTimeout(navSearchTimeout);const q=this.value.trim();searchClearBtn.classList.toggle('visible',q.length>0);
+  if(!q){navSearchDropdown.classList.remove('active');return}
+  navSearchDropdown.classList.add('active');navSearchDropdown.innerHTML='<div class="search-dropdown-loading"><div class="spinner" style="width:28px;height:28px;margin:0 auto"></div></div>';
+  navSearchTimeout=setTimeout(async()=>{
+    try{const d=await api('/search/multi',{query:q});const f=d.results.filter(i=>i.poster_path&&(i.media_type==='movie'||i.media_type==='tv')).slice(0,8);
+    if(!f.length){navSearchDropdown.innerHTML='<div class="search-dropdown-empty"><i class="fas fa-search" style="font-size:1.5rem;opacity:.3;display:block;margin-bottom:8px"></i>No results for "'+q+'"</div>';return}
+    navSearchDropdown.innerHTML=f.map(i=>{const n=i.title||i.name,y=(i.release_date||i.first_air_date||'').slice(0,4),tc=i.media_type==='tv'?'tv-t':'movie-t',tl=i.media_type==='tv'?'TV':'Movie';
+      return`<div class="search-dropdown-item" onclick="navSearchSelect(${i.id},'${i.media_type}')"><img src="${IMG}w92${i.poster_path}" alt="${n}" onerror="this.style.display='none'"><div class="search-dropdown-item-info"><div class="search-dropdown-item-title">${n}</div><div class="search-dropdown-item-meta"><span class="sdi-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span><span>${y}</span></div></div><span class="search-dropdown-item-type ${tc}">${tl}</span></div>`}).join('')}catch(e){navSearchDropdown.innerHTML='<div class="search-dropdown-empty">Search error</div>'}
+  },400);
+});
+navSearchInput.addEventListener('focus',function(){if(this.value.trim())navSearchDropdown.classList.add('active')});
+function navSearchSelect(id,type){navSearchDropdown.classList.remove('active');navSearchInput.value='';searchClearBtn.classList.remove('visible');openDetail(id,type)}
+function clearNavSearch(){navSearchInput.value='';navSearchDropdown.classList.remove('active');searchClearBtn.classList.remove('visible');navSearchInput.focus()}
+document.addEventListener('click',function(e){if(!document.getElementById('navSearchBar').contains(e.target))navSearchDropdown.classList.remove('active')});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){navSearchDropdown.classList.remove('active');if(document.getElementById('loginOverlay').classList.contains('active'))closeLoginModal();closeDetail()}});
+
+// ===== TMDB & PLAYER =====
+const API_KEY='fa44f459ed63551cc23e7bf3f97438b9',BASE='https://api.themoviedb.org/3',IMG='https://image.tmdb.org/t/p/',STREAM_BASE='https://zxcstream.xyz';
+let playerState={tmdbId:null,type:null,season:1,episode:1,server:0,language:'en',isPlaying:false,detail:null,totalEpisodes:1,seasons:[]};
+let heroSlides=[],heroCurrentIndex=0,heroTimer=null,heroProgressTimer=null,heroProgressValue=0;const HERO_INTERVAL=7000;
+
+async function api(endpoint,params={}){const url=new URL(`${BASE}${endpoint}`);url.searchParams.set('api_key',API_KEY);url.searchParams.set('language','en-US');Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));return(await fetch(url)).json()}
+
+function getStreamUrl(id,type,s,ep,sv=0,lang='en'){if(type==='movie')return sv===0?`${STREAM_BASE}/player/movie/${id}/${lang}?autoplay=false&back=true&server=0`:`${STREAM_BASE}/embed/movie/${id}`;return sv===0?`${STREAM_BASE}/player/tv/${id}/${s}/${ep}/${lang}?autoplay=false&back=true&server=0`:`${STREAM_BASE}/embed/tv/${id}/${s}/${ep}`}
+
+function setIframeSrc(url){const w=document.getElementById('playerFrameWrapper');if(!w)return;w.innerHTML='';const f=document.createElement('iframe');f.src=url;f.setAttribute('allowfullscreen','');f.setAttribute('webkitallowfullscreen','');f.setAttribute('mozallowfullscreen','');f.setAttribute('allow','fullscreen *; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');f.setAttribute('referrerpolicy','origin');f.setAttribute('frameborder','0');f.setAttribute('scrolling','no');f.style.cssText='width:100%;height:100%;border:none;display:block;';w.appendChild(f)}
+function destroyPlayer(){const w=document.getElementById('playerFrameWrapper');if(w){const f=w.querySelector('iframe');if(f){f.src='about:blank';f.remove()}}playerState.isPlaying=false}
 function getFullscreenElement(){return document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement}
-function enterFullscreen(el){
-  if(el.requestFullscreen)return el.requestFullscreen();
-  if(el.webkitRequestFullscreen)return el.webkitRequestFullscreen();
-  if(el.webkitEnterFullscreen)return el.webkitEnterFullscreen();
-  if(el.mozRequestFullScreen)return el.mozRequestFullScreen();
-  if(el.msRequestFullscreen)return el.msRequestFullscreen();
-}
-function exitFullscreen(){
-  if(document.exitFullscreen)return document.exitFullscreen();
-  if(document.webkitExitFullscreen)return document.webkitExitFullscreen();
-  if(document.mozCancelFullScreen)return document.mozCancelFullScreen();
-  if(document.msExitFullscreen)return document.msExitFullscreen();
-}
-function toggleFullscreen(){
-  const wrapper=document.getElementById('playerFrameWrapper');
-  if(!wrapper)return;
-  if(getFullscreenElement()){exitFullscreen();return}
-  const iframe=wrapper.querySelector('iframe');
-  const tryFs=enterFullscreen(wrapper);
-  if(tryFs&&typeof tryFs.catch==='function'){tryFs.catch(()=>{if(iframe)enterFullscreen(iframe)})}
-}
-function updateFsButton(){
-  const btn=document.getElementById('fsToggleBtn');
-  if(!btn)return;
-  btn.innerHTML=getFullscreenElement()?'<i class="fas fa-compress"></i> Exit Fullscreen':'<i class="fas fa-expand"></i> Fullscreen';
-}
-['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange'].forEach(evt=>document.addEventListener(evt,updateFsButton));
+function enterFullscreen(el){if(el.requestFullscreen)return el.requestFullscreen();if(el.webkitRequestFullscreen)return el.webkitRequestFullscreen();if(el.webkitEnterFullscreen)return el.webkitEnterFullscreen();if(el.mozRequestFullScreen)return el.mozRequestFullScreen();if(el.msRequestFullscreen)return el.msRequestFullscreen()}
+function exitFullscreen(){if(document.exitFullscreen)return document.exitFullscreen();if(document.webkitExitFullscreen)return document.webkitExitFullscreen();if(document.mozCancelFullScreen)return document.mozCancelFullScreen();if(document.msExitFullscreen)return document.msExitFullscreen()}
+function toggleFullscreen(){const w=document.getElementById('playerFrameWrapper');if(!w)return;if(getFullscreenElement()){exitFullscreen();return}const f=w.querySelector('iframe');const t=enterFullscreen(w);if(t&&typeof t.catch==='function')t.catch(()=>{if(f)enterFullscreen(f)})}
+function updateFsButton(){const b=document.getElementById('fsToggleBtn');if(!b)return;b.innerHTML=getFullscreenElement()?'<i class="fas fa-compress"></i> Exit FS':'<i class="fas fa-expand"></i> Fullscreen'}
+['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange'].forEach(ev=>document.addEventListener(ev,updateFsButton));
 
-function loadPlayer(){
-  const url=getStreamUrl(playerState.tmdbId,playerState.type,playerState.season,playerState.episode,playerState.server,playerState.language);
-  setIframeSrc(url);
-  playerState.isPlaying=true;
-  updateNowPlaying();
-  updateActiveEpisode();
-}
-
-function updateNowPlaying(){
-  const npi=document.getElementById('nowPlayingInfo');
-  if(!npi)return;
-  const t=playerState.detail?.title||playerState.detail?.name||'';
-  npi.innerHTML=playerState.type==='tv'
-    ?`<i class="fas fa-circle"></i> Now playing: <span class="npi-title">${t}</span> — S${playerState.season} E${playerState.episode} (Server ${playerState.server+1})`
-    :`<i class="fas fa-circle"></i> Now playing: <span class="npi-title">${t}</span> (Server ${playerState.server+1})`;
-  npi.style.display='flex';
-}
-
+function loadPlayer(){const u=getStreamUrl(playerState.tmdbId,playerState.type,playerState.season,playerState.episode,playerState.server,playerState.language);setIframeSrc(u);playerState.isPlaying=true;updateNowPlaying();updateActiveEpisode()}
+function updateNowPlaying(){const n=document.getElementById('nowPlayingInfo');if(!n)return;const t=playerState.detail?.title||playerState.detail?.name||'';n.innerHTML=playerState.type==='tv'?`<i class="fas fa-circle"></i> Now playing: <span class="npi-title">${t}</span> — S${playerState.season} E${playerState.episode} (Server ${playerState.server+1})`:`<i class="fas fa-circle"></i> Now playing: <span class="npi-title">${t}</span> (Server ${playerState.server+1})`;n.style.display='flex'}
 function updateActiveEpisode(){document.querySelectorAll('.episode-btn').forEach(b=>b.classList.toggle('active',+b.dataset.ep===playerState.episode))}
-
-function changeServer(s){
-  playerState.server=s;
-  document.querySelectorAll('.server-btn').forEach(b=>b.classList.toggle('active',+b.dataset.server===s));
-  if(playerState.isPlaying)loadPlayer();
-}
-
-async function changeSeason(n){
-  playerState.season=n;playerState.episode=1;
-  try{
-    const d=await api(`/tv/${playerState.tmdbId}/season/${n}`);
-    const g=document.getElementById('episodeGrid');
-    if(g&&d.episodes){
-      playerState.totalEpisodes=d.episodes.length;
-      g.innerHTML=d.episodes.map(e=>`<button class="episode-btn ${e.episode_number===1?'active':''}" data-ep="${e.episode_number}" onclick="changeEpisode(${e.episode_number})" title="E${e.episode_number}: ${e.name||''}">${e.episode_number}</button>`).join('');
-    }
-  }catch(e){console.error(e)}
-  if(playerState.isPlaying)loadPlayer();
-}
-
+function changeServer(s){playerState.server=s;document.querySelectorAll('.server-btn').forEach(b=>b.classList.toggle('active',+b.dataset.server===s));if(playerState.isPlaying)loadPlayer()}
+async function changeSeason(n){playerState.season=n;playerState.episode=1;try{const d=await api(`/tv/${playerState.tmdbId}/season/${n}`);const g=document.getElementById('episodeGrid');if(g&&d.episodes){playerState.totalEpisodes=d.episodes.length;g.innerHTML=d.episodes.map(e=>`<button class="episode-btn ${e.episode_number===1?'active':''}" data-ep="${e.episode_number}" onclick="changeEpisode(${e.episode_number})" title="E${e.episode_number}: ${e.name||''}">${e.episode_number}</button>`).join('')}}catch(e){console.error(e)}if(playerState.isPlaying)loadPlayer()}
 function changeEpisode(n){playerState.episode=n;updateActiveEpisode();if(playerState.isPlaying)loadPlayer()}
+function startWatching(){loadPlayer();const p=document.getElementById('playerSection');if(p)p.scrollIntoView({behavior:'smooth'});setTimeout(()=>{const w=document.getElementById('playerFrameWrapper');if(w){const t=enterFullscreen(w);if(t&&typeof t.catch==='function')t.catch(()=>{const f=w.querySelector('iframe');if(f)enterFullscreen(f)})}},800)}
 
-function startWatching(){
-  loadPlayer();
-  const ps=document.getElementById('playerSection');
-  if(ps)ps.scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{
-    const wrapper=document.getElementById('playerFrameWrapper');
-    if(wrapper){
-      const tryFs=enterFullscreen(wrapper);
-      if(tryFs&&typeof tryFs.catch==='function'){tryFs.catch(()=>{const iframe=wrapper.querySelector('iframe');if(iframe)enterFullscreen(iframe)})}
-    }
-  },800);
-}
-
-function buildPlayerSection(detail,type){
-  playerState.tmdbId=detail.id;playerState.type=type;playerState.detail=detail;
-  playerState.season=1;playerState.episode=1;playerState.server=0;playerState.isPlaying=false;
-
-  let tvControls='';
-  if(type==='tv'&&detail.seasons){
-    const vs=detail.seasons.filter(s=>s.season_number>0);
-    playerState.seasons=vs;playerState.totalEpisodes=vs[0]?.episode_count||1;
-    tvControls=`<div class="tv-selectors"><div class="selector-group"><span class="selector-label">Season</span>
-      <select class="player-select" id="seasonSelect" onchange="changeSeason(+this.value)">
-      ${vs.map(s=>`<option value="${s.season_number}">Season ${s.season_number} (${s.episode_count} ep)</option>`).join('')}
-      </select></div></div>
-      <div style="margin-top:14px"><span class="selector-label" style="display:block;margin-bottom:8px">Episodes</span>
-      <div class="episode-grid" id="episodeGrid">
-      ${Array.from({length:vs[0]?.episode_count||1},(_,i)=>`<button class="episode-btn ${i===0?'active':''}" data-ep="${i+1}" onclick="changeEpisode(${i+1})">${i+1}</button>`).join('')}
-      </div></div>`;
-  }else{playerState.seasons=[];playerState.totalEpisodes=1}
-
-  return`<div class="player-section" id="playerSection">
-    <div class="player-header"><div class="player-title"><i class="fas fa-play-circle"></i> Watch ${type==='tv'?'TV Show':'Movie'}</div>
-    <div class="player-controls"><span class="selector-label" style="margin-right:4px">Server:</span>
-    <button class="server-btn active" data-server="0" onclick="changeServer(0)">Server 1</button>
-    <button class="server-btn" data-server="1" onclick="changeServer(1)">Server 2</button>
-    <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
-    <button class="fs-toggle-btn" id="fsToggleBtn" onclick="toggleFullscreen()"><i class="fas fa-expand"></i> Fullscreen</button>
-    </div></div>${tvControls}
-    <div style="margin-top:18px"><div class="player-frame-wrapper" id="playerFrameWrapper">
-    <div class="player-placeholder" onclick="startWatching()"><i class="fas fa-play-circle"></i>
-    <span>Click to Start Watching</span><small>${detail.title||detail.name}${type==='tv'?' — S1 E1':''}</small></div></div></div>
-    <div class="now-playing-info" id="nowPlayingInfo" style="display:none"></div></div>`;
+function buildPlayerSection(d,type){
+  playerState.tmdbId=d.id;playerState.type=type;playerState.detail=d;playerState.season=1;playerState.episode=1;playerState.server=0;playerState.isPlaying=false;
+  let tv='';if(type==='tv'&&d.seasons){const vs=d.seasons.filter(s=>s.season_number>0);playerState.seasons=vs;playerState.totalEpisodes=vs[0]?.episode_count||1;tv=`<div class="tv-selectors"><div class="selector-group"><span class="selector-label">Season</span><select class="player-select" id="seasonSelect" onchange="changeSeason(+this.value)">${vs.map(s=>`<option value="${s.season_number}">Season ${s.season_number} (${s.episode_count} ep)</option>`).join('')}</select></div></div><div style="margin-top:14px"><span class="selector-label" style="display:block;margin-bottom:8px">Episodes</span><div class="episode-grid" id="episodeGrid">${Array.from({length:vs[0]?.episode_count||1},(_,i)=>`<button class="episode-btn ${i===0?'active':''}" data-ep="${i+1}" onclick="changeEpisode(${i+1})">${i+1}</button>`).join('')}</div></div>`}else{playerState.seasons=[];playerState.totalEpisodes=1}
+  return`<div class="player-section" id="playerSection"><div class="player-header"><div class="player-title"><i class="fas fa-play-circle"></i> Watch ${type==='tv'?'TV Show':'Movie'}</div><div class="player-controls"><span class="selector-label" style="margin-right:4px">Server:</span><button class="server-btn active" data-server="0" onclick="changeServer(0)">Server 1</button><button class="server-btn" data-server="1" onclick="changeServer(1)">Server 2</button><div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div><button class="fs-toggle-btn" id="fsToggleBtn" onclick="toggleFullscreen()"><i class="fas fa-expand"></i> Fullscreen</button></div></div>${tv}<div style="margin-top:18px"><div class="player-frame-wrapper" id="playerFrameWrapper"><div class="player-placeholder" onclick="startWatching()"><i class="fas fa-play-circle"></i><span>Click to Start Watching</span><small>${d.title||d.name}${type==='tv'?' — S1 E1':''}</small></div></div></div><div class="now-playing-info" id="nowPlayingInfo" style="display:none"></div></div>`;
 }
 
 let rowCounter=0;
 function scrollRow(id,dir){const el=document.getElementById(id);if(el)el.scrollBy({left:dir*el.clientWidth*.75,behavior:'smooth'})}
-
-window.addEventListener('scroll',()=>{
-  const nb=document.getElementById('navbar');
-  if(!nb.classList.contains('detail-open')){nb.classList.toggle('scrolled',window.scrollY>50)}
-});
-
+window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(!n.classList.contains('detail-open'))n.classList.toggle('scrolled',window.scrollY>50)});
 function showNavCloseBtn(){document.getElementById('navCloseDetail').classList.add('visible');document.getElementById('navbar').classList.add('detail-open')}
 function hideNavCloseBtn(){document.getElementById('navCloseDetail').classList.remove('visible');document.getElementById('navbar').classList.remove('detail-open');document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)}
 
-// ===== HERO CAROUSEL =====
-function stopHeroCarousel(){
-  clearInterval(heroTimer);clearInterval(heroProgressTimer);
-  heroTimer=null;heroProgressTimer=null;
-}
-
-function startHeroProgress(){
-  heroProgressValue=0;
-  const fill=document.getElementById('heroProgressFill');
-  if(fill)fill.style.width='0%';
-  clearInterval(heroProgressTimer);
-  heroProgressTimer=setInterval(()=>{
-    heroProgressValue+=100/((HERO_INTERVAL)/50);
-    if(heroProgressValue>=100)heroProgressValue=100;
-    const fill=document.getElementById('heroProgressFill');
-    if(fill)fill.style.width=heroProgressValue+'%';
-  },50);
-}
-
-function goToHeroSlide(idx,manual=false){
-  if(idx===heroCurrentIndex&&!manual)return;
-  const slides=document.querySelectorAll('.hero-slide');
-  const dots=document.querySelectorAll('.hero-dot');
-  const thumbs=document.querySelectorAll('.hero-thumb');
-  if(!slides.length)return;
-
-  slides.forEach(s=>{s.classList.remove('active','prev')});
-  slides[heroCurrentIndex]?.classList.add('prev');
-  heroCurrentIndex=((idx%slides.length)+slides.length)%slides.length;
-  slides[heroCurrentIndex]?.classList.add('active');
-
-  dots.forEach((d,i)=>d.classList.toggle('active',i===heroCurrentIndex));
-  thumbs.forEach((t,i)=>t.classList.toggle('active',i===heroCurrentIndex));
-
-  if(manual){
-    stopHeroCarousel();
-    startHeroAutoplay();
-  }
-  startHeroProgress();
-}
-
-function startHeroAutoplay(){
-  stopHeroCarousel();
-  startHeroProgress();
-  heroTimer=setInterval(()=>{goToHeroSlide(heroCurrentIndex+1)},HERO_INTERVAL);
-}
+function stopHeroCarousel(){clearInterval(heroTimer);clearInterval(heroProgressTimer);heroTimer=null;heroProgressTimer=null}
+function startHeroProgress(){heroProgressValue=0;const f=document.getElementById('heroProgressFill');if(f)f.style.width='0%';clearInterval(heroProgressTimer);heroProgressTimer=setInterval(()=>{heroProgressValue+=100/(HERO_INTERVAL/50);if(heroProgressValue>=100)heroProgressValue=100;const f=document.getElementById('heroProgressFill');if(f)f.style.width=heroProgressValue+'%'},50)}
+function goToHeroSlide(idx,manual=false){if(idx===heroCurrentIndex&&!manual)return;const sl=document.querySelectorAll('.hero-slide'),dt=document.querySelectorAll('.hero-dot'),th=document.querySelectorAll('.hero-thumb');if(!sl.length)return;sl.forEach(s=>{s.classList.remove('active','prev')});sl[heroCurrentIndex]?.classList.add('prev');heroCurrentIndex=((idx%sl.length)+sl.length)%sl.length;sl[heroCurrentIndex]?.classList.add('active');dt.forEach((d,i)=>d.classList.toggle('active',i===heroCurrentIndex));th.forEach((t,i)=>t.classList.toggle('active',i===heroCurrentIndex));if(manual){stopHeroCarousel();startHeroAutoplay()}startHeroProgress()}
+function startHeroAutoplay(){stopHeroCarousel();startHeroProgress();heroTimer=setInterval(()=>{goToHeroSlide(heroCurrentIndex+1)},HERO_INTERVAL)}
 
 function buildHeroCarousel(items){
-  heroSlides=items.filter(i=>i.backdrop_path).slice(0,8);
-  if(!heroSlides.length)return'';
-
-  const slides=heroSlides.map((h,i)=>{
-    const ht=h.media_type||'movie';
-    const hn=h.title||h.name;
-    const hy=(h.release_date||h.first_air_date||'').slice(0,4);
-    const typeClass=ht==='tv'?'tv-b':'movie-b';
-    const typeLabel=ht==='tv'?'TV Show':'Movie';
-    return`<div class="hero-slide ${i===0?'active':''}">
-      <div class="hero-slide-bg"><img src="${IMG}original${h.backdrop_path}" alt="${hn}" onerror="this.src='https://via.placeholder.com/1920x1080/0d0d1a/333?text=Mark+Movie+Hub'"></div>
-      <div class="hero-slide-content">
-        <div class="hero-rank"><i class="fas fa-fire"></i> #${i+1} Trending This Week</div>
-        <h1>${hn}</h1>
-        <div class="hero-meta">
-          <span class="rating"><i class="fas fa-star"></i> ${h.vote_average?.toFixed(1)}</span>
-          <span>${hy}</span>
-          <span class="type-badge ${typeClass}">${typeLabel}</span>
-        </div>
-        <p class="hero-overview">${h.overview||''}</p>
-        <div class="hero-buttons">
-          <button class="btn btn-primary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-play"></i> Watch Now</button>
-          <button class="btn btn-secondary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-info-circle"></i> More Info</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
+  heroSlides=items.filter(i=>i.backdrop_path).slice(0,8);if(!heroSlides.length)return'';
+  const slides=heroSlides.map((h,i)=>{const ht=h.media_type||'movie',hn=h.title||h.name,hy=(h.release_date||h.first_air_date||'').slice(0,4),tc=ht==='tv'?'tv-b':'movie-b',tl=ht==='tv'?'TV Show':'Movie';
+    return`<div class="hero-slide ${i===0?'active':''}"><div class="hero-slide-bg"><img src="${IMG}original${h.backdrop_path}" alt="${hn}" onerror="this.src='https://via.placeholder.com/1920x1080/0d0d1a/333?text=Mark+Movie+Hub'"></div><div class="hero-slide-content"><div class="hero-rank"><i class="fas fa-fire"></i> #${i+1} Trending This Week</div><h1>${hn}</h1><div class="hero-meta"><span class="rating"><i class="fas fa-star"></i> ${h.vote_average?.toFixed(1)}</span><span>${hy}</span><span class="type-badge ${tc}">${tl}</span></div><p class="hero-overview">${h.overview||''}</p><div class="hero-buttons"><button class="btn btn-primary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-play"></i> Watch Now</button><button class="btn btn-secondary" onclick="openDetail(${h.id},'${ht}')"><i class="fas fa-info-circle"></i> More Info</button></div></div></div>`}).join('');
   const dots=heroSlides.map((_,i)=>`<button class="hero-dot ${i===0?'active':''}" onclick="goToHeroSlide(${i},true)"></button>`).join('');
-
-  const thumbs=heroSlides.map((h,i)=>`<div class="hero-thumb ${i===0?'active':''}" onclick="goToHeroSlide(${i},true)">
-    <img src="${IMG}w185${h.poster_path}" alt="" onerror="this.parentElement.style.display='none'">
-  </div>`).join('');
-
-  return`<section class="hero-carousel" id="heroCarousel">
-    ${slides}
-    <div class="hero-nav-arrows">
-      <button onclick="goToHeroSlide(heroCurrentIndex-1,true)"><i class="fas fa-chevron-left"></i></button>
-      <button onclick="goToHeroSlide(heroCurrentIndex+1,true)"><i class="fas fa-chevron-right"></i></button>
-    </div>
-    <div class="hero-indicators">${dots}</div>
-    <div class="hero-thumbs">${thumbs}</div>
-    <div class="hero-progress-bar"><div class="hero-progress-fill" id="heroProgressFill"></div></div>
-  </section>`;
+  const thumbs=heroSlides.map((h,i)=>`<div class="hero-thumb ${i===0?'active':''}" onclick="goToHeroSlide(${i},true)"><img src="${IMG}w185${h.poster_path}" alt="" onerror="this.parentElement.style.display='none'"></div>`).join('');
+  return`<section class="hero-carousel" id="heroCarousel">${slides}<div class="hero-nav-arrows"><button onclick="goToHeroSlide(heroCurrentIndex-1,true)"><i class="fas fa-chevron-left"></i></button><button onclick="goToHeroSlide(heroCurrentIndex+1,true)"><i class="fas fa-chevron-right"></i></button></div><div class="hero-indicators">${dots}</div><div class="hero-thumbs">${thumbs}</div><div class="hero-progress-bar"><div class="hero-progress-fill" id="heroProgressFill"></div></div></section>`;
 }
 
 async function goHome(){
-  closeDetail();stopHeroCarousel();
-  setActiveNav('home');
-  const m=document.getElementById('mainContent');
-  m.innerHTML='<div class="loader"><div class="spinner"></div></div>';
-  try{
-    const[t,p,tr,u,at,pt,tt]=await Promise.all([
-      api('/trending/all/week'),api('/movie/popular'),api('/movie/top_rated'),
-      api('/movie/upcoming'),api('/tv/airing_today'),api('/tv/popular'),api('/tv/top_rated')
-    ]);
-
-    m.innerHTML=`
-      ${buildHeroCarousel(t.results)}
-      ${buildRow('Trending This Week',t.results,'fa-fire',true)}
-      ${buildRow('Popular Movies',p.results,'fa-star',false,'movie')}
-      ${buildRow('Top Rated Movies',tr.results,'fa-trophy',false,'movie')}
-      ${buildRow('Upcoming Movies',u.results,'fa-calendar',false,'movie')}
-      ${buildRow('Airing Today',at.results,'fa-broadcast-tower',false,'tv')}
-      ${buildRow('Popular TV Shows',pt.results,'fa-tv',false,'tv')}
-      ${buildRow('Top Rated TV Shows',tt.results,'fa-award',false,'tv')}`;
-
-    heroCurrentIndex=0;
-    startHeroAutoplay();
-  }catch(e){m.innerHTML=`<div style="text-align:center;padding:200px 20px"><h2>Error</h2><p style="color:var(--text-muted)">${e.message}</p></div>`}
+  closeDetail();stopHeroCarousel();setActiveNav('home');const m=document.getElementById('mainContent');m.innerHTML='<div class="loader"><div class="spinner"></div></div>';
+  try{const[t,p,tr,u,at,pt,tt]=await Promise.all([api('/trending/all/week'),api('/movie/popular'),api('/movie/top_rated'),api('/movie/upcoming'),api('/tv/airing_today'),api('/tv/popular'),api('/tv/top_rated')]);
+  m.innerHTML=`${buildHeroCarousel(t.results)}${buildRow('Trending This Week',t.results,'fa-fire',true)}${buildRow('Popular Movies',p.results,'fa-star',false,'movie')}${buildRow('Top Rated Movies',tr.results,'fa-trophy',false,'movie')}${buildRow('Upcoming Movies',u.results,'fa-calendar',false,'movie')}${buildRow('Airing Today',at.results,'fa-broadcast-tower',false,'tv')}${buildRow('Popular TV Shows',pt.results,'fa-tv',false,'tv')}${buildRow('Top Rated TV Shows',tt.results,'fa-award',false,'tv')}`;
+  heroCurrentIndex=0;startHeroAutoplay()}catch(e){m.innerHTML=`<div style="text-align:center;padding:200px 20px"><h2>Error</h2><p style="color:var(--text-muted)">${e.message}</p></div>`}
 }
 
 function buildRow(title,items,icon,isTrending=false,forceType=''){
-  if(!items?.length)return'';
-  const rid='row_'+(rowCounter++);
-  const cards=items.filter(i=>i.poster_path).slice(0,20).map((item,idx)=>{
-    const type=forceType||item.media_type||'movie',name=item.title||item.name,year=(item.release_date||item.first_air_date||'').slice(0,4);
-    return`<div class="card" onclick="openDetail(${item.id},'${type}')">
-      ${isTrending?`<div class="card-badge trending">#${idx+1}</div>`:''}
-      <img class="card-img" src="${IMG}w342${item.poster_path}" alt="${name}" loading="lazy" onerror="this.src='https://via.placeholder.com/342x513/0d0d1a/333?text=No+Image'">
-      <div class="card-play-icon"><i class="fas fa-play"></i></div>
-      <div class="card-overlay"><div class="card-title">${name}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span><span>${year}</span></div></div></div>`;
-  }).join('');
-  return`<section class="section"><div class="section-header"><h2 class="section-title"><i class="fas ${icon}"></i> ${title}</h2></div>
-    <div class="row-wrapper"><button class="row-arrow left" onclick="scrollRow('${rid}',-1)"><i class="fas fa-chevron-left"></i></button>
-    <div class="row" id="${rid}">${cards}</div><button class="row-arrow right" onclick="scrollRow('${rid}',1)"><i class="fas fa-chevron-right"></i></button></div></section>`;
+  if(!items?.length)return'';const rid='row_'+(rowCounter++);
+  const cards=items.filter(i=>i.poster_path).slice(0,20).map((item,idx)=>{const type=forceType||item.media_type||'movie',name=item.title||item.name,year=(item.release_date||item.first_air_date||'').slice(0,4);
+    return`<div class="card" onclick="openDetail(${item.id},'${type}')">${isTrending?`<div class="card-badge trending">#${idx+1}</div>`:''}<img class="card-img" src="${IMG}w342${item.poster_path}" alt="${name}" loading="lazy" onerror="this.src='https://via.placeholder.com/342x513/0d0d1a/333?text=No+Image'"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${name}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1)}</span><span>${year}</span></div></div></div>`}).join('');
+  return`<section class="section"><div class="section-header"><h2 class="section-title"><i class="fas ${icon}"></i> ${title}</h2></div><div class="row-wrapper"><button class="row-arrow left" onclick="scrollRow('${rid}',-1)"><i class="fas fa-chevron-left"></i></button><div class="row" id="${rid}">${cards}</div><button class="row-arrow right" onclick="scrollRow('${rid}',1)"><i class="fas fa-chevron-right"></i></button></div></section>`;
 }
 
 async function showPage(type,page=1){
-  closeDetail();stopHeroCarousel();
-  setActiveNav(type==='movie'?'movies':'tv');
-  const m=document.getElementById('mainContent'),l=type==='movie'?'Movies':'TV Shows';
+  closeDetail();stopHeroCarousel();setActiveNav(type==='movie'?'movies':'tv');const m=document.getElementById('mainContent'),l=type==='movie'?'Movies':'TV Shows';
   if(page===1)m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
   const[p,tr,g]=await Promise.all([api(`/${type}/popular`,{page}),api(`/${type}/top_rated`,{page}),api(`/genre/${type}/list`)]);
   let h=`<div class="page-title-bar">🎬 Browse ${l}</div>`;
   if(g.genres){h+=`<div style="padding:0 40px 20px;display:flex;flex-wrap:wrap;gap:8px">`;g.genres.forEach(x=>{h+=`<button class="genre-tag" onclick="showGenreResults(${x.id},'${type}','${x.name}')" style="cursor:pointer">${x.name}</button>`});h+=`</div>`}
-  h+=buildRow(`Popular ${l}`,p.results,'fa-fire',false,type);
-  h+=buildRow(`Top Rated ${l}`,tr.results,'fa-trophy',false,type);
+  h+=buildRow(`Popular ${l}`,p.results,'fa-fire',false,type);h+=buildRow(`Top Rated ${l}`,tr.results,'fa-trophy',false,type);
   h+=`<section class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-th"></i> All Popular ${l}</h2></div></section><div class="page-grid">`;
-  p.results.filter(i=>i.poster_path).forEach(i=>{const n=i.title||i.name,y=(i.release_date||i.first_air_date||'').slice(0,4);
-    h+=`<div class="card" onclick="openDetail(${i.id},'${type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span><span>${y}</span></div></div></div>`});
+  p.results.filter(i=>i.poster_path).forEach(i=>{const n=i.title||i.name,y=(i.release_date||i.first_air_date||'').slice(0,4);h+=`<div class="card" onclick="openDetail(${i.id},'${type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span><span>${y}</span></div></div></div>`});
   h+=`</div>`;m.innerHTML=h;window.scrollTo(0,0);
 }
 
-async function showGenreResults(gid,type,gname){
-  closeDetail();stopHeroCarousel();
-  const m=document.getElementById('mainContent');
-  m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
-  const d=await api(`/discover/${type}`,{with_genres:gid,sort_by:'popularity.desc'});
-  let h=`<div class="page-title-bar">${gname}</div><div class="page-grid">`;
-  d.results.filter(i=>i.poster_path).forEach(i=>{const n=i.title||i.name,y=(i.release_date||i.first_air_date||'').slice(0,4);
-    h+=`<div class="card" onclick="openDetail(${i.id},'${type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span><span>${y}</span></div></div></div>`});
-  h+=`</div>`;m.innerHTML=h;window.scrollTo(0,0);
-}
+async function showGenreResults(gid,type,gname){closeDetail();stopHeroCarousel();const m=document.getElementById('mainContent');m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';const d=await api(`/discover/${type}`,{with_genres:gid,sort_by:'popularity.desc'});let h=`<div class="page-title-bar">${gname}</div><div class="page-grid">`;d.results.filter(i=>i.poster_path).forEach(i=>{const n=i.title||i.name,y=(i.release_date||i.first_air_date||'').slice(0,4);h+=`<div class="card" onclick="openDetail(${i.id},'${type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span><span>${y}</span></div></div></div>`});h+=`</div>`;m.innerHTML=h;window.scrollTo(0,0)}
 
-async function showGenrePage(){
-  closeDetail();stopHeroCarousel();setActiveNav('genres');
-  const m=document.getElementById('mainContent');
-  m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';
-  const[mg,tg]=await Promise.all([api('/genre/movie/list'),api('/genre/tv/list')]);
-  const c=['#00d4ff','#7b2ff7','#ff2d75','#39ff14','#fbbf24','#ec4899','#f97316','#06b6d4','#8b5cf6','#10b981'];
-  let h=`<div class="page-title-bar">🎭 Genres</div>`;
-  h+=`<section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-film"></i> Movie Genres</h2></section>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;
-  mg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'movie','${g.name}')" style="background:${c[i%c.length]}11;border:1px solid ${c[i%c.length]}33;color:${c[i%c.length]};box-shadow:0 0 20px ${c[i%c.length]}08">${g.name}</button>`});
-  h+=`</div>`;
-  h+=`<section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-tv"></i> TV Genres</h2></section>`;
-  h+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;
-  tg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'tv','${g.name}')" style="background:${c[(i+3)%c.length]}11;border:1px solid ${c[(i+3)%c.length]}33;color:${c[(i+3)%c.length]};box-shadow:0 0 20px ${c[(i+3)%c.length]}08">${g.name}</button>`});
-  h+=`</div>`;m.innerHTML=h;window.scrollTo(0,0);
-}
-
-let searchTimeout;
-function openSearch(){document.getElementById('searchOverlay').classList.add('active');document.getElementById('searchInput').focus();document.body.style.overflow='hidden'}
-function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');document.body.style.overflow=''}
-document.getElementById('searchInput').addEventListener('input',e=>{
-  clearTimeout(searchTimeout);const q=e.target.value.trim();
-  if(!q){document.getElementById('searchResults').innerHTML='';return}
-  searchTimeout=setTimeout(async()=>{
-    const d=await api('/search/multi',{query:q}),c=document.getElementById('searchResults');
-    c.innerHTML=d.results.filter(i=>i.poster_path&&(i.media_type==='movie'||i.media_type==='tv')).map(i=>{
-      const n=i.title||i.name,y=(i.release_date||i.first_air_date||'').slice(0,4);
-      return`<div class="card" onclick="closeSearch();openDetail(${i.id},'${i.media_type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay" style="opacity:1"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span><span>${y}</span><span>${i.media_type.toUpperCase()}</span></div></div></div>`
-    }).join('');
-    if(!c.innerHTML)c.innerHTML='<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:40px">No results found</p>';
-  },400);
-});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();closeDetail()}});
+async function showGenrePage(){closeDetail();stopHeroCarousel();setActiveNav('genres');const m=document.getElementById('mainContent');m.innerHTML='<div class="loader" style="padding-top:120px"><div class="spinner"></div></div>';const[mg,tg]=await Promise.all([api('/genre/movie/list'),api('/genre/tv/list')]);const c=['#00d4ff','#7b2ff7','#ff2d75','#39ff14','#fbbf24','#ec4899','#f97316','#06b6d4','#8b5cf6','#10b981'];let h=`<div class="page-title-bar">🎭 Genres</div><section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-film"></i> Movie Genres</h2></section><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;mg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'movie','${g.name}')" style="background:${c[i%c.length]}11;border:1px solid ${c[i%c.length]}33;color:${c[i%c.length]};box-shadow:0 0 20px ${c[i%c.length]}08">${g.name}</button>`});h+=`</div><section class="section"><h2 class="section-title" style="margin-bottom:16px"><i class="fas fa-tv"></i> TV Genres</h2></section><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0 40px 30px">`;tg.genres.forEach((g,i)=>{h+=`<button class="genre-btn-cool" onclick="showGenreResults(${g.id},'tv','${g.name}')" style="background:${c[(i+3)%c.length]}11;border:1px solid ${c[(i+3)%c.length]}33;color:${c[(i+3)%c.length]};box-shadow:0 0 20px ${c[(i+3)%c.length]}08">${g.name}</button>`});h+=`</div>`;m.innerHTML=h;window.scrollTo(0,0)}
 
 async function openDetail(id,type){
-  stopHeroCarousel();
-  const o=document.getElementById('detailOverlay'),c=document.getElementById('detailContent');
-  o.classList.add('active');document.body.style.overflow='hidden';showNavCloseBtn();
+  stopHeroCarousel();const o=document.getElementById('detailOverlay'),c=document.getElementById('detailContent');o.classList.add('active');document.body.style.overflow='hidden';showNavCloseBtn();
   c.innerHTML='<div class="loader" style="padding-top:40vh"><div class="spinner"></div></div>';
-  try{
-    const[d,s]=await Promise.all([api(`/${type}/${id}`),api(`/${type}/${id}/similar`)]);
-    const title=d.title||d.name,year=(d.release_date||d.first_air_date||'').slice(0,4);
-    const runtime=d.runtime?`${Math.floor(d.runtime/60)}h ${d.runtime%60}m`:(d.number_of_seasons?`${d.number_of_seasons} Season${d.number_of_seasons>1?'s':''}`:'');
-    const ph=buildPlayerSection(d,type);
-
-    let sh='';
-    if(type==='tv'&&d.seasons){
-      sh=`<div style="margin-top:34px"><h3 class="detail-section-title"><i class="fas fa-list" style="color:var(--accent);margin-right:8px"></i>Seasons</h3>
-        <div class="row-wrapper"><button class="row-arrow left" onclick="scrollRow('detail_seasons',-1)"><i class="fas fa-chevron-left"></i></button>
-        <div class="row" id="detail_seasons">${d.seasons.filter(x=>x.poster_path).map(x=>`<div class="card" style="flex:0 0 140px"><img class="card-img" src="${IMG}w342${x.poster_path}" alt="${x.name}" loading="lazy"><div class="card-overlay" style="opacity:1"><div class="card-title">${x.name}</div><div class="card-info">${x.episode_count} Episodes</div></div></div>`).join('')}</div>
-        <button class="row-arrow right" onclick="scrollRow('detail_seasons',1)"><i class="fas fa-chevron-right"></i></button></div></div>`;
-    }
-
-    c.innerHTML=`
-      <div class="detail-backdrop"><img src="${d.backdrop_path?IMG+'original'+d.backdrop_path:'https://via.placeholder.com/1920x1080/0d0d1a/333?text=Mark+Movie+Hub'}" alt="${title}"></div>
-      <div class="detail-body">
-        <div class="detail-poster-row">
-          <div class="detail-poster"><img src="${d.poster_path?IMG+'w500'+d.poster_path:'https://via.placeholder.com/500x750/0d0d1a/333?text=No+Image'}" alt="${title}"></div>
-          <div class="detail-main">
-            <h1 class="detail-title">${title}</h1>
-            ${d.tagline?`<p class="detail-tagline">"${d.tagline}"</p>`:''}
-            <div class="detail-meta">
-              <span><i class="fas fa-star" style="color:#fbbf24"></i> ${d.vote_average?.toFixed(1)}</span>
-              <span><i class="fas fa-calendar"></i> ${year}</span>
-              <span><i class="fas fa-clock"></i> ${runtime}</span>
-              <span><i class="fas fa-globe"></i> ${d.original_language?.toUpperCase()}</span>
-              ${d.status?`<span><i class="fas fa-info-circle"></i> ${d.status}</span>`:''}
-            </div>
-            <div class="detail-genres">${(d.genres||[]).map(g=>`<span class="genre-tag">${g.name}</span>`).join('')}</div>
-            <div class="detail-actions"><button class="btn btn-primary" onclick="startWatching()"><i class="fas fa-play"></i> Watch Now</button></div>
-            <p class="detail-overview">${d.overview||'No overview available.'}</p>
-          </div>
-        </div>
-        ${ph}${sh}
-        ${s.results?.length?`<div style="margin-top:34px"><h3 class="detail-section-title"><i class="fas fa-th-large" style="color:var(--accent);margin-right:8px"></i>Similar</h3>
-          <div class="row-wrapper"><button class="row-arrow left" onclick="scrollRow('detail_similar',-1)"><i class="fas fa-chevron-left"></i></button>
-          <div class="row" id="detail_similar">${s.results.filter(i=>i.poster_path).slice(0,12).map(i=>{const n=i.title||i.name;return`<div class="card" onclick="openDetail(${i.id},'${type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span></div></div></div>`}).join('')}</div>
-          <button class="row-arrow right" onclick="scrollRow('detail_similar',1)"><i class="fas fa-chevron-right"></i></button></div></div>`:''}
-      </div>`;
-    o.scrollTop=0;
-  }catch(e){c.innerHTML=`<div style="text-align:center;padding:40vh 20px"><h2>Error</h2><p style="color:var(--text-muted)">${e.message}</p></div>`}
+  try{const[d,s]=await Promise.all([api(`/${type}/${id}`),api(`/${type}/${id}/similar`)]);const title=d.title||d.name,year=(d.release_date||d.first_air_date||'').slice(0,4),runtime=d.runtime?`${Math.floor(d.runtime/60)}h ${d.runtime%60}m`:(d.number_of_seasons?`${d.number_of_seasons} Season${d.number_of_seasons>1?'s':''}`:'');const ph=buildPlayerSection(d,type);
+  let sh='';if(type==='tv'&&d.seasons){sh=`<div style="margin-top:34px"><h3 class="detail-section-title"><i class="fas fa-list" style="color:var(--accent);margin-right:8px"></i>Seasons</h3><div class="row-wrapper"><button class="row-arrow left" onclick="scrollRow('detail_seasons',-1)"><i class="fas fa-chevron-left"></i></button><div class="row" id="detail_seasons">${d.seasons.filter(x=>x.poster_path).map(x=>`<div class="card" style="flex:0 0 140px"><img class="card-img" src="${IMG}w342${x.poster_path}" alt="${x.name}" loading="lazy"><div class="card-overlay" style="opacity:1"><div class="card-title">${x.name}</div><div class="card-info">${x.episode_count} Episodes</div></div></div>`).join('')}</div><button class="row-arrow right" onclick="scrollRow('detail_seasons',1)"><i class="fas fa-chevron-right"></i></button></div></div>`}
+  c.innerHTML=`<div class="detail-backdrop"><img src="${d.backdrop_path?IMG+'original'+d.backdrop_path:'https://via.placeholder.com/1920x1080/0d0d1a/333?text=Mark+Movie+Hub'}" alt="${title}"></div><div class="detail-body"><div class="detail-poster-row"><div class="detail-poster"><img src="${d.poster_path?IMG+'w500'+d.poster_path:'https://via.placeholder.com/500x750/0d0d1a/333?text=No+Image'}" alt="${title}"></div><div class="detail-main"><h1 class="detail-title">${title}</h1>${d.tagline?`<p class="detail-tagline">"${d.tagline}"</p>`:''}<div class="detail-meta"><span><i class="fas fa-star" style="color:#fbbf24"></i> ${d.vote_average?.toFixed(1)}</span><span><i class="fas fa-calendar"></i> ${year}</span><span><i class="fas fa-clock"></i> ${runtime}</span><span><i class="fas fa-globe"></i> ${d.original_language?.toUpperCase()}</span>${d.status?`<span><i class="fas fa-info-circle"></i> ${d.status}</span>`:''}</div><div class="detail-genres">${(d.genres||[]).map(g=>`<span class="genre-tag">${g.name}</span>`).join('')}</div><div class="detail-actions"><button class="btn btn-primary" onclick="startWatching()"><i class="fas fa-play"></i> Watch Now</button></div><p class="detail-overview">${d.overview||'No overview available.'}</p></div></div>${ph}${sh}${s.results?.length?`<div style="margin-top:34px"><h3 class="detail-section-title"><i class="fas fa-th-large" style="color:var(--accent);margin-right:8px"></i>Similar</h3><div class="row-wrapper"><button class="row-arrow left" onclick="scrollRow('detail_similar',-1)"><i class="fas fa-chevron-left"></i></button><div class="row" id="detail_similar">${s.results.filter(i=>i.poster_path).slice(0,12).map(i=>{const n=i.title||i.name;return`<div class="card" onclick="openDetail(${i.id},'${type}')"><img class="card-img" src="${IMG}w342${i.poster_path}" alt="${n}" loading="lazy"><div class="card-play-icon"><i class="fas fa-play"></i></div><div class="card-overlay"><div class="card-title">${n}</div><div class="card-info"><span class="card-rating"><i class="fas fa-star"></i> ${i.vote_average?.toFixed(1)}</span></div></div></div>`}).join('')}</div><button class="row-arrow right" onclick="scrollRow('detail_similar',1)"><i class="fas fa-chevron-right"></i></button></div></div>`:''}</div>`;o.scrollTop=0}catch(e){c.innerHTML=`<div style="text-align:center;padding:40vh 20px"><h2>Error</h2><p style="color:var(--text-muted)">${e.message}</p></div>`}
 }
 
-function closeDetail(){
-  const overlay=document.getElementById('detailOverlay');
-  const content=document.getElementById('detailContent');
-  if(getFullscreenElement())exitFullscreen();
-  destroyPlayer();
-  if(content)content.innerHTML='';
-  overlay.classList.remove('active');
-  document.body.style.overflow='';
-  playerState.isPlaying=false;
-  hideNavCloseBtn();
-}
+function closeDetail(){const o=document.getElementById('detailOverlay'),c=document.getElementById('detailContent');if(getFullscreenElement())exitFullscreen();destroyPlayer();if(c)c.innerHTML='';o.classList.remove('active');document.body.style.overflow='';playerState.isPlaying=false;hideNavCloseBtn()}
 
-function setActiveNav(s){
-  document.querySelectorAll('.nav-links a,.mobile-nav a').forEach(a=>a.classList.remove('active'));
-  ({home:['nav-home','mnav-home'],movies:['nav-movies','mnav-movies'],tv:['nav-tv','mnav-tv'],genres:['nav-genres']}[s]||[]).forEach(id=>document.getElementById(id)?.classList.add('active'));
-}
+function setActiveNav(s){document.querySelectorAll('.nav-links a,.mobile-nav a').forEach(a=>a.classList.remove('active'));({home:['nav-home','mnav-home'],movies:['nav-movies','mnav-movies'],tv:['nav-tv','mnav-tv'],genres:['nav-genres']}[s]||[]).forEach(id=>document.getElementById(id)?.classList.add('active'))}
 
-// Touch/swipe support for hero carousel
-(function(){
-  let startX=0,startY=0,swiping=false;
-  document.addEventListener('touchstart',e=>{
-    const carousel=document.getElementById('heroCarousel');
-    if(!carousel||!carousel.contains(e.target))return;
-    startX=e.touches[0].clientX;startY=e.touches[0].clientY;swiping=true;
-  },{passive:true});
-  document.addEventListener('touchend',e=>{
-    if(!swiping)return;swiping=false;
-    const dx=e.changedTouches[0].clientX-startX;
-    const dy=e.changedTouches[0].clientY-startY;
-    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){
-      if(dx<0)goToHeroSlide(heroCurrentIndex+1,true);
-      else goToHeroSlide(heroCurrentIndex-1,true);
-    }
-  },{passive:true});
-})();
+(function(){let sx=0,sy=0,sw=false;document.addEventListener('touchstart',e=>{const c=document.getElementById('heroCarousel');if(!c||!c.contains(e.target))return;sx=e.touches[0].clientX;sy=e.touches[0].clientY;sw=true},{passive:true});document.addEventListener('touchend',e=>{if(!sw)return;sw=false;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?goToHeroSlide(heroCurrentIndex+1,true):goToHeroSlide(heroCurrentIndex-1,true)}},{passive:true})})();
 
-// Initialize: check saved session, then load home
 checkSavedSession();
 goHome();
 </script>
