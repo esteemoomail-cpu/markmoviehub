@@ -58,6 +58,75 @@ img{display:block;max-width:100%}
 .search-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border)}
 .search-btn:hover{background:transparent;border-color:var(--accent);color:var(--accent);box-shadow:var(--glow);transform:scale(1.1)}
 
+/* ===== LOGIN BUTTON & MODAL ===== */
+.login-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:.95rem;transition:all .3s;border:1px solid var(--border);position:relative}
+.login-btn:hover{background:transparent;border-color:var(--accent2);color:var(--accent2);box-shadow:0 0 20px rgba(123,47,247,.3),0 0 40px rgba(123,47,247,.2);transform:scale(1.1)}
+.login-btn.logged-in{border-color:var(--neon-green);color:var(--neon-green)}
+.login-btn.logged-in:hover{box-shadow:0 0 20px rgba(57,255,20,.3)}
+
+.user-avatar-btn{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--gradient);font-size:.85rem;font-weight:700;transition:all .3s;border:2px solid rgba(0,212,255,.3);cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
+.user-avatar-btn:hover{transform:scale(1.1);box-shadow:var(--glow)}
+
+.login-overlay{position:fixed;inset:0;z-index:7000;background:rgba(5,5,16,.92);backdrop-filter:blur(30px);display:none;align-items:center;justify-content:center;padding:20px}
+.login-overlay.active{display:flex;animation:fadeIn .3s ease}
+
+.login-modal{width:100%;max-width:420px;background:var(--surface);border-radius:24px;border:1px solid var(--border);padding:40px 36px;position:relative;overflow:hidden}
+.login-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient3);opacity:.7}
+.login-modal::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,212,255,.05) 0%,transparent 60%);pointer-events:none}
+
+.login-close{position:absolute;top:16px;right:16px;font-size:1.2rem;color:var(--text-muted);transition:all .3s;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;z-index:1}
+.login-close:hover{color:var(--accent3);transform:rotate(90deg)}
+
+.login-header{text-align:center;margin-bottom:32px;position:relative;z-index:1}
+.login-header-icon{width:64px;height:64px;border-radius:18px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 16px;box-shadow:var(--glow);position:relative}
+.login-header-icon::before{content:'';position:absolute;inset:-3px;background:var(--gradient3);border-radius:20px;z-index:-1;animation:logoPulse 3s ease-in-out infinite;opacity:.5}
+.login-header h2{font-size:1.5rem;font-weight:700;margin-bottom:6px;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.login-header p{font-size:.85rem;color:var(--text-muted)}
+
+.login-tabs{display:flex;gap:4px;margin-bottom:28px;background:var(--surface2);border-radius:12px;padding:4px;position:relative;z-index:1}
+.login-tab{flex:1;padding:10px;border-radius:10px;font-size:.85rem;font-weight:600;text-align:center;transition:all .3s;color:var(--text-muted);letter-spacing:.5px}
+.login-tab.active{background:var(--gradient);color:#fff;box-shadow:0 4px 15px rgba(0,212,255,.3)}
+.login-tab:hover:not(.active){color:var(--text)}
+
+.login-form{position:relative;z-index:1}
+.login-form-group{margin-bottom:18px}
+.login-form-group label{display:block;font-size:.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.login-form-group input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:.95rem;outline:none;transition:all .3s;font-family:'Space Grotesk',sans-serif}
+.login-form-group input:focus{border-color:var(--accent);box-shadow:0 0 20px rgba(0,212,255,.1)}
+.login-form-group input::placeholder{color:var(--text-muted);opacity:.5}
+
+.login-submit{width:100%;padding:14px;border-radius:12px;background:var(--gradient);color:#fff;font-size:.95rem;font-weight:700;letter-spacing:.5px;transition:all .3s;box-shadow:0 4px 20px rgba(0,212,255,.3);margin-top:8px}
+.login-submit:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,212,255,.5),0 0 60px rgba(123,47,247,.3)}
+.login-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+.login-error{background:rgba(255,45,117,.1);border:1px solid rgba(255,45,117,.25);border-radius:10px;padding:12px 16px;font-size:.85rem;color:var(--accent3);margin-bottom:16px;display:none;align-items:center;gap:8px}
+.login-error.visible{display:flex}
+.login-error i{flex-shrink:0}
+
+.login-success{background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.25);border-radius:10px;padding:12px 16px;font-size:.85rem;color:var(--neon-green);margin-bottom:16px;display:none;align-items:center;gap:8px}
+.login-success.visible{display:flex}
+.login-success i{flex-shrink:0}
+
+.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-muted);font-size:.75rem;text-transform:uppercase;letter-spacing:1px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* User dropdown */
+.user-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:220px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:8px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 30px rgba(0,212,255,.1);display:none;z-index:5001;overflow:hidden}
+.user-dropdown::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gradient3);opacity:.5}
+.user-dropdown.active{display:block;animation:fadeIn .2s ease}
+.user-dropdown-header{padding:16px 12px;text-align:center;border-bottom:1px solid var(--border);margin-bottom:4px}
+.user-dropdown-avatar{width:48px;height:48px;border-radius:14px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;margin:0 auto 10px;font-family:'Orbitron',sans-serif;letter-spacing:1px;text-transform:uppercase}
+.user-dropdown-name{font-size:.9rem;font-weight:600;margin-bottom:2px}
+.user-dropdown-email{font-size:.75rem;color:var(--text-muted)}
+.user-dropdown-item{padding:10px 12px;border-radius:10px;font-size:.85rem;display:flex;align-items:center;gap:10px;transition:all .2s;color:var(--text-muted);cursor:pointer}
+.user-dropdown-item:hover{background:var(--surface2);color:var(--text)}
+.user-dropdown-item.logout{color:var(--accent3)}
+.user-dropdown-item.logout:hover{background:rgba(255,45,117,.1)}
+.user-dropdown-item i{width:18px;text-align:center;font-size:.85rem}
+
+/* Loading spinner for login */
+.login-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
+
 /* ===== HERO CAROUSEL ===== */
 .hero-carousel{position:relative;height:92vh;min-height:580px;overflow:hidden}
 .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease,transform .5s ease;transform:scale(1.05);pointer-events:none}
@@ -234,6 +303,8 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
   .episode-grid{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
   .row-arrow{width:36px;height:36px;font-size:.85rem;border-radius:10px}.row-arrow.left{left:2px}.row-arrow.right{right:2px}
   .nav-logo{gap:8px}.nav-logo-icon{width:32px;height:32px;font-size:.9rem}.nav-logo-text{font-size:.9rem}
+  .login-modal{padding:30px 24px;margin:10px}
+  .user-dropdown{right:-60px;width:200px}
 }
 
 .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:5000;background:rgba(5,5,16,.95);backdrop-filter:blur(30px);border-top:1px solid var(--border);padding:8px 0}
@@ -264,6 +335,20 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
   </div>
   <div class="nav-right">
     <button class="search-btn" id="searchBtn" onclick="openSearch()"><i class="fas fa-search"></i></button>
+    <!-- Login Button -->
+    <div style="position:relative" id="authContainer">
+      <button class="login-btn" id="loginBtn" onclick="toggleLoginModal()"><i class="fas fa-user"></i></button>
+      <!-- User dropdown (shown when logged in) -->
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+          <div class="user-dropdown-avatar" id="dropdownAvatar">U</div>
+          <div class="user-dropdown-name" id="dropdownName">User</div>
+          <div class="user-dropdown-email" id="dropdownEmail">user@email.com</div>
+        </div>
+        <div class="user-dropdown-item" onclick="closeUserDropdown()"><i class="fas fa-home"></i> Home</div>
+        <div class="user-dropdown-item logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</div>
+      </div>
+    </div>
     <button class="nav-close-detail" id="navCloseDetail" onclick="closeDetail()" title="Close"><i class="fas fa-times"></i></button>
   </div>
 </nav>
@@ -273,6 +358,61 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
   <a href="#" onclick="showPage('movie')" id="mnav-movies"><i class="fas fa-film"></i>Movies</a>
   <a href="#" onclick="showPage('tv')" id="mnav-tv"><i class="fas fa-tv"></i>TV</a>
   <a href="#" onclick="openSearch()" id="mnav-search"><i class="fas fa-search"></i>Search</a>
+  <a href="#" onclick="toggleLoginModal()" id="mnav-login"><i class="fas fa-user"></i>Login</a>
+</div>
+
+<!-- Login Overlay -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-modal">
+    <button class="login-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
+    <div class="login-header">
+      <div class="login-header-icon"><i class="fas fa-user-astronaut"></i></div>
+      <h2 id="loginModalTitle">Welcome Back</h2>
+      <p id="loginModalSubtitle">Sign in to your account</p>
+    </div>
+    
+    <div class="login-tabs">
+      <button class="login-tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</button>
+      <button class="login-tab" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
+    </div>
+
+    <div class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i><span id="loginErrorText">Error</span></div>
+    <div class="login-success" id="loginSuccess"><i class="fas fa-check-circle"></i><span id="loginSuccessText">Success</span></div>
+
+    <!-- Login Form -->
+    <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+      <div class="login-form-group">
+        <label>Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username">
+      </div>
+      <div class="login-form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-submit" id="loginSubmitBtn">
+        <span id="loginSubmitText">Sign In</span>
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form class="login-form" id="registerForm" style="display:none" onsubmit="handleRegister(event)">
+      <div class="login-form-group">
+        <label>Username</label>
+        <input type="text" id="regUsername" placeholder="Choose a username" required autocomplete="username">
+      </div>
+      <div class="login-form-group">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="Enter your email" required autocomplete="email">
+      </div>
+      <div class="login-form-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="Create a password" required minlength="4" autocomplete="new-password">
+      </div>
+      <button type="submit" class="login-submit" id="regSubmitBtn">
+        <span id="regSubmitText">Create Account</span>
+      </button>
+    </form>
+  </div>
 </div>
 
 <div class="search-overlay" id="searchOverlay">
@@ -291,7 +431,387 @@ iframe:fullscreen,iframe:-webkit-full-screen,iframe:-moz-full-screen,iframe:-ms-
 <main id="mainContent"></main>
 
 <script>
-// Particles
+// ===========================
+// GOOGLE SHEETS AUTH SYSTEM
+// ===========================
+// SETUP INSTRUCTIONS:
+// 1. Create a Google Sheet with columns: A=Username, B=Email, C=Password
+// 2. Add header row: Username | Email | Password
+// 3. Go to Extensions > Apps Script and paste the script below
+// 4. Deploy as Web App (Execute as: Me, Access: Anyone)
+// 5. Replace GOOGLE_SCRIPT_URL with your deployed URL
+
+/*
+===== GOOGLE APPS SCRIPT (paste in Apps Script editor) =====
+
+function doGet(e) {
+  return handleRequest(e);
+}
+
+function doPost(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
+  var params = e.parameter;
+  var action = params.action;
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Users') || ss.getSheets()[0];
+  
+  var result = {};
+  
+  try {
+    if (action === 'login') {
+      result = loginUser(sheet, params.username, params.password);
+    } else if (action === 'register') {
+      result = registerUser(sheet, params.username, params.email, params.password);
+    } else {
+      result = { success: false, message: 'Invalid action' };
+    }
+  } catch (err) {
+    result = { success: false, message: err.toString() };
+  }
+  
+  return ContentService.createTextOutput(
+    params.callback + '(' + JSON.stringify(result) + ')'
+  ).setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+function loginUser(sheet, username, password) {
+  var data = sheet.getDataRange().getValues();
+  
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString().toLowerCase() === username.toLowerCase() && 
+        data[i][2].toString() === password) {
+      return { 
+        success: true, 
+        message: 'Login successful', 
+        user: { 
+          username: data[i][0], 
+          email: data[i][1] 
+        } 
+      };
+    }
+  }
+  
+  return { success: false, message: 'Invalid username or password' };
+}
+
+function registerUser(sheet, username, email, password) {
+  var data = sheet.getDataRange().getValues();
+  
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString().toLowerCase() === username.toLowerCase()) {
+      return { success: false, message: 'Username already exists' };
+    }
+    if (data[i][1].toString().toLowerCase() === email.toLowerCase()) {
+      return { success: false, message: 'Email already registered' };
+    }
+  }
+  
+  sheet.appendRow([username, email, password]);
+  
+  return { 
+    success: true, 
+    message: 'Account created successfully! You can now login.',
+    user: { username: username, email: email }
+  };
+}
+
+===== END APPS SCRIPT =====
+*/
+
+// REPLACE THIS with your actual Google Apps Script Web App URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSxXFB_-plm8PvhQ8ifMHLtczdiKs5QQFNikdmMw5xeAh5hUT_Jm8Ia8R--S9ZKUd9ZQ/exec';
+
+let currentUser = null;
+let authCallbackCounter = 0;
+
+// Check for saved session on load
+function checkSavedSession() {
+  const saved = localStorage.getItem('mmh_user');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      updateUIForLoggedInUser();
+    } catch(e) {
+      localStorage.removeItem('mmh_user');
+    }
+  }
+}
+
+function updateUIForLoggedInUser() {
+  const loginBtn = document.getElementById('loginBtn');
+  const mnavLogin = document.getElementById('mnav-login');
+  
+  if (currentUser) {
+    const initials = currentUser.username.substring(0, 2).toUpperCase();
+    loginBtn.innerHTML = initials;
+    loginBtn.classList.add('logged-in');
+    loginBtn.className = 'user-avatar-btn';
+    loginBtn.onclick = toggleUserDropdown;
+    
+    // Update dropdown
+    document.getElementById('dropdownAvatar').textContent = initials;
+    document.getElementById('dropdownName').textContent = currentUser.username;
+    document.getElementById('dropdownEmail').textContent = currentUser.email;
+    
+    // Update mobile nav
+    if (mnavLogin) {
+      mnavLogin.innerHTML = `<i class="fas fa-user-check"></i>${currentUser.username.substring(0, 6)}`;
+      mnavLogin.onclick = function() { toggleUserDropdown(); };
+    }
+  } else {
+    loginBtn.innerHTML = '<i class="fas fa-user"></i>';
+    loginBtn.classList.remove('logged-in');
+    loginBtn.className = 'login-btn';
+    loginBtn.onclick = toggleLoginModal;
+    
+    if (mnavLogin) {
+      mnavLogin.innerHTML = '<i class="fas fa-user"></i>Login';
+      mnavLogin.onclick = function() { toggleLoginModal(); };
+    }
+  }
+}
+
+function toggleLoginModal() {
+  if (currentUser) {
+    toggleUserDropdown();
+    return;
+  }
+  const overlay = document.getElementById('loginOverlay');
+  if (overlay.classList.contains('active')) {
+    closeLoginModal();
+  } else {
+    openLoginModal();
+  }
+}
+
+function openLoginModal() {
+  if (currentUser) { toggleUserDropdown(); return; }
+  document.getElementById('loginOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  clearAuthMessages();
+  document.getElementById('loginUsername').focus();
+}
+
+function closeLoginModal() {
+  document.getElementById('loginOverlay').classList.remove('active');
+  if (!document.getElementById('detailOverlay').classList.contains('active')) {
+    document.body.style.overflow = '';
+  }
+  clearAuthMessages();
+}
+
+function toggleUserDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('active');
+  
+  // Close dropdown when clicking outside
+  if (dropdown.classList.contains('active')) {
+    setTimeout(() => {
+      document.addEventListener('click', closeDropdownOutside);
+    }, 10);
+  }
+}
+
+function closeUserDropdown() {
+  document.getElementById('userDropdown').classList.remove('active');
+  document.removeEventListener('click', closeDropdownOutside);
+}
+
+function closeDropdownOutside(e) {
+  const container = document.getElementById('authContainer');
+  if (!container.contains(e.target)) {
+    closeUserDropdown();
+  }
+}
+
+function switchAuthTab(tab) {
+  clearAuthMessages();
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  
+  if (tab === 'login') {
+    document.getElementById('loginModalTitle').textContent = 'Welcome Back';
+    document.getElementById('loginModalSubtitle').textContent = 'Sign in to your account';
+  } else {
+    document.getElementById('loginModalTitle').textContent = 'Join Us';
+    document.getElementById('loginModalSubtitle').textContent = 'Create a new account';
+  }
+}
+
+function clearAuthMessages() {
+  document.getElementById('loginError').classList.remove('visible');
+  document.getElementById('loginSuccess').classList.remove('visible');
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('loginError');
+  document.getElementById('loginErrorText').textContent = msg;
+  el.classList.add('visible');
+  document.getElementById('loginSuccess').classList.remove('visible');
+}
+
+function showAuthSuccess(msg) {
+  const el = document.getElementById('loginSuccess');
+  document.getElementById('loginSuccessText').textContent = msg;
+  el.classList.add('visible');
+  document.getElementById('loginError').classList.remove('visible');
+}
+
+function setButtonLoading(btnId, textId, loading) {
+  const btn = document.getElementById(btnId);
+  const text = document.getElementById(textId);
+  if (loading) {
+    btn.disabled = true;
+    text.innerHTML = '<span class="login-spinner"></span> Please wait...';
+  } else {
+    btn.disabled = false;
+    if (btnId === 'loginSubmitBtn') text.textContent = 'Sign In';
+    else text.textContent = 'Create Account';
+  }
+}
+
+function jsonpRequest(url, callback) {
+  const callbackName = 'authCallback_' + (++authCallbackCounter) + '_' + Date.now();
+  
+  window[callbackName] = function(data) {
+    callback(data);
+    delete window[callbackName];
+    const script = document.getElementById('script_' + callbackName);
+    if (script) script.remove();
+  };
+  
+  const script = document.createElement('script');
+  script.id = 'script_' + callbackName;
+  script.src = url + '&callback=' + callbackName;
+  
+  script.onerror = function() {
+    callback({ success: false, message: 'Network error. Check your connection or script URL.' });
+    delete window[callbackName];
+    script.remove();
+  };
+  
+  document.body.appendChild(script);
+  
+  // Timeout
+  setTimeout(() => {
+    if (window[callbackName]) {
+      callback({ success: false, message: 'Request timed out. Please try again.' });
+      delete window[callbackName];
+      script.remove();
+    }
+  }, 15000);
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  clearAuthMessages();
+  
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  if (!username || !password) {
+    showAuthError('Please fill in all fields');
+    return;
+  }
+  
+  setButtonLoading('loginSubmitBtn', 'loginSubmitText', true);
+  
+  const url = `${GOOGLE_SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+  
+  jsonpRequest(url, function(result) {
+    setButtonLoading('loginSubmitBtn', 'loginSubmitText', false);
+    
+    if (result.success) {
+      currentUser = result.user;
+      localStorage.setItem('mmh_user', JSON.stringify(currentUser));
+      showAuthSuccess('Welcome back, ' + currentUser.username + '!');
+      updateUIForLoggedInUser();
+      
+      setTimeout(() => {
+        closeLoginModal();
+      }, 1200);
+    } else {
+      showAuthError(result.message);
+    }
+  });
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  clearAuthMessages();
+  
+  const username = document.getElementById('regUsername').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  
+  if (!username || !email || !password) {
+    showAuthError('Please fill in all fields');
+    return;
+  }
+  
+  if (username.length < 3) {
+    showAuthError('Username must be at least 3 characters');
+    return;
+  }
+  
+  if (password.length < 4) {
+    showAuthError('Password must be at least 4 characters');
+    return;
+  }
+  
+  setButtonLoading('regSubmitBtn', 'regSubmitText', true);
+  
+  const url = `${GOOGLE_SCRIPT_URL}?action=register&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+  
+  jsonpRequest(url, function(result) {
+    setButtonLoading('regSubmitBtn', 'regSubmitText', false);
+    
+    if (result.success) {
+      showAuthSuccess(result.message);
+      // Auto switch to login tab after registration
+      setTimeout(() => {
+        switchAuthTab('login');
+        document.getElementById('loginUsername').value = username;
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+      }, 1500);
+    } else {
+      showAuthError(result.message);
+    }
+  });
+}
+
+function logoutUser() {
+  currentUser = null;
+  localStorage.removeItem('mmh_user');
+  closeUserDropdown();
+  updateUIForLoggedInUser();
+}
+
+// Close login on escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('loginOverlay').classList.contains('active')) {
+      closeLoginModal();
+    }
+  }
+});
+
+// Close login on overlay click
+document.getElementById('loginOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeLoginModal();
+});
+
+
+// ===========================
+// PARTICLES
+// ===========================
 (function(){
   const c=document.getElementById('particles');
   for(let i=0;i<40;i++){
@@ -779,6 +1299,8 @@ function setActiveNav(s){
   },{passive:true});
 })();
 
+// Initialize: check saved session, then load home
+checkSavedSession();
 goHome();
 </script>
 </body>
