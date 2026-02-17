@@ -473,7 +473,7 @@ function forgotPassword(sheet,email){
 ===== END APPS SCRIPT =====
 */
 
-const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyQD_w4IPq1-p_Qb0Bgszgm12GH_6AlfbyRRO3g_HGaD_rw87f5lPlB3UCh79pkbPyAHw/exec';
+const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwYrhFvPaYeciWvNOTYPJSaZIbAzU1sbGW5sqjLlVKKiADYg20KgvzHy7-bTV-RagMLGw/exec';
 let currentUser=null,authCallbackCounter=0;
 
 function isValidEmail(e){const r=/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;if(!r.test(e))return false;const p=e.split('@');if(p.length!==2)return false;const d=p[1];if(!d.includes('.'))return false;return d.split('.').pop().length>=2}
