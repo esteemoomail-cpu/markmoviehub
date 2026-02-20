@@ -412,7 +412,7 @@
             transform: scale(0.97);
         }
 
-        /* Genre overlay backdrop */
+        /* Genre overlay backdrop - MOVED OUTSIDE NAV */
         .genre-backdrop {
             display: none;
             position: fixed;
@@ -851,6 +851,7 @@
                 height: auto;
                 flex-wrap: wrap;
                 gap: 8px;
+                overflow: visible;
             }
             .nav-center {
                 order: 3;
@@ -866,7 +867,7 @@
             .brand-text { font-size: 16px; letter-spacing: 0.5px; }
             .brand-slogan { font-size: 8px; letter-spacing: 2px; }
 
-            .search-container { position: static; }
+            .search-container { position: relative; }
             .search-box { width: 150px; height: 36px; padding: 0 10px; }
             .search-box input { font-size: 12px; }
             .search-box input::placeholder { font-size: 11px; }
@@ -929,7 +930,11 @@
         /* ========= MOBILE (≤480px) ================== */
         /* ============================================ */
         @media (max-width: 480px) {
-            nav { padding: 8px 3%; gap: 6px; }
+            nav { 
+                padding: 8px 3%; 
+                gap: 6px; 
+                overflow: visible;
+            }
             .nav-brand { gap: 8px; }
             .brand-icon { width: 34px; height: 34px; font-size: 14px; }
             .brand-text { font-size: 14px; letter-spacing: 0.3px; }
@@ -969,6 +974,9 @@
                 display: block;
                 width: 100%;
                 font-size: 16px;
+            }
+            .search-container.search-active .search-clear {
+                z-index: 3101;
             }
             .search-container.search-active .search-dropdown {
                 position: fixed;
@@ -1092,14 +1100,21 @@
                 to { transform: translateY(0); }
             }
         }
+
+        /* Prevent body scroll when overlays are active */
+        body.no-scroll {
+            overflow: hidden !important;
+            position: fixed;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
-<!-- Search backdrop for mobile - solid dark, no blur -->
+<!-- Search backdrop for mobile - solid dark, no blur - OUTSIDE NAV -->
 <div class="search-backdrop" id="search-backdrop"></div>
 
-<!-- Genre backdrop -->
+<!-- Genre backdrop - OUTSIDE NAV -->
 <div class="genre-backdrop" id="genre-backdrop"></div>
 
 <!-- NAVIGATION -->
@@ -1126,13 +1141,6 @@
             <button class="nav-link" id="nav-genres" onclick="toggleGenreMenu(event)">
                 <i class="fas fa-layer-group"></i>Genres <i class="fas fa-chevron-down genre-chevron"></i>
             </button>
-            <div class="genre-menu" id="genre-menu">
-                <div class="genre-menu-header">
-                    <div class="genre-menu-handle"></div>
-                    <div class="genre-menu-title">Browse Genres</div>
-                </div>
-                <div class="genre-grid" id="genre-grid"></div>
-            </div>
         </div>
     </div>
 
@@ -1147,6 +1155,15 @@
         </div>
     </div>
 </nav>
+
+<!-- Genre menu - MOVED OUTSIDE NAV to avoid stacking context issues -->
+<div class="genre-menu" id="genre-menu">
+    <div class="genre-menu-header">
+        <div class="genre-menu-handle"></div>
+        <div class="genre-menu-title">Browse Genres</div>
+    </div>
+    <div class="genre-grid" id="genre-grid"></div>
+</div>
 
 <!-- HERO BANNER -->
 <div id="hero-banner">
@@ -1225,6 +1242,7 @@
     let searchDebounceTimer = null;
     let currentView = 'home';
     let genreMenuOpen = false;
+    let savedScrollY = 0;
 
     const genres = [
         { id: 28, name: 'Action', icon: '💥' },
@@ -1270,6 +1288,23 @@
         }
     };
 
+    // Helper to lock body scroll without jump
+    function lockBodyScroll() {
+        savedScrollY = window.scrollY;
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollY}px`;
+        document.body.style.width = '100%';
+    }
+
+    function unlockBodyScroll() {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, savedScrollY);
+    }
+
     window.onload = () => {
         buildGenreMenu();
         loadHeroBanner();
@@ -1314,8 +1349,7 @@
         const container = document.getElementById('search-container');
         container.classList.add('search-active');
         document.getElementById('search-backdrop').classList.add('active');
-        // Lock body scroll
-        document.body.style.overflow = 'hidden';
+        lockBodyScroll();
         setTimeout(() => {
             document.getElementById('query').focus();
         }, 150);
@@ -1325,7 +1359,7 @@
         const container = document.getElementById('search-container');
         container.classList.remove('search-active');
         document.getElementById('search-backdrop').classList.remove('active');
-        document.body.style.overflow = '';
+        unlockBodyScroll();
         closeSearchDropdown();
     }
 
@@ -1362,6 +1396,7 @@
         const searchContainer = document.getElementById('search-container');
         const searchBackdrop = document.getElementById('search-backdrop');
         const genreDropdown = document.getElementById('genre-dropdown');
+        const genreMenu = document.getElementById('genre-menu');
         const genreBackdrop = document.getElementById('genre-backdrop');
 
         if (!searchContainer.contains(e.target) && e.target !== searchBackdrop) {
@@ -1369,17 +1404,19 @@
             if (window.innerWidth <= 480) collapseMobileSearch();
         }
 
-        if (!genreDropdown.contains(e.target) && e.target !== genreBackdrop) {
+        if (!genreDropdown.contains(e.target) && !genreMenu.contains(e.target) && e.target !== genreBackdrop) {
             closeGenreMenu();
         }
     });
 
-    document.getElementById('search-backdrop').addEventListener('click', function() {
+    document.getElementById('search-backdrop').addEventListener('click', function(e) {
+        e.stopPropagation();
         collapseMobileSearch();
         document.getElementById('query').blur();
     });
 
-    document.getElementById('genre-backdrop').addEventListener('click', function() {
+    document.getElementById('genre-backdrop').addEventListener('click', function(e) {
+        e.stopPropagation();
         closeGenreMenu();
     });
 
@@ -1465,7 +1502,7 @@
     }
 
     // ==========================================
-    // GENRE MENU (Click-based)
+    // GENRE MENU (Click-based) - now outside nav
     // ==========================================
     function toggleGenreMenu(e) {
         e.stopPropagation();
@@ -1479,11 +1516,30 @@
 
     function openGenreMenu() {
         genreMenuOpen = true;
-        document.getElementById('genre-dropdown').classList.add('open');
-        document.getElementById('genre-menu').classList.add('open');
+        const genreDropdown = document.getElementById('genre-dropdown');
+        const genreMenu = document.getElementById('genre-menu');
+        
+        genreDropdown.classList.add('open');
+        genreMenu.classList.add('open');
+        
+        // On desktop, position relative to the genre button
+        if (window.innerWidth > 600) {
+            const btnRect = genreDropdown.getBoundingClientRect();
+            genreMenu.style.position = 'fixed';
+            genreMenu.style.top = (btnRect.bottom + 6) + 'px';
+            genreMenu.style.left = (btnRect.left + btnRect.width / 2) + 'px';
+            genreMenu.style.transform = 'translateX(-50%)';
+            genreMenu.style.bottom = 'auto';
+            genreMenu.style.right = 'auto';
+            genreMenu.style.width = '';
+            genreMenu.style.minWidth = '420px';
+            genreMenu.style.borderRadius = '14px';
+            genreMenu.style.maxHeight = '';
+        }
+        
         if (window.innerWidth <= 600) {
             document.getElementById('genre-backdrop').classList.add('active');
-            document.body.style.overflow = 'hidden';
+            lockBodyScroll();
         }
     }
 
@@ -1493,7 +1549,10 @@
         document.getElementById('genre-dropdown').classList.remove('open');
         document.getElementById('genre-menu').classList.remove('open');
         document.getElementById('genre-backdrop').classList.remove('active');
-        document.body.style.overflow = '';
+        
+        if (window.innerWidth <= 600) {
+            unlockBodyScroll();
+        }
     }
 
     function buildGenreMenu() {
