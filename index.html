@@ -72,7 +72,6 @@
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent-light); }
 
-        /* === NAV === */
         nav {
             display: flex;
             justify-content: space-between;
@@ -198,7 +197,6 @@
 
         .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
-        /* === SEARCH === */
         .search-container { position: relative; display: flex; align-items: center; }
 
         .search-box {
@@ -237,7 +235,6 @@
         .search-clear:hover { color: var(--accent-light); }
         .search-clear.visible { display: block; }
 
-        /* === SEARCH DROPDOWN === */
         .search-dropdown {
             position: absolute;
             top: calc(100% + 8px);
@@ -368,10 +365,10 @@
         .genre-dropdown { position: relative; }
 
         .genre-chevron {
+            transition: transform 0.3s ease;
             font-size: 9px !important;
             margin-left: 4px !important;
             margin-right: 0 !important;
-            transition: transform 0.3s ease;
         }
         .genre-dropdown.open .genre-chevron {
             transform: rotate(180deg);
@@ -380,24 +377,26 @@
         .genre-menu {
             display: none;
             position: absolute;
-            top: calc(100% + 4px);
+            top: calc(100% + 6px);
             left: 50%;
             transform: translateX(-50%);
             background: var(--bg-secondary);
             border: 1px solid var(--border-hover);
             border-radius: 14px;
-            padding: 10px;
+            padding: 12px;
             min-width: 420px;
             box-shadow: 0 20px 60px rgba(0, 10, 40, 0.7), 0 0 30px rgba(37, 99, 235, 0.06);
             backdrop-filter: blur(20px);
             z-index: 2000;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
             animation: dropIn 0.25s ease;
         }
+        .genre-menu.open { display: block; }
 
-        /* Show via JS class */
-        .genre-menu.active { display: grid; }
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+        }
 
         .genre-item {
             padding: 9px 14px; border-radius: 8px;
@@ -405,22 +404,27 @@
             color: var(--text-secondary); transition: all 0.2s;
             text-align: center; white-space: nowrap;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
         }
         .genre-item:hover { background: var(--accent-subtle); color: var(--text-primary); }
-        .genre-item:active { background: rgba(37, 99, 235, 0.2); color: var(--text-primary); }
+        .genre-item:active { 
+            background: rgba(37, 99, 235, 0.25); 
+            color: var(--text-primary);
+            transform: scale(0.97);
+        }
 
-        /* Genre backdrop overlay for mobile */
+        /* Genre overlay backdrop */
         .genre-backdrop {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(5, 10, 20, 0.7);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 1999;
         }
         .genre-backdrop.active { display: block; }
+
+        .genre-menu-header {
+            display: none;
+        }
 
         /* === HERO BANNER === */
         #hero-banner {
@@ -503,10 +507,8 @@
             box-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* === CONTAINER === */
         .container { max-width: 1400px; margin: auto; padding: 0 4% 40px; }
 
-        /* === PLAYER === */
         #player-area {
             display: none; margin-bottom: 40px;
             background: var(--bg-secondary); padding: 20px;
@@ -664,7 +666,6 @@
             color: var(--accent-light); border-color: var(--border-hover);
         }
 
-        /* === SECTION TITLES === */
         .section-header {
             display: flex; justify-content: space-between;
             align-items: center; margin: 35px 0 18px;
@@ -706,10 +707,7 @@
         }
         .see-all-btn i { margin-left: 6px; font-size: 10px; }
 
-        /* === SCROLL ROW === */
-        .scroll-row-wrapper {
-            position: relative;
-        }
+        .scroll-row-wrapper { position: relative; }
         .scroll-row-wrapper::after {
             content: '';
             position: absolute;
@@ -742,7 +740,6 @@
             scroll-snap-align: start;
         }
 
-        /* === GRID CARDS === */
         #results {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -817,7 +814,6 @@
         }
         .card-year { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 
-        /* === LOADING === */
         #loading-indicator {
             text-align: center; padding: 30px;
             color: var(--text-secondary); display: none;
@@ -832,15 +828,15 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Backdrop overlay for mobile search */
+        /* ======================================== */
+        /* MOBILE SEARCH OVERLAY - NO BLUR          */
+        /* ======================================== */
         .search-backdrop {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(5, 10, 20, 0.75);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            z-index: 2999;
+            background: rgba(5, 10, 20, 0.92);
+            z-index: 3000;
         }
         .search-backdrop.active {
             display: block;
@@ -882,7 +878,7 @@
                 width: auto;
                 max-height: 60vh;
                 border-radius: 14px;
-                z-index: 3000;
+                z-index: 3100;
             }
 
             .search-result-item { padding: 8px 12px; gap: 10px; }
@@ -914,8 +910,10 @@
 
             .genre-menu {
                 min-width: 280px;
-                grid-template-columns: repeat(2, 1fr);
                 left: -50%; transform: translateX(0);
+            }
+            .genre-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .scroll-row .movie-card {
@@ -949,23 +947,24 @@
             .search-box i { margin-right: 0; }
             .search-box input { display: none; }
 
+            /* Expanded mobile search - sits on top of solid backdrop */
             .search-container.search-active .search-box {
                 position: fixed;
-                top: 10px;
-                left: 12px;
-                right: 12px;
+                top: 16px;
+                left: 16px;
+                right: 16px;
                 width: auto;
-                height: 44px;
-                padding: 0 15px;
+                height: 48px;
+                padding: 0 16px;
                 justify-content: flex-start;
                 overflow: visible;
-                z-index: 4000;
-                background: var(--bg-secondary);
+                z-index: 3100;
+                background: var(--bg-card);
                 border-color: var(--accent);
                 border-radius: 12px;
-                box-shadow: 0 4px 30px rgba(0,0,0,0.5), 0 0 30px rgba(37, 99, 235, 0.2);
+                box-shadow: 0 4px 30px rgba(0,0,0,0.4);
             }
-            .search-container.search-active .search-box i { margin-right: 10px; color: var(--accent-light); }
+            .search-container.search-active .search-box i { margin-right: 12px; color: var(--accent-light); }
             .search-container.search-active .search-box input {
                 display: block;
                 width: 100%;
@@ -973,13 +972,13 @@
             }
             .search-container.search-active .search-dropdown {
                 position: fixed;
-                top: 60px;
-                left: 8px;
-                right: 8px;
+                top: 76px;
+                left: 12px;
+                right: 12px;
                 width: auto;
-                max-height: 55vh;
+                max-height: calc(100vh - 100px);
                 border-radius: 12px;
-                z-index: 3500;
+                z-index: 3100;
             }
 
             .search-result-item { padding: 8px 10px; gap: 8px; }
@@ -1004,9 +1003,6 @@
             .see-all-btn { padding: 4px 10px; font-size: 10px; }
         }
 
-        /* ============================================ */
-        /* ========= TINY (≤360px) ==================== */
-        /* ============================================ */
         @media (max-width: 360px) {
             .brand-text { font-size: 12px; }
             .brand-slogan { font-size: 6px; letter-spacing: 1px; }
@@ -1020,46 +1016,90 @@
             .scroll-row .movie-card { min-width: 120px; max-width: 120px; }
         }
 
-        /* Mobile genre bottom sheet */
+        /* ============================================ */
+        /* ========= MOBILE GENRE BOTTOM SHEET ======== */
+        /* ============================================ */
         @media (max-width: 600px) {
             .genre-menu {
-                position: fixed;
-                top: auto; bottom: 0; left: 0; right: 0;
-                transform: none; min-width: 100%;
-                border-radius: 16px 16px 0 0;
-                max-height: 70vh; overflow-y: auto;
-                grid-template-columns: repeat(2, 1fr);
-                padding: 8px 8px 20px;
+                position: fixed !important;
+                top: auto !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                transform: none !important;
+                min-width: 100% !important;
+                width: 100% !important;
+                border-radius: 18px 18px 0 0;
+                max-height: 75vh;
+                overflow-y: auto;
+                padding: 10px 16px 30px;
+                z-index: 2001;
                 animation: slideUp 0.3s ease;
+                -webkit-overflow-scrolling: touch;
             }
-            .genre-menu::before {
-                content: '';
-                display: block;
-                width: 40px; height: 4px;
-                background: rgba(255,255,255,0.2);
-                border-radius: 2px;
-                margin: 8px auto 12px;
-                grid-column: 1 / -1;
-            }
-            .genre-item {
-                padding: 14px 14px;
-                font-size: 14px;
-                border-radius: 10px;
-            }
-        }
+            .genre-menu::-webkit-scrollbar { width: 3px; }
+            .genre-menu::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 2px; }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(100%); }
-            to { opacity: 1; transform: translateY(0); }
+            .genre-menu-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-bottom: 12px;
+                margin-bottom: 8px;
+                border-bottom: 1px solid var(--border);
+            }
+            .genre-menu-handle {
+                width: 40px;
+                height: 4px;
+                background: rgba(147, 197, 253, 0.3);
+                border-radius: 2px;
+                margin-bottom: 12px;
+            }
+            .genre-menu-title {
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--text-primary);
+                letter-spacing: 0.3px;
+            }
+
+            .genre-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .genre-item {
+                padding: 14px 12px;
+                font-size: 14px;
+                font-weight: 500;
+                border-radius: 10px;
+                background: rgba(37, 99, 235, 0.04);
+                border: 1px solid var(--border);
+                text-align: left;
+            }
+            .genre-item:active {
+                background: var(--accent-subtle);
+                border-color: var(--accent);
+                transform: scale(0.97);
+            }
+
+            .genre-backdrop.active {
+                display: block;
+                z-index: 2000;
+            }
+
+            @keyframes slideUp {
+                from { transform: translateY(100%); }
+                to { transform: translateY(0); }
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Search backdrop for mobile -->
+<!-- Search backdrop for mobile - solid dark, no blur -->
 <div class="search-backdrop" id="search-backdrop"></div>
 
-<!-- Genre backdrop for mobile -->
+<!-- Genre backdrop -->
 <div class="genre-backdrop" id="genre-backdrop"></div>
 
 <!-- NAVIGATION -->
@@ -1086,7 +1126,13 @@
             <button class="nav-link" id="nav-genres" onclick="toggleGenreMenu(event)">
                 <i class="fas fa-layer-group"></i>Genres <i class="fas fa-chevron-down genre-chevron"></i>
             </button>
-            <div class="genre-menu" id="genre-menu"></div>
+            <div class="genre-menu" id="genre-menu">
+                <div class="genre-menu-header">
+                    <div class="genre-menu-handle"></div>
+                    <div class="genre-menu-title">Browse Genres</div>
+                </div>
+                <div class="genre-grid" id="genre-grid"></div>
+            </div>
         </div>
     </div>
 
@@ -1133,7 +1179,6 @@
         </button>
     </div>
 
-    <!-- HOME SECTIONS -->
     <div id="home-sections">
         <div class="section-header">
             <h2 class="section-title">🔥 Trending This Week</h2>
@@ -1160,7 +1205,6 @@
         </div>
     </div>
 
-    <!-- GRID SECTION -->
     <div id="grid-section" style="display: none;">
         <div class="section-header">
             <h2 id="list-title"></h2>
@@ -1226,9 +1270,6 @@
         }
     };
 
-    // ==========================================
-    // INITIALIZATION
-    // ==========================================
     window.onload = () => {
         buildGenreMenu();
         loadHeroBanner();
@@ -1253,86 +1294,7 @@
     });
 
     // ==========================================
-    // GENRE MENU (Click-based toggle)
-    // ==========================================
-    function toggleGenreMenu(e) {
-        e.stopPropagation();
-        if (genreMenuOpen) {
-            closeGenreMenu();
-        } else {
-            openGenreMenu();
-        }
-    }
-
-    function openGenreMenu() {
-        genreMenuOpen = true;
-        document.getElementById('genre-menu').classList.add('active');
-        document.getElementById('genre-dropdown').classList.add('open');
-        // Show backdrop on mobile
-        if (window.innerWidth <= 600) {
-            document.getElementById('genre-backdrop').classList.add('active');
-        }
-    }
-
-    function closeGenreMenu() {
-        genreMenuOpen = false;
-        document.getElementById('genre-menu').classList.remove('active');
-        document.getElementById('genre-dropdown').classList.remove('open');
-        document.getElementById('genre-backdrop').classList.remove('active');
-    }
-
-    // Close genre menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (genreMenuOpen) {
-            const dropdown = document.getElementById('genre-dropdown');
-            if (!dropdown.contains(e.target)) {
-                closeGenreMenu();
-            }
-        }
-
-        // Search close logic
-        const container = document.getElementById('search-container');
-        const backdrop = document.getElementById('search-backdrop');
-        if (!container.contains(e.target) && e.target !== backdrop) {
-            closeSearchDropdown();
-            if (window.innerWidth <= 480) {
-                collapseMobileSearch();
-            }
-        }
-    });
-
-    // Genre backdrop click closes menu
-    document.getElementById('genre-backdrop').addEventListener('click', function() {
-        closeGenreMenu();
-    });
-
-    function buildGenreMenu() {
-        const menu = document.getElementById('genre-menu');
-        genres.forEach(g => {
-            const item = document.createElement('div');
-            item.className = 'genre-item';
-            item.innerHTML = `${g.icon} ${g.name}`;
-            item.onclick = (e) => {
-                e.stopPropagation();
-                closeGenreMenu();
-                loadGenre(g.id, g.name);
-            };
-            menu.appendChild(item);
-        });
-    }
-
-    function loadGenre(id, name) {
-        currentPage = 1;
-        document.getElementById('results').innerHTML = '';
-        currentPath = `discover/movie?with_genres=${id}`;
-        showGridView(`${name} Movies`);
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        document.getElementById('nav-genres').classList.add('active');
-        fetchData(); scrollToContent();
-    }
-
-    // ==========================================
-    // MOBILE SEARCH (JS-based expansion)
+    // MOBILE SEARCH
     // ==========================================
     function setupMobileSearch() {
         const searchBox = document.getElementById('search-box-el');
@@ -1352,13 +1314,18 @@
         const container = document.getElementById('search-container');
         container.classList.add('search-active');
         document.getElementById('search-backdrop').classList.add('active');
-        setTimeout(() => { document.getElementById('query').focus(); }, 100);
+        // Lock body scroll
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            document.getElementById('query').focus();
+        }, 150);
     }
 
     function collapseMobileSearch() {
         const container = document.getElementById('search-container');
         container.classList.remove('search-active');
         document.getElementById('search-backdrop').classList.remove('active');
+        document.body.style.overflow = '';
         closeSearchDropdown();
     }
 
@@ -1384,19 +1351,36 @@
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 closeSearchDropdown();
-                if (window.innerWidth <= 480) {
-                    collapseMobileSearch();
-                }
+                if (window.innerWidth <= 480) collapseMobileSearch();
                 this.blur();
                 seeAll('search');
             }
         });
     }
 
-    // Backdrop click closes search
+    document.addEventListener('click', function(e) {
+        const searchContainer = document.getElementById('search-container');
+        const searchBackdrop = document.getElementById('search-backdrop');
+        const genreDropdown = document.getElementById('genre-dropdown');
+        const genreBackdrop = document.getElementById('genre-backdrop');
+
+        if (!searchContainer.contains(e.target) && e.target !== searchBackdrop) {
+            closeSearchDropdown();
+            if (window.innerWidth <= 480) collapseMobileSearch();
+        }
+
+        if (!genreDropdown.contains(e.target) && e.target !== genreBackdrop) {
+            closeGenreMenu();
+        }
+    });
+
     document.getElementById('search-backdrop').addEventListener('click', function() {
         collapseMobileSearch();
         document.getElementById('query').blur();
+    });
+
+    document.getElementById('genre-backdrop').addEventListener('click', function() {
+        closeGenreMenu();
     });
 
     async function performSearchDropdown(query) {
@@ -1449,9 +1433,7 @@
 
     function selectSearchResult(type, id) {
         closeSearchDropdown();
-        if (window.innerWidth <= 480) {
-            collapseMobileSearch();
-        }
+        if (window.innerWidth <= 480) collapseMobileSearch();
         document.getElementById('query').value = '';
         document.getElementById('query').blur();
         document.getElementById('search-clear').classList.remove('visible');
@@ -1460,9 +1442,7 @@
 
     function viewAllSearchResults() {
         closeSearchDropdown();
-        if (window.innerWidth <= 480) {
-            collapseMobileSearch();
-        }
+        if (window.innerWidth <= 480) collapseMobileSearch();
         document.getElementById('query').blur();
         seeAll('search');
     }
@@ -1482,6 +1462,63 @@
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text; return div.innerHTML;
+    }
+
+    // ==========================================
+    // GENRE MENU (Click-based)
+    // ==========================================
+    function toggleGenreMenu(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (genreMenuOpen) {
+            closeGenreMenu();
+        } else {
+            openGenreMenu();
+        }
+    }
+
+    function openGenreMenu() {
+        genreMenuOpen = true;
+        document.getElementById('genre-dropdown').classList.add('open');
+        document.getElementById('genre-menu').classList.add('open');
+        if (window.innerWidth <= 600) {
+            document.getElementById('genre-backdrop').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeGenreMenu() {
+        if (!genreMenuOpen) return;
+        genreMenuOpen = false;
+        document.getElementById('genre-dropdown').classList.remove('open');
+        document.getElementById('genre-menu').classList.remove('open');
+        document.getElementById('genre-backdrop').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function buildGenreMenu() {
+        const grid = document.getElementById('genre-grid');
+        genres.forEach(g => {
+            const item = document.createElement('div');
+            item.className = 'genre-item';
+            item.innerHTML = `${g.icon} ${g.name}`;
+            item.onclick = (e) => {
+                e.stopPropagation();
+                closeGenreMenu();
+                loadGenre(g.id, g.name);
+            };
+            grid.appendChild(item);
+        });
+    }
+
+    function loadGenre(id, name) {
+        currentPage = 1;
+        document.getElementById('results').innerHTML = '';
+        currentPath = `discover/movie?with_genres=${id}`;
+        showGridView(`${name} Movies`);
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById('nav-genres').classList.add('active');
+        fetchData(); scrollToContent();
     }
 
     // ==========================================
