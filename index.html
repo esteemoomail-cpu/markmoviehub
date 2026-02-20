@@ -100,6 +100,7 @@
             cursor: pointer;
             text-decoration: none;
             transition: transform 0.3s;
+            flex-shrink: 0;
         }
         .nav-brand:hover { transform: scale(1.04); }
 
@@ -114,6 +115,7 @@
             animation: iconPulse 3s ease-in-out infinite;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
         .brand-icon::before {
             content: '';
@@ -181,6 +183,7 @@
             transition: all 0.3s;
             position: relative;
             letter-spacing: 0.3px;
+            white-space: nowrap;
         }
         .nav-link i { margin-right: 6px; font-size: 12px; }
         .nav-link:hover { color: var(--text-primary); background: rgba(37, 99, 235, 0.08); }
@@ -193,7 +196,7 @@
             background: var(--accent-gradient); border-radius: 2px;
         }
 
-        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
         /* === SEARCH === */
         .search-container { position: relative; display: flex; align-items: center; }
@@ -212,12 +215,13 @@
             box-shadow: 0 0 25px rgba(37, 99, 235, 0.15), 0 0 60px rgba(37, 99, 235, 0.05);
             width: 300px;
         }
-        .search-box i { color: var(--text-secondary); font-size: 13px; margin-right: 10px; transition: color 0.3s; }
+        .search-box i { color: var(--text-secondary); font-size: 13px; margin-right: 10px; transition: color 0.3s; flex-shrink: 0; }
         .search-box:focus-within i { color: var(--accent-light); }
         .search-box input {
             background: transparent; border: none; color: var(--text-primary);
             font-family: var(--font-body); font-size: 13px;
             outline: none; width: 100%;
+            min-width: 0;
         }
         .search-box input::placeholder { color: var(--text-secondary); }
 
@@ -225,6 +229,7 @@
             background: none; border: none; color: var(--text-secondary);
             cursor: pointer; font-size: 12px; padding: 4px;
             display: none; transition: color 0.2s;
+            flex-shrink: 0;
         }
         .search-clear:hover { color: var(--accent-light); }
         .search-clear.visible { display: block; }
@@ -267,6 +272,7 @@
             background: var(--accent-subtle);
             color: var(--accent-light);
             padding: 2px 8px; border-radius: 10px; font-size: 10px;
+            flex-shrink: 0;
         }
 
         .search-result-item {
@@ -274,6 +280,7 @@
             padding: 10px 16px; cursor: pointer;
             transition: all 0.2s;
             border-bottom: 1px solid rgba(37, 99, 235, 0.04);
+            overflow: hidden;
         }
         .search-result-item:last-child { border-bottom: none; }
         .search-result-item:hover { background: rgba(37, 99, 235, 0.08); }
@@ -292,20 +299,22 @@
             flex-shrink: 0; color: var(--text-secondary); font-size: 16px;
             border: 1px solid var(--border);
         }
-        .search-result-info { flex: 1; min-width: 0; }
+        .search-result-info { flex: 1; min-width: 0; overflow: hidden; }
         .search-result-title {
             font-size: 13px; font-weight: 500;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             color: var(--text-primary);
         }
         .search-result-meta {
-            display: flex; align-items: center; gap: 8px; margin-top: 3px;
+            display: flex; align-items: center; gap: 6px; margin-top: 3px;
+            flex-wrap: wrap;
         }
         .search-result-year { font-size: 11px; color: var(--text-secondary); }
         .search-result-type {
             font-size: 10px; font-weight: 600;
             padding: 1px 7px; border-radius: 4px;
             text-transform: uppercase; letter-spacing: 0.5px;
+            flex-shrink: 0;
         }
         .search-result-type.movie {
             background: rgba(37, 99, 235, 0.15); color: #60a5fa;
@@ -316,6 +325,7 @@
         .search-result-rating {
             font-size: 11px; color: #fbbf24;
             display: flex; align-items: center; gap: 3px;
+            flex-shrink: 0;
         }
         .search-result-rating i { font-size: 9px; }
 
@@ -323,7 +333,7 @@
             padding: 30px 16px; text-align: center; color: var(--text-secondary);
         }
         .search-no-results i { font-size: 28px; margin-bottom: 10px; display: block; opacity: 0.3; }
-        .search-no-results p { font-size: 13px; }
+        .search-no-results p { font-size: 13px; word-break: break-word; }
 
         .search-loading {
             padding: 25px 16px; text-align: center;
@@ -344,6 +354,9 @@
             font-size: 12px; font-weight: 600;
             cursor: pointer; border-top: 1px solid var(--border);
             transition: background 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .search-view-all:hover { background: rgba(37, 99, 235, 0.06); }
         .search-view-all i { margin-left: 4px; font-size: 10px; }
@@ -471,15 +484,49 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .iframe-wrapper {
-            position: relative; width: 100%; padding-top: 56.25%;
-            border-radius: 12px; overflow: hidden;
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            border-radius: 12px;
+            overflow: visible;
             box-shadow: 0 10px 40px rgba(0, 10, 40, 0.5), 0 0 30px rgba(37, 99, 235, 0.05);
         }
         .iframe-wrapper iframe {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; border: none; background: #000;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+            background: #000;
+            border-radius: 12px;
         }
+
+        .iframe-wrapper iframe:-webkit-full-screen {
+            position: fixed; top: 0; left: 0;
+            width: 100vw !important; height: 100vh !important;
+            z-index: 999999; border-radius: 0;
+        }
+        .iframe-wrapper iframe:-moz-full-screen {
+            position: fixed; top: 0; left: 0;
+            width: 100vw !important; height: 100vh !important;
+            z-index: 999999; border-radius: 0;
+        }
+        .iframe-wrapper iframe:-ms-fullscreen {
+            position: fixed; top: 0; left: 0;
+            width: 100vw !important; height: 100vh !important;
+            z-index: 999999; border-radius: 0;
+        }
+        .iframe-wrapper iframe:fullscreen {
+            position: fixed; top: 0; left: 0;
+            width: 100vw !important; height: 100vh !important;
+            z-index: 999999; border-radius: 0;
+        }
+
+        #player-area:has(iframe:-webkit-full-screen),
+        #player-area:has(iframe:fullscreen) { overflow: visible !important; }
+        .iframe-wrapper:has(iframe:-webkit-full-screen),
+        .iframe-wrapper:has(iframe:fullscreen) { overflow: visible !important; }
 
         .server-error-banner {
             background: rgba(234, 179, 8, 0.06);
@@ -521,12 +568,13 @@
             box-shadow: 0 8px 25px rgba(0, 10, 40, 0.4);
             border: 1px solid var(--border);
         }
-        .details-text { flex: 1; }
+        .details-text { flex: 1; min-width: 0; }
 
         #det-title {
             font-size: 22px; font-weight: 700; margin-bottom: 8px;
             background: linear-gradient(135deg, #e8edf5, #93c5fd);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            word-break: break-word;
         }
         #det-overview {
             color: var(--text-secondary); line-height: 1.6; font-size: 13px;
@@ -615,6 +663,7 @@
             background: var(--accent-gradient);
             border-radius: 2px;
             box-shadow: 0 0 8px var(--accent-glow);
+            flex-shrink: 0;
         }
 
         /* === CARDS === */
@@ -707,16 +756,112 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* === MOBILE === */
+        /* ============================================ */
+        /* ========= MOBILE SEARCH OPTIMIZATION ======= */
+        /* ============================================ */
+
+        /* --- Tablet and below (768px) --- */
         @media (max-width: 768px) {
-            nav { padding: 10px 3%; height: auto; flex-wrap: wrap; gap: 8px; }
-            .nav-center { order: 3; width: 100%; justify-content: center; overflow-x: auto; }
+            nav {
+                padding: 10px 3%;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .nav-center {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .nav-center::-webkit-scrollbar { display: none; }
             .nav-link { font-size: 11px; padding: 6px 12px; }
             .brand-text { font-size: 16px; letter-spacing: 0.5px; }
             .brand-slogan { font-size: 8px; letter-spacing: 2px; }
-            .search-box { width: 160px; height: 36px; }
-            .search-box:focus-within { width: 200px; }
-            .search-dropdown { width: 92vw; right: -20px; }
+
+            /* Search box — constrain width, prevent overflow */
+            .search-container {
+                position: static;
+            }
+            .search-box {
+                width: 150px;
+                height: 36px;
+                padding: 0 10px;
+            }
+            .search-box:focus-within {
+                width: 180px;
+            }
+            .search-box input {
+                font-size: 12px;
+            }
+            .search-box input::placeholder {
+                font-size: 11px;
+            }
+
+            /* Search dropdown — fixed to viewport edges on mobile */
+            .search-dropdown {
+                position: fixed;
+                top: auto;
+                left: 3%;
+                right: 3%;
+                width: auto;
+                max-height: 60vh;
+                border-radius: 14px;
+                z-index: 3000;
+            }
+
+            .search-result-item {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+            .search-result-poster {
+                width: 36px;
+                height: 54px;
+            }
+            .search-result-no-poster {
+                width: 36px;
+                height: 54px;
+                font-size: 14px;
+            }
+            .search-result-title {
+                font-size: 12px;
+            }
+            .search-result-meta {
+                gap: 4px;
+            }
+            .search-result-type {
+                font-size: 9px;
+                padding: 1px 5px;
+            }
+            .search-result-year {
+                font-size: 10px;
+            }
+            .search-result-rating {
+                font-size: 10px;
+            }
+            .search-result-rating i {
+                font-size: 8px;
+            }
+            .search-dropdown-header {
+                padding: 10px 12px 6px;
+                font-size: 10px;
+            }
+            .search-view-all {
+                padding: 10px;
+                font-size: 11px;
+            }
+            .search-no-results {
+                padding: 20px 12px;
+            }
+            .search-no-results i {
+                font-size: 22px;
+            }
+            .search-no-results p {
+                font-size: 12px;
+            }
 
             #hero-banner { height: 263px; }
             .hero-title { font-size: 22px; }
@@ -737,11 +882,158 @@
             }
         }
 
-        @media (max-width: 400px) {
-            .brand-text { font-size: 14px; }
-            .brand-slogan { font-size: 7px; letter-spacing: 1.5px; }
-            .search-box { width: 130px; }
-            .search-dropdown { right: -40px; }
+        /* --- Small phones (480px and below) --- */
+        @media (max-width: 480px) {
+            nav {
+                padding: 8px 3%;
+                gap: 6px;
+            }
+
+            .nav-brand {
+                gap: 8px;
+            }
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+            .brand-text {
+                font-size: 14px;
+                letter-spacing: 0.3px;
+            }
+            .brand-slogan {
+                font-size: 7px;
+                letter-spacing: 1.5px;
+            }
+
+            /* Search box — icon-only collapsed, expands on focus */
+            .search-box {
+                width: 40px;
+                height: 34px;
+                padding: 0 10px;
+                border-radius: 10px;
+                transition: width 0.3s ease;
+            }
+            .search-box input {
+                opacity: 0;
+                width: 0;
+                transition: opacity 0.2s ease, width 0.3s ease;
+            }
+            .search-box:focus-within {
+                width: calc(100vw - 24px);
+                position: fixed;
+                top: 10px;
+                left: 12px;
+                right: 12px;
+                z-index: 4000;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--bg-secondary);
+                border-color: var(--accent);
+                box-shadow: 0 4px 30px rgba(0,0,0,0.5), 0 0 30px rgba(37, 99, 235, 0.2);
+            }
+            .search-box:focus-within input {
+                opacity: 1;
+                width: 100%;
+            }
+            .search-box i {
+                margin-right: 0;
+                transition: margin 0.3s;
+            }
+            .search-box:focus-within i {
+                margin-right: 10px;
+            }
+
+            /* Search dropdown — full width on small screens */
+            .search-dropdown {
+                position: fixed;
+                top: 58px;
+                left: 8px;
+                right: 8px;
+                width: auto;
+                max-height: 55vh;
+                border-radius: 12px;
+                z-index: 3500;
+            }
+
+            .search-result-item {
+                padding: 8px 10px;
+                gap: 8px;
+            }
+            .search-result-poster {
+                width: 32px;
+                height: 48px;
+                border-radius: 4px;
+            }
+            .search-result-no-poster {
+                width: 32px;
+                height: 48px;
+                border-radius: 4px;
+                font-size: 12px;
+            }
+            .search-result-title {
+                font-size: 11px;
+            }
+            .search-result-type {
+                font-size: 8px;
+                padding: 1px 4px;
+            }
+            .search-result-year {
+                font-size: 9px;
+            }
+            .search-result-rating {
+                font-size: 9px;
+            }
+            .search-dropdown-header {
+                padding: 8px 10px 6px;
+                font-size: 9px;
+            }
+            .search-dropdown-header .result-count {
+                font-size: 9px;
+                padding: 1px 6px;
+            }
+            .search-view-all {
+                padding: 8px;
+                font-size: 10px;
+            }
+            .search-no-results p {
+                font-size: 11px;
+            }
+
+            #list-title { font-size: 18px; }
+        }
+
+        /* --- Extra small phones (360px and below) --- */
+        @media (max-width: 360px) {
+            .brand-text { font-size: 12px; }
+            .brand-slogan { font-size: 6px; letter-spacing: 1px; }
+            .brand-icon { width: 30px; height: 30px; font-size: 12px; border-radius: 8px; }
+
+            .search-box {
+                width: 36px;
+                height: 32px;
+                padding: 0 8px;
+            }
+
+            .search-result-title { font-size: 10px; }
+            .search-result-meta { gap: 3px; }
+
+            #list-title { font-size: 16px; }
+            .hero-title { font-size: 18px; }
+        }
+
+        /* Backdrop overlay when search is focused on mobile */
+        .search-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 10, 20, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2999;
+        }
+        .search-backdrop.active {
+            display: block;
         }
 
         @media (max-width: 600px) {
@@ -757,6 +1049,9 @@
     </style>
 </head>
 <body>
+
+<!-- Search backdrop for mobile -->
+<div class="search-backdrop" id="search-backdrop"></div>
 
 <!-- NAVIGATION -->
 <nav id="main-nav">
@@ -911,8 +1206,29 @@
 
     document.addEventListener('click', function(e) {
         const container = document.getElementById('search-container');
-        if (!container.contains(e.target)) closeSearchDropdown();
+        const backdrop = document.getElementById('search-backdrop');
+        if (!container.contains(e.target) && e.target !== backdrop) {
+            closeSearchDropdown();
+            hideSearchBackdrop();
+        }
     });
+
+    // Backdrop click closes search
+    document.getElementById('search-backdrop').addEventListener('click', function() {
+        closeSearchDropdown();
+        hideSearchBackdrop();
+        document.getElementById('query').blur();
+    });
+
+    function showSearchBackdrop() {
+        if (window.innerWidth <= 480) {
+            document.getElementById('search-backdrop').classList.add('active');
+        }
+    }
+
+    function hideSearchBackdrop() {
+        document.getElementById('search-backdrop').classList.remove('active');
+    }
 
     function setupSearchListeners() {
         const input = document.getElementById('query');
@@ -925,10 +1241,24 @@
             searchDebounceTimer = setTimeout(() => performSearchDropdown(val), 400);
         });
         input.addEventListener('focus', function() {
+            showSearchBackdrop();
             if (this.value.trim().length >= 2) performSearchDropdown(this.value.trim());
         });
+        input.addEventListener('blur', function() {
+            // Small delay so click events on dropdown items fire first
+            setTimeout(() => {
+                if (!document.getElementById('search-dropdown').matches(':hover')) {
+                    hideSearchBackdrop();
+                }
+            }, 150);
+        });
         input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') { closeSearchDropdown(); resetAndLoad('search'); }
+            if (e.key === 'Enter') {
+                closeSearchDropdown();
+                hideSearchBackdrop();
+                this.blur();
+                resetAndLoad('search');
+            }
         });
     }
 
@@ -945,8 +1275,9 @@
 
     function renderSearchDropdown(results, query) {
         const dropdown = document.getElementById('search-dropdown');
+        const truncatedQuery = query.length > 25 ? query.substring(0, 25) + '…' : query;
         if (results.length === 0) {
-            dropdown.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i><p>No results for "<strong>${escapeHtml(query)}</strong>"</p></div>`;
+            dropdown.innerHTML = `<div class="search-no-results"><i class="fas fa-search"></i><p>No results for "<strong>${escapeHtml(truncatedQuery)}</strong>"</p></div>`;
             dropdown.classList.add('active'); return;
         }
         let html = `<div class="search-dropdown-header"><span>Search Results</span><span class="result-count">${results.length} found</span></div>`;
@@ -968,7 +1299,7 @@
                 </div>
             </div>`;
         });
-        html += `<div class="search-view-all" onclick="viewAllResults()">View all results for "${escapeHtml(query)}" <i class="fas fa-arrow-right"></i></div>`;
+        html += `<div class="search-view-all" onclick="viewAllResults()">View all for "${escapeHtml(truncatedQuery)}" <i class="fas fa-arrow-right"></i></div>`;
         dropdown.innerHTML = html;
         dropdown.classList.add('active');
     }
@@ -981,12 +1312,19 @@
 
     function selectSearchResult(type, id) {
         closeSearchDropdown();
+        hideSearchBackdrop();
         document.getElementById('query').value = '';
+        document.getElementById('query').blur();
         document.getElementById('search-clear').classList.remove('visible');
         loadMedia(type, id);
     }
 
-    function viewAllResults() { closeSearchDropdown(); resetAndLoad('search'); }
+    function viewAllResults() {
+        closeSearchDropdown();
+        hideSearchBackdrop();
+        document.getElementById('query').blur();
+        resetAndLoad('search');
+    }
 
     function closeSearchDropdown() {
         document.getElementById('search-dropdown').classList.remove('active');
@@ -996,6 +1334,7 @@
         document.getElementById('query').value = '';
         document.getElementById('search-clear').classList.remove('visible');
         closeSearchDropdown();
+        hideSearchBackdrop();
         document.getElementById('query').focus();
     }
 
@@ -1192,10 +1531,13 @@
         const container = document.getElementById('iframe-container');
         container.innerHTML = '';
         const iframe = document.createElement('iframe');
-        iframe.src = src; iframe.allowFullscreen = true;
-        iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+        iframe.src = src;
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('webkitallowfullscreen', '');
+        iframe.setAttribute('mozallowfullscreen', '');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture; web-share');
         iframe.setAttribute('referrerpolicy', 'origin');
-        iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;background:#000;';
+        iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;background:#000;border-radius:12px;';
         container.appendChild(iframe);
     }
 
