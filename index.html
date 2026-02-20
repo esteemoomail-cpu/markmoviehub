@@ -218,7 +218,6 @@
         }
         .search-box input::placeholder { color: var(--text-secondary); }
 
-        /* Desktop focus-within */
         @media (min-width: 481px) {
             .search-box:focus-within {
                 border-color: var(--accent);
@@ -365,32 +364,63 @@
         .search-view-all:hover { background: rgba(37, 99, 235, 0.06); }
         .search-view-all i { margin-left: 4px; font-size: 10px; }
 
-        /* === GENRE DROPDOWN === */
+        /* === GENRE DROPDOWN (Click-based) === */
         .genre-dropdown { position: relative; }
+
+        .genre-chevron {
+            font-size: 9px !important;
+            margin-left: 4px !important;
+            margin-right: 0 !important;
+            transition: transform 0.3s ease;
+        }
+        .genre-dropdown.open .genre-chevron {
+            transform: rotate(180deg);
+        }
+
         .genre-menu {
             display: none;
             position: absolute;
-            top: calc(100% + 10px); left: 50%;
+            top: calc(100% + 4px);
+            left: 50%;
             transform: translateX(-50%);
             background: var(--bg-secondary);
             border: 1px solid var(--border-hover);
-            border-radius: 14px; padding: 10px;
+            border-radius: 14px;
+            padding: 10px;
             min-width: 420px;
             box-shadow: 0 20px 60px rgba(0, 10, 40, 0.7), 0 0 30px rgba(37, 99, 235, 0.06);
             backdrop-filter: blur(20px);
             z-index: 2000;
             grid-template-columns: repeat(3, 1fr);
             gap: 4px;
+            animation: dropIn 0.25s ease;
         }
-        .genre-dropdown:hover .genre-menu { display: grid; }
+
+        /* Show via JS class */
+        .genre-menu.active { display: grid; }
 
         .genre-item {
             padding: 9px 14px; border-radius: 8px;
             cursor: pointer; font-size: 12px; font-weight: 400;
             color: var(--text-secondary); transition: all 0.2s;
             text-align: center; white-space: nowrap;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .genre-item:hover { background: var(--accent-subtle); color: var(--text-primary); }
+        .genre-item:active { background: rgba(37, 99, 235, 0.2); color: var(--text-primary); }
+
+        /* Genre backdrop overlay for mobile */
+        .genre-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 10, 20, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1999;
+        }
+        .genre-backdrop.active { display: block; }
 
         /* === HERO BANNER === */
         #hero-banner {
@@ -907,7 +937,6 @@
             .brand-text { font-size: 14px; letter-spacing: 0.3px; }
             .brand-slogan { font-size: 7px; letter-spacing: 1.5px; }
 
-            /* Search: collapsed icon-only state */
             .search-box {
                 width: 40px;
                 height: 34px;
@@ -920,7 +949,6 @@
             .search-box i { margin-right: 0; }
             .search-box input { display: none; }
 
-            /* JS-controlled expanded state */
             .search-container.search-active .search-box {
                 position: fixed;
                 top: 10px;
@@ -941,7 +969,7 @@
             .search-container.search-active .search-box input {
                 display: block;
                 width: 100%;
-                font-size: 16px; /* prevents iOS zoom */
+                font-size: 16px;
             }
             .search-container.search-active .search-dropdown {
                 position: fixed;
@@ -992,15 +1020,37 @@
             .scroll-row .movie-card { min-width: 120px; max-width: 120px; }
         }
 
+        /* Mobile genre bottom sheet */
         @media (max-width: 600px) {
             .genre-menu {
                 position: fixed;
                 top: auto; bottom: 0; left: 0; right: 0;
                 transform: none; min-width: 100%;
                 border-radius: 16px 16px 0 0;
-                max-height: 60vh; overflow-y: auto;
+                max-height: 70vh; overflow-y: auto;
                 grid-template-columns: repeat(2, 1fr);
+                padding: 8px 8px 20px;
+                animation: slideUp 0.3s ease;
             }
+            .genre-menu::before {
+                content: '';
+                display: block;
+                width: 40px; height: 4px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 2px;
+                margin: 8px auto 12px;
+                grid-column: 1 / -1;
+            }
+            .genre-item {
+                padding: 14px 14px;
+                font-size: 14px;
+                border-radius: 10px;
+            }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(100%); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -1008,6 +1058,9 @@
 
 <!-- Search backdrop for mobile -->
 <div class="search-backdrop" id="search-backdrop"></div>
+
+<!-- Genre backdrop for mobile -->
+<div class="genre-backdrop" id="genre-backdrop"></div>
 
 <!-- NAVIGATION -->
 <nav id="main-nav">
@@ -1029,9 +1082,9 @@
         <button class="nav-link" id="nav-tv" onclick="setActiveNav(this); seeAll('popular_tv')">
             <i class="fas fa-tv"></i>TV Shows
         </button>
-        <div class="genre-dropdown">
-            <button class="nav-link" id="nav-genres">
-                <i class="fas fa-layer-group"></i>Genres <i class="fas fa-chevron-down" style="font-size:9px;margin-left:4px;"></i>
+        <div class="genre-dropdown" id="genre-dropdown">
+            <button class="nav-link" id="nav-genres" onclick="toggleGenreMenu(event)">
+                <i class="fas fa-layer-group"></i>Genres <i class="fas fa-chevron-down genre-chevron"></i>
             </button>
             <div class="genre-menu" id="genre-menu"></div>
         </div>
@@ -1080,7 +1133,7 @@
         </button>
     </div>
 
-    <!-- HOME SECTIONS (3 separate rows) -->
+    <!-- HOME SECTIONS -->
     <div id="home-sections">
         <div class="section-header">
             <h2 class="section-title">🔥 Trending This Week</h2>
@@ -1107,7 +1160,7 @@
         </div>
     </div>
 
-    <!-- GRID SECTION (for Movies/TV/Search/Genre pages) -->
+    <!-- GRID SECTION -->
     <div id="grid-section" style="display: none;">
         <div class="section-header">
             <h2 id="list-title"></h2>
@@ -1126,7 +1179,8 @@
     let currentId, currentType, currentSeason = 1, currentEpisode = 1, currentServer = 'cinemaos';
     let heroSlideInterval, currentSlide = 0, heroData = [];
     let searchDebounceTimer = null;
-    let currentView = 'home'; // 'home' or 'grid'
+    let currentView = 'home';
+    let genreMenuOpen = false;
 
     const genres = [
         { id: 28, name: 'Action', icon: '💥' },
@@ -1184,7 +1238,6 @@
     };
 
     window.onscroll = () => {
-        // Infinite scroll only when grid section is visible
         if (currentView === 'grid' &&
             (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 800 && !isFetching) {
             fetchData();
@@ -1200,11 +1253,89 @@
     });
 
     // ==========================================
+    // GENRE MENU (Click-based toggle)
+    // ==========================================
+    function toggleGenreMenu(e) {
+        e.stopPropagation();
+        if (genreMenuOpen) {
+            closeGenreMenu();
+        } else {
+            openGenreMenu();
+        }
+    }
+
+    function openGenreMenu() {
+        genreMenuOpen = true;
+        document.getElementById('genre-menu').classList.add('active');
+        document.getElementById('genre-dropdown').classList.add('open');
+        // Show backdrop on mobile
+        if (window.innerWidth <= 600) {
+            document.getElementById('genre-backdrop').classList.add('active');
+        }
+    }
+
+    function closeGenreMenu() {
+        genreMenuOpen = false;
+        document.getElementById('genre-menu').classList.remove('active');
+        document.getElementById('genre-dropdown').classList.remove('open');
+        document.getElementById('genre-backdrop').classList.remove('active');
+    }
+
+    // Close genre menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (genreMenuOpen) {
+            const dropdown = document.getElementById('genre-dropdown');
+            if (!dropdown.contains(e.target)) {
+                closeGenreMenu();
+            }
+        }
+
+        // Search close logic
+        const container = document.getElementById('search-container');
+        const backdrop = document.getElementById('search-backdrop');
+        if (!container.contains(e.target) && e.target !== backdrop) {
+            closeSearchDropdown();
+            if (window.innerWidth <= 480) {
+                collapseMobileSearch();
+            }
+        }
+    });
+
+    // Genre backdrop click closes menu
+    document.getElementById('genre-backdrop').addEventListener('click', function() {
+        closeGenreMenu();
+    });
+
+    function buildGenreMenu() {
+        const menu = document.getElementById('genre-menu');
+        genres.forEach(g => {
+            const item = document.createElement('div');
+            item.className = 'genre-item';
+            item.innerHTML = `${g.icon} ${g.name}`;
+            item.onclick = (e) => {
+                e.stopPropagation();
+                closeGenreMenu();
+                loadGenre(g.id, g.name);
+            };
+            menu.appendChild(item);
+        });
+    }
+
+    function loadGenre(id, name) {
+        currentPage = 1;
+        document.getElementById('results').innerHTML = '';
+        currentPath = `discover/movie?with_genres=${id}`;
+        showGridView(`${name} Movies`);
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById('nav-genres').classList.add('active');
+        fetchData(); scrollToContent();
+    }
+
+    // ==========================================
     // MOBILE SEARCH (JS-based expansion)
     // ==========================================
     function setupMobileSearch() {
         const searchBox = document.getElementById('search-box-el');
-
         searchBox.addEventListener('click', function(e) {
             if (window.innerWidth <= 480) {
                 const container = document.getElementById('search-container');
@@ -1221,10 +1352,7 @@
         const container = document.getElementById('search-container');
         container.classList.add('search-active');
         document.getElementById('search-backdrop').classList.add('active');
-        // Delay focus so DOM updates first
-        setTimeout(() => {
-            document.getElementById('query').focus();
-        }, 100);
+        setTimeout(() => { document.getElementById('query').focus(); }, 100);
     }
 
     function collapseMobileSearch() {
@@ -1250,7 +1378,6 @@
         });
 
         input.addEventListener('focus', function() {
-            // On desktop/tablet, no special handling needed
             if (this.value.trim().length >= 2) performSearchDropdown(this.value.trim());
         });
 
@@ -1265,18 +1392,6 @@
             }
         });
     }
-
-    // Close search when clicking outside
-    document.addEventListener('click', function(e) {
-        const container = document.getElementById('search-container');
-        const backdrop = document.getElementById('search-backdrop');
-        if (!container.contains(e.target) && e.target !== backdrop) {
-            closeSearchDropdown();
-            if (window.innerWidth <= 480) {
-                collapseMobileSearch();
-            }
-        }
-    });
 
     // Backdrop click closes search
     document.getElementById('search-backdrop').addEventListener('click', function() {
@@ -1309,7 +1424,7 @@
             const year = (item.release_date || item.first_air_date || '').substring(0, 4);
             const rating = item.vote_average ? item.vote_average.toFixed(1) : '—';
             const posterUrl = item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : null;
-            html += `<div class="search-result-item" onmousedown="selectSearchResult('${type}', ${item.id})">
+            html += `<div class="search-result-item" onclick="selectSearchResult('${type}', ${item.id})">
                 ${posterUrl ? `<img class="search-result-poster" src="${posterUrl}" loading="lazy">` : `<div class="search-result-no-poster"><i class="fas fa-film"></i></div>`}
                 <div class="search-result-info">
                     <div class="search-result-title">${escapeHtml(title)}</div>
@@ -1321,7 +1436,7 @@
                 </div>
             </div>`;
         });
-        html += `<div class="search-view-all" onmousedown="viewAllSearchResults()">View all for "${escapeHtml(truncatedQuery)}" <i class="fas fa-arrow-right"></i></div>`;
+        html += `<div class="search-view-all" onclick="viewAllSearchResults()">View all for "${escapeHtml(truncatedQuery)}" <i class="fas fa-arrow-right"></i></div>`;
         dropdown.innerHTML = html;
         dropdown.classList.add('active');
     }
@@ -1361,41 +1476,12 @@
         document.getElementById('query').value = '';
         document.getElementById('search-clear').classList.remove('visible');
         closeSearchDropdown();
-        // Keep mobile search open for new input
-        if (window.innerWidth <= 480) {
-            document.getElementById('query').focus();
-        } else {
-            document.getElementById('query').focus();
-        }
+        document.getElementById('query').focus();
     }
 
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text; return div.innerHTML;
-    }
-
-    // ==========================================
-    // GENRE MENU
-    // ==========================================
-    function buildGenreMenu() {
-        const menu = document.getElementById('genre-menu');
-        genres.forEach(g => {
-            const item = document.createElement('div');
-            item.className = 'genre-item';
-            item.innerHTML = `${g.icon} ${g.name}`;
-            item.onclick = () => loadGenre(g.id, g.name);
-            menu.appendChild(item);
-        });
-    }
-
-    function loadGenre(id, name) {
-        currentPage = 1;
-        document.getElementById('results').innerHTML = '';
-        currentPath = `discover/movie?with_genres=${id}`;
-        showGridView(`${name} Movies`);
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        document.getElementById('nav-genres').classList.add('active');
-        fetchData(); scrollToContent();
     }
 
     // ==========================================
@@ -1416,7 +1502,6 @@
 
     async function loadHomeSections() {
         showHomeView();
-        // Load all three sections in parallel
         await Promise.all([
             loadScrollRow('trending/all/week', 'trending-row'),
             loadScrollRow('movie/popular', 'movies-row'),
@@ -1509,7 +1594,7 @@
     }
 
     // ==========================================
-    // DATA FETCH (grid infinite scroll)
+    // DATA FETCH
     // ==========================================
     async function fetchData() {
         if (isFetching) return; isFetching = true;
