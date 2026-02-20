@@ -133,7 +133,12 @@
             50% { box-shadow: 0 4px 30px rgba(37, 99, 235, 0.6), 0 0 60px rgba(6, 182, 212, 0.15); }
         }
 
-        /* LOGO — Orbitron only */
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
         .brand-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 20px;
@@ -146,6 +151,17 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: gradientMove 4s linear infinite;
+        }
+
+        .brand-slogan {
+            font-family: var(--font-body);
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-top: 3px;
+            opacity: 0.85;
         }
 
         @keyframes gradientMove {
@@ -361,7 +377,7 @@
 
         /* === HERO BANNER === */
         #hero-banner {
-            position: relative; width: 100%; height: 520px;
+            position: relative; width: 100%; height: 390px;
             overflow: hidden; margin-bottom: 20px;
         }
         .hero-slide {
@@ -377,34 +393,34 @@
                 linear-gradient(to right, rgba(5,10,20,0.7) 0%, transparent 50%);
         }
         .hero-content {
-            position: absolute; bottom: 60px; left: 5%;
-            max-width: 550px; z-index: 2;
+            position: absolute; bottom: 50px; left: 5%;
+            max-width: 500px; z-index: 2;
         }
         .hero-badge {
             display: inline-flex; align-items: center; gap: 6px;
             background: var(--accent-gradient); color: white;
-            font-size: 11px; font-weight: 600;
-            padding: 5px 14px; border-radius: 6px;
-            margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px;
+            font-size: 10px; font-weight: 600;
+            padding: 4px 12px; border-radius: 6px;
+            margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 4px 15px var(--accent-glow);
         }
         .hero-title {
-            font-size: 42px; font-weight: 700; line-height: 1.1;
-            margin-bottom: 10px; text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            font-size: 34px; font-weight: 700; line-height: 1.1;
+            margin-bottom: 8px; text-shadow: 0 4px 20px rgba(0,0,0,0.5);
             color: white;
         }
         .hero-desc {
-            font-size: 14px; color: rgba(200, 215, 240, 0.7); line-height: 1.5;
-            margin-bottom: 20px;
+            font-size: 13px; color: rgba(200, 215, 240, 0.7); line-height: 1.5;
+            margin-bottom: 16px;
             display: -webkit-box; -webkit-line-clamp: 2;
             -webkit-box-orient: vertical; overflow: hidden;
         }
         .hero-actions { display: flex; gap: 10px; }
         .hero-btn {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 12px 28px; border-radius: 10px; border: none;
+            padding: 10px 24px; border-radius: 10px; border: none;
             cursor: pointer; font-family: var(--font-body);
-            font-size: 14px; font-weight: 600; transition: all 0.3s;
+            font-size: 13px; font-weight: 600; transition: all 0.3s;
         }
         .hero-btn.primary {
             background: var(--accent-gradient); color: white;
@@ -425,7 +441,7 @@
         }
 
         .hero-dots {
-            position: absolute; bottom: 20px; left: 50%;
+            position: absolute; bottom: 16px; left: 50%;
             transform: translateX(-50%);
             display: flex; gap: 8px; z-index: 3;
         }
@@ -697,15 +713,17 @@
             .nav-center { order: 3; width: 100%; justify-content: center; overflow-x: auto; }
             .nav-link { font-size: 11px; padding: 6px 12px; }
             .brand-text { font-size: 16px; letter-spacing: 0.5px; }
+            .brand-slogan { font-size: 8px; letter-spacing: 2px; }
             .search-box { width: 160px; height: 36px; }
             .search-box:focus-within { width: 200px; }
             .search-dropdown { width: 92vw; right: -20px; }
 
-            #hero-banner { height: 350px; }
-            .hero-title { font-size: 26px; }
-            .hero-desc { font-size: 12px; }
-            .hero-btn { padding: 10px 20px; font-size: 12px; }
-            .hero-content { bottom: 40px; left: 4%; max-width: 85%; }
+            #hero-banner { height: 263px; }
+            .hero-title { font-size: 22px; }
+            .hero-desc { font-size: 11px; margin-bottom: 12px; }
+            .hero-btn { padding: 8px 18px; font-size: 11px; }
+            .hero-content { bottom: 35px; left: 4%; max-width: 85%; }
+            .hero-badge { font-size: 9px; padding: 3px 10px; margin-bottom: 8px; }
 
             #player-area { padding: 10px; border-radius: 12px; margin-bottom: 20px; }
             .details-container { gap: 12px; }
@@ -721,6 +739,7 @@
 
         @media (max-width: 400px) {
             .brand-text { font-size: 14px; }
+            .brand-slogan { font-size: 7px; letter-spacing: 1.5px; }
             .search-box { width: 130px; }
             .search-dropdown { right: -40px; }
         }
@@ -741,13 +760,16 @@
 
 <!-- NAVIGATION -->
 <nav id="main-nav">
-    <div class="nav-brand" onclick="resetAndLoad('trending')">
+    <div class="nav-brand" onclick="goHome()">
         <div class="brand-icon"><i class="fas fa-play"></i></div>
-        <div class="brand-text">MARK MOVIE HUB</div>
+        <div class="brand-text-wrapper">
+            <div class="brand-text">MARK MOVIE HUB</div>
+            <div class="brand-slogan">STREAM EVERYTHING</div>
+        </div>
     </div>
 
     <div class="nav-center">
-        <button class="nav-link active" id="nav-home" onclick="setActiveNav(this); resetAndLoad('trending')">
+        <button class="nav-link active" id="nav-home" onclick="setActiveNav(this); goHome()">
             <i class="fas fa-home"></i>Home
         </button>
         <button class="nav-link" id="nav-movies" onclick="setActiveNav(this); resetAndLoad('popular_movie')">
@@ -1003,6 +1025,18 @@
         fetchData(); scrollToResults();
     }
 
+    function goHome() {
+        closePlayer();
+        setActiveNav(document.getElementById('nav-home'));
+        currentPage = 1;
+        document.getElementById('results').innerHTML = '';
+        currentPath = 'trending/all/week';
+        document.getElementById('list-title').innerText = "🔥 Trending This Week";
+        document.getElementById('hero-banner').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        fetchData();
+    }
+
     async function loadHeroBanner() {
         try {
             const r = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`);
@@ -1077,7 +1111,8 @@
             currentPath = `search/multi?query=${encodeURIComponent(q)}`;
             document.getElementById('list-title').innerText = `🔍 Results: ${q}`;
         }
-        await fetchData(); scrollToResults();
+        await fetchData();
+        if (mode !== 'trending') scrollToResults();
     }
 
     async function fetchData() {
