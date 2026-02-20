@@ -1728,6 +1728,13 @@
     }
 
     function loadGenre(id, name) {
+        // Close any active player
+        document.getElementById('player-area').style.display = 'none';
+        document.getElementById('iframe-container').innerHTML = '';
+        document.getElementById('server-error').style.display = 'none';
+        // Hide the banner
+        document.getElementById('hero-banner').style.display = 'none';
+
         currentPage = 1;
         document.getElementById('results').innerHTML = '';
         currentPath = `discover/movie?with_genres=${id}`;
@@ -1914,7 +1921,7 @@
                 dot.onclick = () => goToSlide(i);
                 dots.appendChild(dot);
             });
-            heroSlideInterval = setInterval(nextSlide, 6000);
+            heroSlideInterval = setInterval(nextSlide, 3000);
         } catch(e) { document.getElementById('hero-banner').style.display = 'none'; }
     }
 
@@ -1929,7 +1936,7 @@
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
         clearInterval(heroSlideInterval);
-        heroSlideInterval = setInterval(nextSlide, 6000);
+        heroSlideInterval = setInterval(nextSlide, 3000);
     }
 
     // ==========================================
